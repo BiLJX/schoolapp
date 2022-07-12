@@ -22,6 +22,33 @@ export function FormInput({className, Icon, onChange, placeholder, type}: FormIn
     )
 }
 
+export interface FormSelectData {
+    label: string,
+    value: string
+}
+
+interface FormSelectProps {
+    className?: string,
+    onChange?: (text: string) => any;
+    Icon: any;
+    data: FormSelectData[],
+}
+
+export function FormSelect(props: FormSelectProps){
+    return(
+        <div className = {`form-input-container ${props.className || ""}`}>
+            <div className = "icon-container">
+                <props.Icon />
+            </div>
+            <div className = "input-container">
+                <select>
+                    {props.data.map((data, i)=><option key = {i} value = {data.value}>{data.label}</option>)}
+                </select>
+            </div>
+        </div>
+    )
+}
+
 interface FormButtonProps {
     className?: string,
     onClick?: () => any;

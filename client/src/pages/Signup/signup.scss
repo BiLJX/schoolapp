@@ -1,0 +1,14 @@
+.profile-picture-container {
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .profile-picture {
+        border-radius: 100%;
+        width: 100px;
+        height: 100px;
+        background-color: var(--image-background);
+        overflow: hidden;
+    }
+}

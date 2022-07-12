@@ -50,3 +50,13 @@ input:-webkit-autofill:active {
   outline: none;
   -webkit-text-fill-color: var(--text-input);
 }
+
+select option {
+  background-color: var(--background);
+  -webkit-appearance: none;
+}
+
+select:focus, :active {
+  border: none;
+  outline: none;
+}

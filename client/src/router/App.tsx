@@ -3,6 +3,7 @@ import AccountRequestPage from "pages/admin/AccountRequest/account-request-page"
 import AdminLoginPage from "pages/admin/Login/login-page";
 import LoginPage from "pages/Login/login-page";
 import StudentLoginPage from "pages/Login/login-student-page";
+import SignupUpPage from "pages/Signup/signup-page";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify"
 export default function App(){
@@ -15,6 +16,7 @@ export default function App(){
 
             <Route path = "/login" element = {<LoginPage />} />
             <Route path = "/login/student" element = {<StudentLoginPage />} />
+            <Route path = "/signup" element = {<SignupUpPage />} />
         </Routes>
     )
 }
