@@ -1,0 +1,57 @@
+$nav-width:210px;
+
+.admin-app-container {
+    display: flex;
+    nav {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        width: $nav-width;
+        background-color: var(--admin-nav);
+        height: 100vh;
+        padding: 1rem;
+        .nav-header {
+            display: flex;
+            .nav-logo {
+                width: 40px;
+                height: 40px;
+            }
+            .nav-title{
+                display: flex;
+                align-items: center;
+                margin-left: .5rem;
+                flex: 1;
+                h2{
+                    font-size: 1.1rem;
+                    color: var(--white);
+                    cursor: default;
+                    font-weight: 500;
+                }
+            }
+        }
+        .nav-items-container {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+    main {
+        margin-left: $nav-width;
+        width: calc(100vw - $nav-width);
+        height: 100vh;
+    }
+}
+
+.admin-nav-item {
+    display: flex;
+    color: var(--gray-0);
+    padding-top: 30px;
+    align-items: center;
+    svg {
+        color: var(--gray-0);
+    }
+    .nav-icon {
+        margin-right: .5rem;
+        display: flex;
+        align-items: center;
+    }
+}

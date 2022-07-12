@@ -1,0 +1,70 @@
+:root {
+  --blue: #005BFF;
+  --light-blue: #ABC9FF;
+  --red: #EB4747;
+  --pink: #FF7C7C;
+  --white: #FFFFFF;
+  --white-2: #FAFAFA;
+  --gray-0: #E9E9E9;
+  --gray-1: #c2c2c2;
+  --gray-2: #6A6A6A;
+  --gray-3: #404040;
+  --gray-4: #919191;
+  --gray-5: #4e4e4e;
+  --black-0: #000;
+  --black-1: #0c0c0c59;
+  --black-blue: #202631;
+  --button-color-primary: var(--blue);
+  --button-color-primary-disabled: var(--light-blue);
+  --button-color-secondary: var(--red);
+  --button-color-secondary-disabled: var(--pink);
+}
+
+
+
+
+.light-mode {
+  --background: var(--white-2);
+  --cards-background: var(--white);
+  --login-background: var(--white);
+  --text-input: var(--black-blue);
+  --text-title: var(--black-blue);
+  --text-secondary: var(--gray-3);
+  --text-secondary-alt: var(--gray-2);
+  --border-color: var(--gray-0);
+  --border-color-dark: var(--gray-3);
+  --drop-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+
+  /*Admin Styles*/
+  
+  --admin-nav: #16263E;
+}
+
+* {
+  margin: 0;
+  /* font-family: 'M PLUS Rounded 1c', sans-serif; */
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body {
+  background: var(--background);
+  overflow-x: hidden;
+}
+
+.full-img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+a {
+  text-decoration: none;
+  color: var(--text-secondary-alt);
+}
+
+
+
+
