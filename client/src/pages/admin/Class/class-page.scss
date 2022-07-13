@@ -1,0 +1,63 @@
+.admin-class-page {
+    display: flex;
+    padding: 1rem 2rem;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-header {
+    display: flex;
+    padding-bottom: 1rem;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--border-color-dark);
+    width: 100%;
+    margin-bottom: 2rem;
+    color: var(--text-title);
+}
+
+.admin-list-container {
+    .admin-class-container-header {
+        display: flex;
+        padding: 1rem 0;
+        h2 {
+            width: 80%;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            color: var(--text-title);
+        }
+    }
+    .category {
+        display: flex;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--border-color-dark);
+        color: var(--admin-list-category-text-color);
+        font-weight: 500;
+    }
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--drop-shadow);
+    padding: 1rem;
+    width: 490px;
+    background-color: var(--cards-background);
+    position: relative;
+    left: 100px;
+}
+
+.form-double-input-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    .admin-input-container {
+        width: 48%;
+    }
+}
+
+.form-add-button {
+    width: 150px;
+}

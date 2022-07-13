@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
-import { Class } from "@shared/School"
+import { ClassSchema } from "@shared/School"
 
-const ClassSchema = new Schema<Class>({
+const ClassSchema = new Schema<ClassSchema>({
     class_id: {
         type: String,
         required: true,

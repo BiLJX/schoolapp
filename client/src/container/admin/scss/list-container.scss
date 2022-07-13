@@ -1,0 +1,10 @@
+.admin-list-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--drop-shadow);
+    padding: 1rem;
+    width: 587px;
+    background-color: var(--cards-background);
+}

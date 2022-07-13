@@ -6,9 +6,9 @@ export interface School {
     total_students: number
 }
 
-export interface Class {
+export interface ClassSchema {
+    class_id: string,
+    school_id: string,
     grade: number,
     section: string,
-    school_id: string,
-    class_id: string
 }

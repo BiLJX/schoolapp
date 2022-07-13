@@ -1,5 +1,6 @@
 import { AdminLayout } from "container/admin/Layout";
 import AccountRequestPage from "pages/admin/AccountRequest/account-request-page";
+import AdminClassPage from "pages/admin/Class/class-page";
 import AdminLoginPage from "pages/admin/Login/login-page";
 import LoginPage from "pages/Login/login-page";
 import StudentLoginPage from "pages/Login/login-student-page";
@@ -11,6 +12,7 @@ export default function App(){
         <Routes>
             <Route path = "/admin" element = {<AdminLayout />}>
                 <Route index element = {<AccountRequestPage />} />
+                <Route path = "classes" element = {<AdminClassPage />} />
             </Route>
             <Route path = "/admin/login" element = {<AdminLoginPage/>} /> 
 
