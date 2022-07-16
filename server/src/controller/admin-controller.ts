@@ -2,8 +2,13 @@ import { School } from "@shared/School";
 import { Request, Response } from "express";
 import { Class } from "../models/Class";
 import { Schools } from "../models/School";
+import { Students } from "../models/Student";
+import { Controller } from "../types/controller";
 import { makeId } from "../utils/idgen";
 import JsonResponse from "../utils/Response";
+import admin from "firebase-admin";
+
+const st = admin.storage()
 
 export const getCurrentAdmin = async (req: Request, res: Response) => {
     const jsonResponse = new JsonResponse(res)
@@ -16,13 +21,26 @@ export const getCurrentAdmin = async (req: Request, res: Response) => {
     }
 }
 
+
+
 export namespace Classes {
 
     export const getClasses = async (req: Request, res: Response) => {
         const jsonResponse = new JsonResponse(res);
         try {
             const admin: School = res.locals.admin;
-            const classes = await Class.find({school_id: admin.school_id});
+            const classes = await Class.aggregate([
+                {
+                    $match: {
+                        school_id: admin.school_id
+                    }
+                },
+                {
+                    $sort: {
+                        grade: 1
+                    }
+                }
+            ]);
             return jsonResponse.success(classes);
         } catch (error) {
             console.log(error);
@@ -34,6 +52,7 @@ export namespace Classes {
         const jsonResponse = new JsonResponse(res);
         const { grade, section }: { grade: number, section: string } = req.body;
         try {
+            console.log(grade)
             if( typeof grade !== "number" ) return jsonResponse.clientError("Classes must be a number");
             const admin: School = res.locals.admin;
             const _class = new Class({
@@ -54,13 +73,75 @@ export namespace Classes {
         const jsonResponse = new JsonResponse(res);
         const class_id = req.params.class_id
         try {
-            await Class.findOneAndRemove({class_id});
+            await Class.findOneAndDelete({class_id});
             jsonResponse.success({}, "successfully removed class")
         } catch (error) {
             console.log(error);
             jsonResponse.serverError()
         }
     }
+
+}
+
+
+export namespace AdminUser {
+    //get
+    export const getStudentAccountRequests: Controller = async(req, res) => {
+        const jsonResponse = new JsonResponse(res);
+        const admin = res.locals.admin;
+        try {
+            const students = await Students.findOne({school_id: admin.school_id, student_verified: false});
+            return jsonResponse.success(students)
+        } catch (error) {
+            console.log(error);
+            jsonResponse.serverError()
+        }
+    }
+
+    //put
+    export const approveStudentAccount: Controller = async (req, res) => {
+        const jsonResponse = new JsonResponse(res);
+        const admin = res.locals.admin;
+        const user_id = req.params.user_id;
+        const updated_data = req.body;
+        try {
+            if(updated_data){
+                await Students.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
+                    $set: {
+                        student_verified: true,
+                        class_id: updated_data.class_id,
+                        full_name: updated_data.full_name
+                    }
+                });
+            }else{
+                await Students.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
+                    $set: {
+                        student_verified: true
+                    }
+                });
+            }
+            return jsonResponse.success("Student Approved")
+        } catch (error) {
+            console.log(error);
+            jsonResponse.serverError()
+        }
+    }
+
+    //delete
+    export const rejectStudentAccount: Controller = async (req, res) => {
+        const jsonResponse = new JsonResponse(res);
+        const { school_id } = res.locals.admin;
+        const user_id = req.params.user_id;
+        try {
+            const student = await Students.findOneAndDelete({user_id, school_id});
+            if(student) await st.bucket().deleteFiles({ prefix: "user/"+student?.user_id });
+            return jsonResponse.success("User rejected")
+        } catch (error) {
+            console.log(error);
+            jsonResponse.serverError()
+        }
+    }
+
 
 }
 

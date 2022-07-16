@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import JsonResponse from "../utils/Response";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import { SCHOOL_PASSWORD_SECRET } from "../secret";
 import { Schools } from "../models/School";
 export const AdminAuth = async (req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +11,8 @@ export const AdminAuth = async (req: Request, res: Response, next: NextFunction)
         const verified: any = jwt.verify(session, SCHOOL_PASSWORD_SECRET);
         const school_id = verified.school_id;
         const school = await Schools.findOne({school_id}).select('-password');
-        res.locals.admin = school?.toJSON();
+        if(!school) return jsonResponse.notAuthorized()
+        res.locals.admin = school.toJSON();
         next();
     }catch(err){
         console.log(err);

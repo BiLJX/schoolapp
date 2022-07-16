@@ -11,4 +11,5 @@ export interface ClassSchema {
     school_id: string,
     grade: number,
     section: string,
+    total_students: number
 }

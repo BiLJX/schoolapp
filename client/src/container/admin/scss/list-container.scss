@@ -8,3 +8,24 @@
     width: 587px;
     background-color: var(--cards-background);
 }
+
+.admin-list-item-container {
+    display: flex;
+    padding: 1.3rem 0;
+    max-height: 61px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary-alt);
+    font-weight: 500;
+    cursor: pointer;
+    .admin-list-item-delete {
+        display: none;
+        justify-content: center;
+        cursor: pointer;
+    }
+    &:hover {
+        background-color: var(--background);
+        .admin-list-item-delete {
+            display: flex;
+        }
+    }
+}

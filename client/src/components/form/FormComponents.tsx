@@ -1,3 +1,4 @@
+import React from "react";
 import { NavLink } from "react-router-dom";
 import "./form-component.scss"
 
@@ -41,7 +42,7 @@ export function FormSelect(props: FormSelectProps){
                 <props.Icon />
             </div>
             <div className = "input-container">
-                <select>
+                <select onChange={(e)=>props.onChange?.(e.target.value)}>
                     {props.data.map((data, i)=><option key = {i} value = {data.value}>{data.label}</option>)}
                 </select>
             </div>
@@ -54,13 +55,19 @@ interface FormButtonProps {
     onClick?: () => any;
     label: string;
     isDisabled?: boolean;
-    color?: string
+    color?: string;
+    isLoading?: boolean;
 }
 
 export function FormSubmit(props: FormButtonProps){
     if(props.isDisabled){
         return (
             <div style = {{display: "flex", justifyContent: "center", cursor: "default",backgroundColor: props.color || "var(--blue)"}} className={`form-button ${props.className || ""}`}>{props.label}</div>
+        )
+    }
+    if(props.isLoading){
+        return (
+            <div style = {{display: "flex", justifyContent: "center", cursor: "default",backgroundColor: props.color || "var(--blue)"}} className={`form-button ${props.className || ""}`}>Loading...</div>
         )
     }
     return(
@@ -76,9 +83,9 @@ export function AuthTitle({title}: {title: string}){
     )
 }
 
-export function AuthPicture({src}: {src: string}){
+export function AuthPicture({src, style}: {src: string, style?: React.CSSProperties}){
     return (
-        <div className = "auth-image">
+        <div className = "auth-image" style = {style}>
             <img className="full-img" src = {src} />
         </div>
     )

@@ -31,15 +31,15 @@ export default class JsonResponse {
         this.res.status(200).json({
             error: true,
             status: 401,
-            data: {},
+            data: null,
             message
         })
     }
-    public clientError(message: string){
+    public clientError(message: string, data: any = null){
         this.res.status(200).json({
             error: true,
             status: 400,
-            data: {},
+            data,
             message
         })
     }

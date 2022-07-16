@@ -18,11 +18,11 @@ export namespace Classes {
 
     export const getAdminClasses = async() => {
         const res = await axios.get("/api/admin/classes");
-        return res.data as ApiResponse<ClassSchema>;
+        return res.data as ApiResponse<ClassSchema[]>;
     }
 
-    export const addClass = async({grade, section}: {grade: number, section: string}) => {
-        const res = await axios.put("/api/admin/class");
+    export const addClass = async(data: {grade: number, section: string}) => {
+        const res = await axios.put("/api/admin/class", data);
         return res.data as ApiResponse<ClassSchema>;
     }
     
@@ -30,6 +30,5 @@ export namespace Classes {
         const res = await axios.delete("/api/admin/class/"+class_id);
         return res.data as ApiResponse;
     }
-
 }
 

@@ -4,7 +4,7 @@ import mongoose from "mongoose"
 import { Server } from "socket.io"
 import cookie from "cookie"
 import path from "path"
-
+import "./fire"
 //middlewares
 import bodyParser from "body-parser"
 import cors from "cors"

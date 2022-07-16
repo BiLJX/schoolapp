@@ -10,5 +10,12 @@
         height: 100px;
         background-color: var(--image-background);
         overflow: hidden;
+        position: relative;
+        .pfp-upload-icon {
+            position: absolute;
+            color: var(--text-secondary-alt);
+            bottom: 5%;
+            left: 40%;
+        }
     }
 }
