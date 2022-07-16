@@ -52,7 +52,6 @@ export namespace Classes {
         const jsonResponse = new JsonResponse(res);
         const { grade, section }: { grade: number, section: string } = req.body;
         try {
-            console.log(grade)
             if( typeof grade !== "number" ) return jsonResponse.clientError("Classes must be a number");
             const admin: School = res.locals.admin;
             const _class = new Class({
@@ -90,7 +89,7 @@ export namespace AdminUser {
         const jsonResponse = new JsonResponse(res);
         const admin = res.locals.admin;
         try {
-            const students = await Students.findOne({school_id: admin.school_id, student_verified: false});
+            const students = await Students.find({school_id: admin.school_id, student_verified: false}).lean();
             return jsonResponse.success(students)
         } catch (error) {
             console.log(error);
@@ -109,8 +108,7 @@ export namespace AdminUser {
                 await Students.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
                     $set: {
                         student_verified: true,
-                        class_id: updated_data.class_id,
-                        full_name: updated_data.full_name
+                        class_id: updated_data.class_id
                     }
                 });
             }else{

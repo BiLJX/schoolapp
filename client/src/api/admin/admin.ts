@@ -1,5 +1,6 @@
 import axios from "../instance";
 import { School, ClassSchema } from "@shared/School"
+import { Student } from "@shared/User";
 
 export const adminLogin = async (school_name: string, password: string) => {
     const res = await axios.post("/api/auth/login/admin", { school_name, password });
@@ -29,6 +30,17 @@ export namespace Classes {
     export const removeClass = async(class_id: string) => {
         const res = await axios.delete("/api/admin/class/"+class_id);
         return res.data as ApiResponse;
+    }
+}
+
+export namespace AdminUser {
+    export const getStudentsAccountRequest = async() => {
+        const res = await axios.get("/api/admin/requests/students");
+        return res.data as ApiResponse<Student[]> 
+    }
+    export const approveStudent = async(user_id: string, class_id: string) => {
+        const res = await axios.put(`/api/admin/requests/students/${user_id}/approve`, {class_id})
+        return res.data as ApiResponse
     }
 }
 

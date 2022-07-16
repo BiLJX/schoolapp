@@ -1,0 +1,45 @@
+.account-request-item {
+    display: flex;
+    padding: 2rem 0;
+    .pfp {
+        height: 200px;
+        width: 200px;
+        background-color: var(--image-background);
+        margin-right: 1rem;
+    }
+    .info {
+        display: flex;
+        flex-direction: column;
+        select {
+            padding: 0;
+        }
+        .info-item {
+            padding-bottom: 1rem;
+            font-size: 1.5rem;
+            display: flex;
+        }
+        .button-container {
+            display: flex;
+            .button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 45px;
+                width: 100px;
+                color: #fff;
+                font-weight: bold;
+                font-size: 1.2rem;
+                margin-right: 20px;
+                border-radius: 10px;
+                cursor: pointer;
+            }
+            .accept {
+                background-color: #65FF90;
+            }
+            .reject {
+                background-color: var(--red);
+            }
+        }
+    }
+
+}

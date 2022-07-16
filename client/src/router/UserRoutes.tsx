@@ -33,7 +33,7 @@ export default function UserRoutes(){
         )
     }
 
-    if(!teacher.teacher_verified || !student.student_verified){
+    if(!(teacher.teacher_verified || student.student_verified)){
         return <AccountReview />
     }
 

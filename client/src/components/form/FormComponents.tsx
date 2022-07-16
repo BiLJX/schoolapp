@@ -50,6 +50,26 @@ export function FormSelect(props: FormSelectProps){
     )
 }
 
+interface SimpleSelectProps {
+    className?: string,
+    onChange: any;
+    data: FormSelectData[],
+    style?: any,
+    value: string,
+}
+
+export function SimpleSelect(props: SimpleSelectProps){
+    return(
+        <div className = {`form-input-container ${props.className || ""}`} style = {props.style}>
+            <div className = "input-container">
+                <select onChange={(e)=>props.onChange(e.target.value)} value = {props.value}>
+                    {props.data.map((data, i)=>(data?<option key = {i} value = {data.value}>{data.label}</option>:null))}
+                </select>
+            </div>
+        </div>
+    )
+}
+
 interface FormButtonProps {
     className?: string,
     onClick?: () => any;

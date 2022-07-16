@@ -56,6 +56,7 @@ export const UserAuth = async(req: Request, res: Response, next: NextFunction) =
         if(!user) return jsonResponse.notAuthorized();
         if(!user.student_verified) return jsonResponse.clientError("Not verified", user)
         res.locals.user = user;
+        next();
     } catch (error) {
         console.log(error)
         jsonResponse.serverError()
