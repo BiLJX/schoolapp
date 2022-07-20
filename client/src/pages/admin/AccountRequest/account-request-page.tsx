@@ -1,12 +1,12 @@
 import { AdminSearchBarButton } from "components/Admin/buttons"
 import { useEffect, useState } from "react"
-import { NavLink } from "react-router-dom"
-import { AdminUser, Classes } from "api/admin/admin";
+import { NavLink, Route, Routes } from "react-router-dom"
+import { AdminRequests, Classes } from "api/admin/admin";
 import { AccountRequestItem } from "./account-request-item"
 import { FormSelectData } from "components/form/FormComponents";
 import "./account-request.scss"
 import { SearchComponent } from "./search-component"
-import { Student } from "@shared/User";
+import { Student, Teacher } from "@shared/User";
 export default function AccountRequestPage(){
     const [classes, setClasses] = useState<FormSelectData[]>([]);
     const getClasses = async () => {
@@ -22,17 +22,20 @@ export default function AccountRequestPage(){
             <header className="admin-header">
                 <h1>Account Creation Requests</h1>
                 <div className="admin-header-nav">
-                    <NavLink to = "">Student</NavLink>
-                    <NavLink to = "teacher">Teacher</NavLink>
+                    <NavLink end to = "" className={(state)=>state.isActive?"active":""}>Student</NavLink>
+                    <NavLink to = "teacher" className={(state)=>state.isActive?"active":""}>Teacher</NavLink>
                 </div>
             </header>
             <div className = "admin-request-main-container">
                 <div className = "admin-request-main-header">
                     <SearchComponent />
-                    <AdminSearchBarButton label = "Reload" />
+                    <AdminSearchBarButton label = "Search" />
                 </div>
                 <div className = "admin-request-items-container">
-                    <StudentsContainer classes = {classes} />
+                    <Routes>
+                        <Route index element = {<StudentsContainer classes = {classes} />} />
+                        <Route path = "teachers" element = {<TeachersContainer />} />
+                    </Routes>
                 </div>
             </div>
         </div>
@@ -42,7 +45,7 @@ export default function AccountRequestPage(){
 function StudentsContainer({classes}: {classes: FormSelectData[]}){
     const [students, setStudents] = useState<Student[]>([]);
     const getStudents = async() => {
-        const res = await AdminUser.getStudentsAccountRequest();
+        const res = await AdminRequests.getStudentsAccountRequest();
         if(res.error) return;
         setStudents(res.data)
     }
@@ -52,7 +55,26 @@ function StudentsContainer({classes}: {classes: FormSelectData[]}){
     return(
         <>
             {
-                students.map((x, i)=><AccountRequestItem key = {i} student = {x} classes = {classes} />)
+                students.map((x, i)=><AccountRequestItem key = {i} user = {x} classes = {classes} />)
+            }
+        </>
+    )
+}
+
+function TeachersContainer(){
+    const [teachers, setTeachers] = useState<Teacher[]>([]);
+    const getStudents = async() => {
+        const res = await AdminRequests.getTeachersAccountRequest();
+        if(res.error) return;
+        setTeachers(res.data)
+    }
+    useEffect(()=>{
+        getStudents()
+    }, [])
+    return(
+        <>
+            {
+                teachers.map((x, i)=><AccountRequestItem key = {i} user = {x} classes = {[]} />)
             }
         </>
     )

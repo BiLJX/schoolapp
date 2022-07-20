@@ -1,7 +1,10 @@
 import { Student, Teacher } from "@shared/User";
 import { getCurrentUser } from "api/user";
+import MobileNavWrapper from "container/mobile-layouts/nav-wrapper";
+import HomePage from "pages/home/home-page";
 import LoginPage from "pages/Login/login-page";
 import AccountReview from "pages/Review/account-review-page";
+import { UploadPost } from "pages/upload/upload";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
@@ -39,7 +42,15 @@ export default function UserRoutes(){
 
     return(
         <Routes>
-            <Route index element = {<div></div>}/>
+            <Route path = "/upload" element = {<UploadPost />} />
+            <Route path = "/" element = {<MobileNavWrapper />}>
+                {/* Main Routes */}
+                <Route index element = {<HomePage />}/>
+                <Route path = "explore" element = {<HomePage />}/>
+                <Route path = "upload" element = {<HomePage />}/>
+                <Route path = "inbox" element = {<HomePage />}/>
+                <Route path = "profile" element = {<HomePage />}/>
+            </Route>
         </Routes>
     )
 }

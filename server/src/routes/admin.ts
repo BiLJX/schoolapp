@@ -10,9 +10,13 @@ router.get("/classes", Classes.getClasses)
 router.put("/class", Classes.addClasses);
 router.delete("/class/:class_id", Classes.removeClass)
 
-//user controls
+//req controls
 router.get("/requests/students", AdminUser.getStudentAccountRequests)
-router.put("/requests/students/:user_id/approve", AdminUser.approveStudentAccount)
-router.delete("/requests/students/:user_id/reject", AdminUser.rejectStudentAccount)
+router.get("/requests/teachers", AdminUser.getTeacherAccountRequests)
 
+router.put("/requests/students/:user_id/approve", AdminUser.approveStudentAccount)
+router.put("/requests/teachers/:user_id/approve", AdminUser.approveTeacherAccount)
+
+router.delete("/requests/students/:user_id/reject", AdminUser.rejectStudentAccount)
+router.delete("/requests/teachers/:user_id/reject", AdminUser.rejectTeacherAccount);
 export { router as AdminRoutes }

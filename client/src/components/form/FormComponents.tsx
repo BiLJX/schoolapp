@@ -119,10 +119,10 @@ export function ForgotPassword(){
     )
 }
 
-export function AlternativeOption(){
+export function AlternativeOption({to}:{to: string}){
     return(
         <span className="form-alternative-option">
-            New to schoolify? <NavLink to = "/signup" style={ {fontWeight: "bold", color: "var(--blue)"} } >Signup</NavLink>
+            New to schoolify? <NavLink to = {to} style={ {fontWeight: "bold", color: "var(--blue)"} } >Signup</NavLink>
         </span>
     )
 }

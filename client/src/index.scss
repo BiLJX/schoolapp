@@ -1,5 +1,5 @@
 :root {
-  --blue: #005BFF;
+  --blue: #4083ff;
   --light-blue: #ABC9FF;
   --red: #EB4747;
   --pink: #FF7C7C;
@@ -40,6 +40,16 @@
   --admin-input-label-color: var(--gray-3);
   --admin-nav: #16263E;
   --admin-search-bar-color: var(--gray-0);
+  /*Nav*/
+  --nav-item-color: var(--gray-2);
+  --nav-background: #fff;
+  --nav-border: 1px solid var(--border-color);
+  /*Header*/
+  --header-border: 1px solid var(--border-color);
+  --header-background: #fff;
+  --header-height: 55px;
+  --header-back-button-color: var(--gray-3);
+  --header-label-color: var(--gray-3);
 }
 
 * {

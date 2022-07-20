@@ -32,3 +32,10 @@ export interface StudentSignupData {
     school_id: string,
     password: string,
 }
+
+export interface TeacherSignupData {
+    full_name: string,
+    email: string,
+    school_id: string,
+    password: string,
+}

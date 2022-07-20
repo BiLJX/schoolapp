@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { USER_PASSWORD_SECRET } from "../secret";
 import { Student } from "@shared/User";
 import { Students } from "../models/Student";
+import { Teachers } from "../models/Teacher";
 
 export const UserAuth = async(req: Request, res: Response, next: NextFunction) => {
     const jsonResponse = new JsonResponse(res);
@@ -48,10 +49,50 @@ export const UserAuth = async(req: Request, res: Response, next: NextFunction) =
                             }
                         ]
                     }
-                }
+                },
+                {
+                    $unwind: {
+                        path: "$school"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$class"
+                    }
+                },
             ]);
             user = _user[0];
             if(user) user.type = "student"
+        }else {
+            const _user = await Teachers.aggregate([
+                {
+                    $match: {
+                        user_id: decodedData.user_id
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "schools",
+                        localField: "school_id",
+                        foreignField: "school_id",
+                        as: "school",
+                        pipeline: [
+                            {
+                                $project: {
+                                    password: 0
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$school"
+                    }
+                },
+            ]);
+            user = _user[0];
+            if(user) user.type = "teacher"
         }
         if(!user) return jsonResponse.notAuthorized();
         if(!user.student_verified) return jsonResponse.clientError("Not verified", user)

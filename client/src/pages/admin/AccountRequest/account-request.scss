@@ -9,6 +9,9 @@
     .admin-header-nav {
         display: flex;
         margin-top: 1rem;
+        .active {
+            color: var(--blue)
+        }
         a {
             margin-right: 1rem;
             color: var(--text-secondary-alt);

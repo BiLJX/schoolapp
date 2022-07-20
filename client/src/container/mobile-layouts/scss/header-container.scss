@@ -1,0 +1,10 @@
+.mobile-header-container {
+    position: fixed;
+    height: var(--header-height);
+    background-color: var(--header-background);
+    border: var(--header-border);
+    display: flex;
+    padding: 1rem;
+    top: 0;
+    width: 100vw;
+}

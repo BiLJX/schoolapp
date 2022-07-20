@@ -1,0 +1,36 @@
+.mobile-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    padding: 5px 0;
+    width: 100vw;
+    background-color: var(--nav-background);
+    border: var(--nav-border);
+    .nav-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        color: var(--nav-item-color);
+        svg {
+            font-size: 30px;
+        }
+    }
+    .active {
+        color: var(--blue);
+    }
+    .nav-item-upload {
+        background-color: var(--red);
+        border-radius: 100%;
+        color: #fff;
+        padding: 10px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+            font-size: 35px;
+        }
+    }
+}
