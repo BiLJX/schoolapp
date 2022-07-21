@@ -60,3 +60,7 @@ select:focus, :active {
   border: none;
   outline: none;
 }
+
+textarea {
+  resize: none;
+}

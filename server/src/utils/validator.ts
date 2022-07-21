@@ -45,3 +45,29 @@ export function validatePassowrd(password: string): ValidationResult {
         message: ""
     }
 }
+
+export function validatePostTitle(title: string): ValidationResult {
+    if(title.length < 3) return {
+        success: false,
+        message: "Title should be minimum 3 charecters"
+    }
+    if(title.length >= 250) return {
+        success: false,
+        message: "Title should not exceed more than 250 charecters"
+    }
+    return {
+        success: true,
+        message: ""
+    }
+}
+
+export function validatePostBody(body:string): ValidationResult {
+    if(body.length >= 10000) return {
+        success: false,
+        message: "Body should not exceed more than 10,000 charecters"
+    }
+    return {
+        success: true,
+        message: ""
+    }
+}

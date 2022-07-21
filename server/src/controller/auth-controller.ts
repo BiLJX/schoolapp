@@ -56,6 +56,7 @@ export const studentSignUp = async (req: Request, res: Response) => {
             const pfp = files[0];
             //reasign
             data.email = data.email.trim().toLowerCase();
+            data.full_name = data.full_name.trim();
             //validations
             const nameValidation = validateFullName(data.full_name.trim().toLowerCase());
             const emailValidation = validateEmail(data.email);
@@ -267,6 +268,7 @@ export const teacherSignup: Controller = (req, res) => {
             //saving data
             const salt = await bcrypt.genSalt(10);
             data.password = await bcrypt.hash(data.password, salt);
+            data.full_name = data.full_name.trim()
             const teacher = new Teachers({...data, profile_picture_url: url, user_id});
             await teacher.save()
             const token = jwt.sign({ user_id: teacher.user_id, type: "teacher" }, USER_PASSWORD_SECRET, { expiresIn: "10d" })
