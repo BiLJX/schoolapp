@@ -1,6 +1,7 @@
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import { Post } from '@shared/Post';
+import moment from "moment"
 import "./post.scss"
 export default function PostCard({data}: {data: Post}){
     return(
@@ -10,8 +11,8 @@ export default function PostCard({data}: {data: Post}){
                     <img className="full-img" src = {data.author_data.profile_picture_url} />
                 </div>
                 <div className="post-card-author-info">
-                    <div className="post-card-author-name">{data.author_data.full_name}</div>
-                    <div className="post-card-category">{data.category} • <span className = "post-card-time">5 min ago</span> </div>
+                    <div className="post-card-author-name">{`${data.author_data.full_name}` }</div>
+                    <div className="post-card-category">{data.category} • <span className = "post-card-time">{ moment(data.createdAt).fromNow(true) }</span> </div>
 
                 </div>
             </div>
@@ -27,7 +28,7 @@ export default function PostCard({data}: {data: Post}){
             <div className = "post-card-buttons-container">
                 <div className = "post-card-button">
                     <button><FavoriteBorderOutlinedIcon /></button>
-                    <span>1.1k</span>
+                    <span>{data.like_count}</span>
                 </div>
                 <div className = "post-card-button">
                     <button><ForumOutlinedIcon /></button>

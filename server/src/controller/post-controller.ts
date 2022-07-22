@@ -6,6 +6,8 @@ import { upload, uploadFile } from "../utils/upload";
 import { validatePostBody, validatePostTitle } from "../utils/validator";
 import { Post } from "../models/Post"
 import { Student } from "@shared/User";
+import sharp from "sharp";
+import moment from "moment";
 
 
 export const getFeedPost: Controller = async (req, res) => {
@@ -118,7 +120,8 @@ export const uploadPost: Controller = async (req, res) => {
                 await post.save()
             } else {
                 if(!picture.mimetype.includes("image")) return jsonResponse.clientError("Invalid file format");
-                const url = await uploadFile({buffer: picture.buffer, replace: false, dir: `user/${currentUser.user_id}/post/${post_id}`});
+                const buffer = await sharp(picture.buffer).jpeg({ quality: 80 }).toBuffer()
+                const url = await uploadFile({buffer, replace: false, dir: `user/${currentUser.user_id}/post/${post_id}`});
                 const post = new Post({
                     ...data,
                     post_type: "image",
