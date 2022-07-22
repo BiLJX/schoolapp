@@ -1,5 +1,10 @@
 import axios from "./instance";
-import { ClientPostDataImage, ClientPostDataText } from "@shared/Post";
+import { ClientPostDataImage, ClientPostDataText, Post } from "@shared/Post";
+
+export const getPostFeed = async() => {
+    const res = await axios.get("/api/post/feed");
+    return res.data as ApiResponse<Post[]>;
+}
 
 export const uploadPost = async(data: ClientPostDataImage|ClientPostDataText, picture?: File) => {
     const _data: any = data

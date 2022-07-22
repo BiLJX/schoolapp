@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { uploadPost } from "../controller/post-controller";
+import { getFeedPost, uploadPost } from "../controller/post-controller";
 const router = Router();
+
+router.get("/feed", getFeedPost);
 
 router.post("/upload", uploadPost)
 

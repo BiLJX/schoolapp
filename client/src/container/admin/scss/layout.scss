@@ -19,8 +19,9 @@ $nav-width:210px;
             .nav-title{
                 display: flex;
                 align-items: center;
-                margin-left: .5rem;
+                margin-left: 1rem;
                 flex: 1;
+                justify-content: center;
                 h2{
                     font-size: 1.1rem;
                     color: var(--white);

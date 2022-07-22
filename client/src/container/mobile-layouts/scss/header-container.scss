@@ -1,5 +1,6 @@
 .mobile-header-container {
     position: fixed;
+    z-index: 100;
     height: var(--header-height);
     background-color: var(--header-background);
     border: var(--header-border);

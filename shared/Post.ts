@@ -10,7 +10,11 @@ export interface Post {
     like_count: number,
     comment_count: number,
     category: string,
-    createdAt: string
+    createdAt: string,
+    author_data: {
+        profile_picture_url: string,
+        full_name: string
+    }
 }
 
 interface ClientPostData {

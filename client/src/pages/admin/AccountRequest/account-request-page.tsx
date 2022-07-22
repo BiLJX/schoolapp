@@ -34,7 +34,7 @@ export default function AccountRequestPage(){
                 <div className = "admin-request-items-container">
                     <Routes>
                         <Route index element = {<StudentsContainer classes = {classes} />} />
-                        <Route path = "teachers" element = {<TeachersContainer />} />
+                        <Route path = "teacher" element = {<TeachersContainer />} />
                     </Routes>
                 </div>
             </div>

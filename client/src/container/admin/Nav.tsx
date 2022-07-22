@@ -38,7 +38,7 @@ function NavItem(props: NavItemProps){
             <div className = "nav-icon">
                 <props.Icon />
             </div>
-            <div className = "nav-title">{props.label}</div>
+            <div className = "nav-label">{props.label}</div>
         </NavLink>
     )
 }
