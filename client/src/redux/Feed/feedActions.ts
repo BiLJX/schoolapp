@@ -21,3 +21,10 @@ export function unlikePostAction(post_id: string): Action<FeedActionTypes, strin
         payload: post_id
     }
 }
+
+export function deletePostAction(post_id: string): Action<FeedActionTypes, string> {
+    return {
+        type: FeedActionTypes.DELETE_POST,
+        payload: post_id
+    }
+}

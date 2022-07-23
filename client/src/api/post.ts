@@ -31,3 +31,8 @@ export const unlikePost = async(post_id: string) => {
     const res = await axios.put("/api/post/"+post_id+"/unlike");
     return res.data as ApiResponse;
 }
+
+export const deletePost = async(post_id: string) => {
+    const res = await axios.delete("/api/post/"+post_id+"/delete");
+    return res.data as ApiResponse;
+}

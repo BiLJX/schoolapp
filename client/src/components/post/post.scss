@@ -24,6 +24,7 @@
         display: flex;
         flex-direction: column;
         margin-left: 1rem;
+        flex: 1;
         .post-card-author-name {
             font-weight: 500;
             color: var(--text-title);
@@ -33,6 +34,13 @@
             color: var(--text-secondary-alt);
             font-weight: 500;
             font-size: 0.9rem;
+        }
+    }
+    .post-card-more {
+        display: flex;
+        align-items: center;
+        svg {
+            color: var(--text-secondary-alt);
         }
     }
 }
@@ -79,4 +87,21 @@
 
 .skeleton {
     background-color: var(--skeleton) !important;
+}
+
+.post-options {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--post-card-background);
+    border: 1px solid var(--border-color);
+    width: 90%;
+    border-radius: 20px;
+    font-weight: bold;
+    .post-options-item {
+        display: flex;
+        padding: 1rem;
+        color: var(--text-title);
+        width: 100%;
+        justify-content: center;
+    }
 }

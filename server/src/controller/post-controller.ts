@@ -273,3 +273,16 @@ export const unlikePost: Controller = async (req, res) => {
         jsonResponse.serverError()
     }
 }
+
+export const deletePost: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const currentUser: Student = res.locals.user;
+    const post_id = req.params.post_id;
+    try {
+        await Post.deleteOne({post_id, author_id: currentUser.user_id});
+        jsonResponse.success();
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}

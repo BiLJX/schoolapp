@@ -25,6 +25,13 @@ export default function feedReducer(state: Post[] = [], action: Action<FeedActio
             posts = [...state];
             posts[index] = post;
             return posts;
+        case FeedActionTypes.DELETE_POST:
+            post_id = action.payload as string
+            index = state.findIndex(x=>x.post_id === post_id);
+            if(index <= -1) return state;
+            posts = [...state];
+            posts.splice(index, 1);
+            return posts;
         default:
             return state
     }

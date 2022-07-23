@@ -33,3 +33,20 @@ export interface ClientPostDataImage extends ClientPostData{
     picture: string,
 }
 
+export interface Comment {
+    parent_id: string|null,
+    comment_id: string,
+    author_id: string,
+    post_id: string,
+    text: string,
+    children: Comment|null,
+    author_data: {
+        user_id: string,
+        full_name: string,
+        user_type: "student"|"teacher",
+        profile_picture_url: string
+    },
+    createdAt: string,
+    likes: string[],
+    likes_count: number
+}

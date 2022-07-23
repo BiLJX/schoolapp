@@ -10,13 +10,17 @@ import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPostById, likePost, unlikePost } from "api/post";
 import { toastError } from "components/Toast/toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { likePostAction, unlikePostAction } from "redux/Feed/feedActions";
 import CommentInput from "components/Comment-Input/comment-input";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import PostOptions from "components/post/post-options";
+import { RootState } from "types/states";
 
 export default function PostPage(){
     const post_id = useParams().post_id
     const state:any = useLocation().state;
+    
     const [post, setPost] = useState<Post>(state?.post as Post);
     const getPost = async() => {
         if(post) return;
@@ -36,7 +40,7 @@ export default function PostPage(){
             <MobileStackHeader label="Post" />
             <StackContainer className="post-page">
                 {post && <Content data = {post} />}
-                <CommentInput />
+                <CommentInput data={post} />
             </StackContainer>
         </>
         
@@ -44,8 +48,10 @@ export default function PostPage(){
 }
 
 function Content({data}: {data: Post}){
+    const currentUser = useSelector((state: RootState)=>state.currentUser)
     const [like_count, setLike_count] = useState(data.like_count);
     const [has_liked, setHas_liked] = useState(data.has_liked);
+    const [optionOpened, setOptionOpened] = useState(false)
     const dispatch = useDispatch()
     const onLike = async () => {
         setLike_count(like_count+1);
@@ -63,6 +69,7 @@ function Content({data}: {data: Post}){
     }
     return(
         <article className = "post-card">
+            <PostOptions isOpen = {optionOpened} postId = {data.post_id} onClose = {()=>setOptionOpened(false)} />
             <div className = "post-card-author-container">
                 <div className = "post-card-pfp-container">
                     <img className="full-img" src = {data.author_data.profile_picture_url} />
@@ -70,8 +77,8 @@ function Content({data}: {data: Post}){
                 <div className="post-card-author-info">
                     <div className="post-card-author-name">{`${data.author_data.full_name}` }</div>
                     <div className="post-card-category">{data.category} • <span className = "post-card-time">{ moment(data.createdAt).fromNow(true) }</span> </div>
-
                 </div>
+                {currentUser?.user_id === data.author_id && <button className = "post-card-more" onClick={()=>setOptionOpened(true)}><MoreVertIcon /></button>}
             </div>
             <div className = "post-card-title-container">
                 {data.title}
