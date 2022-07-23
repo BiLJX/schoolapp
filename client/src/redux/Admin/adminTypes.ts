@@ -1,3 +1,3 @@
 export enum AdminTypes {
-    SIGN_IN,
+    SIGN_IN = "ADMIN_SIGN_IN",
 }

@@ -11,6 +11,7 @@ export interface Post {
     comment_count: number,
     category: string,
     createdAt: string,
+    has_liked: boolean,
     author_data: {
         profile_picture_url: string,
         full_name: string

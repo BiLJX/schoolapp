@@ -4,9 +4,10 @@
     padding: 1rem;
     background-color: var(--post-card-background);
     border: var(--post-card-border);
-    box-shadow: var(--post-card-shadow);
+    // box-shadow: var(--post-card-shadow);
     border-radius: 10px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
 }
 
 .post-card-author-container {
@@ -57,11 +58,11 @@
 .post-card-buttons-container {
     display: flex;
     padding-top: 1rem;
+
     .post-card-button {
         display: flex;
         font-size: 0.8rem;
         margin-right: 1rem;
-        
         span {
             color: var(--icon-color);
             align-self: center;

@@ -1,11 +1,31 @@
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Post } from '@shared/Post';
+import { likePost, unlikePost } from 'api/post';
+import { toastError } from 'components/Toast/toast';
 import moment from "moment"
+import { useDispatch } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { likePostAction, unlikePostAction } from 'redux/Feed/feedActions';
 import "./post.scss"
 export default function PostCard({data}: {data: Post}){
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const onLike = async (e: any) => {
+        e.stopPropagation();
+        dispatch(likePostAction(data.post_id))
+        const res = await likePost(data.post_id);
+        if(res.error) return toastError(res.message)
+    }
+    const onUnlike = async (e: any) => {
+        e.stopPropagation();
+        dispatch(unlikePostAction(data.post_id))
+        const res = await unlikePost(data.post_id);
+        if(res.error) return toastError(res.message)
+    }
     return(
-        <article className = "post-card">
+        <article onClick={()=>navigate("/post/"+data.post_id, { state: { post: data } })} className = "post-card">
             <div className = "post-card-author-container">
                 <div className = "post-card-pfp-container">
                     <img className="full-img" src = {data.author_data.profile_picture_url} />
@@ -27,7 +47,13 @@ export default function PostCard({data}: {data: Post}){
             }
             <div className = "post-card-buttons-container">
                 <div className = "post-card-button">
-                    <button><FavoriteBorderOutlinedIcon /></button>
+                    {
+                        data.has_liked?(
+                            <button className="liked" onClick = {onUnlike}><FavoriteIcon /></button>
+                        ):(
+                            <button onClick = {onLike}><FavoriteBorderOutlinedIcon /></button>
+                        )
+                    }
                     <span>{data.like_count}</span>
                 </div>
                 <div className = "post-card-button">

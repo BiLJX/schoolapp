@@ -7,24 +7,40 @@ import { toastError } from "components/Toast/toast";
 import { HeaderContainer } from "container/mobile-layouts/header-container";
 import StackContainer from "container/mobile-layouts/stack-container";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addFeed } from "redux/Feed/feedActions";
 import { RootState } from "types/states";
 import "./home-page.scss"
 export default function HomePage(){
     const school = useSelector((state: RootState)=>state.currentUser?.school as School);
-    const [feed, setFeed] = useState<Post[]>([]);
-    const [loading, setLoading] = useState(false)
+    const feed = useSelector((state: RootState)=>state.feed);
+    const dispatch = useDispatch()
+    const [loading, setLoading] = useState(false);
+
+    const scrollTo = () => {
+        const scrollPos = sessionStorage.getItem("scrollPos");
+        if(scrollPos){
+            window.scrollTo(0, parseInt(scrollPos));
+            sessionStorage.removeItem("scrollPos");
+        }
+    }
+
     useEffect(()=>{
         const getPost = async() => {
+            if(feed.length) return; 
             setLoading(true)
             document.body.style.overflowY = "hidden";
             const res = await getPostFeed();
             if(res.error) return toastError(res.message);
-            setFeed(res.data);
+            dispatch(addFeed(res.data));
             setLoading(false)
             document.body.style.overflowY = "visible";
         }
-        getPost()
+        getPost();
+        scrollTo()
+        return(()=>{
+            window.sessionStorage.setItem("scrollPos", ""+window.scrollY)
+        })
     }, [])
     return(
         <>

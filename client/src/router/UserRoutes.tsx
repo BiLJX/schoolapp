@@ -3,6 +3,7 @@ import { getCurrentUser } from "api/user";
 import MobileNavWrapper from "container/mobile-layouts/nav-wrapper";
 import HomePage from "pages/home/home-page";
 import LoginPage from "pages/Login/login-page";
+import PostPage from "pages/Post/post-page";
 import AccountReview from "pages/Review/account-review-page";
 import { UploadPost } from "pages/upload/upload";
 import { useEffect, useState } from "react";
@@ -50,6 +51,8 @@ export default function UserRoutes(){
                 <Route path = "upload" element = {<HomePage />}/>
                 <Route path = "inbox" element = {<HomePage />}/>
                 <Route path = "profile" element = {<HomePage />}/>
+                {/* Post */}
+                <Route path = "post/:post_id" element = {<PostPage />}/>
             </Route>
         </Routes>
     )
