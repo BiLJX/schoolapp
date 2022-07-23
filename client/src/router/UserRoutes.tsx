@@ -51,9 +51,10 @@ export default function UserRoutes(){
                 <Route path = "upload" element = {<HomePage />}/>
                 <Route path = "inbox" element = {<HomePage />}/>
                 <Route path = "profile" element = {<HomePage />}/>
-                {/* Post */}
-                <Route path = "post/:post_id" element = {<PostPage />}/>
+                
             </Route>
+            {/* Post */}
+            <Route path = "/post/:post_id" element = {<PostPage />}/>
         </Routes>
     )
 }

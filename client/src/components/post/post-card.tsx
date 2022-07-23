@@ -1,5 +1,4 @@
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Post } from '@shared/Post';
 import { likePost, unlikePost } from 'api/post';
@@ -7,6 +6,7 @@ import { toastError } from 'components/Toast/toast';
 import moment from "moment"
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
+import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import { likePostAction, unlikePostAction } from 'redux/Feed/feedActions';
 import "./post.scss"
 export default function PostCard({data}: {data: Post}){
@@ -57,7 +57,7 @@ export default function PostCard({data}: {data: Post}){
                     <span>{data.like_count}</span>
                 </div>
                 <div className = "post-card-button">
-                    <button><ForumOutlinedIcon /></button>
+                    <button><ModeCommentOutlinedIcon /></button>
                     <span>1k</span>
                 </div>
             </div>

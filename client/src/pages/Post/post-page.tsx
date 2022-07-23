@@ -1,7 +1,7 @@
 import { Post } from "@shared/Post";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
+import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import moment from "moment"
 import "./post-page.scss";
 import MobileStackHeader from "components/header/mobile-header";
@@ -12,22 +12,20 @@ import { getPostById, likePost, unlikePost } from "api/post";
 import { toastError } from "components/Toast/toast";
 import { useDispatch } from "react-redux";
 import { likePostAction, unlikePostAction } from "redux/Feed/feedActions";
+import CommentInput from "components/Comment-Input/comment-input";
 
 export default function PostPage(){
     const post_id = useParams().post_id
     const state:any = useLocation().state;
     const [post, setPost] = useState<Post>(state?.post as Post);
-    const [loading, setLoading] = useState(false)
     const getPost = async() => {
         if(post) return;
-        setLoading(true);
         const res = await getPostById(post_id||"");
         if(res.error){
             toastError(res.message);
             return;
         }
         setPost(res.data);
-        setLoading(false);
     }
     useEffect(()=>{
         getPost();
@@ -38,6 +36,7 @@ export default function PostPage(){
             <MobileStackHeader label="Post" />
             <StackContainer className="post-page">
                 {post && <Content data = {post} />}
+                <CommentInput />
             </StackContainer>
         </>
         
@@ -100,7 +99,7 @@ function Content({data}: {data: Post}){
                     <span>{like_count}</span>
                 </div>
                 <div className = "post-card-button">
-                    <button><ForumOutlinedIcon /></button>
+                    <button><ModeCommentOutlinedIcon /></button>
                     <span>1k</span>
                 </div>
             </div>

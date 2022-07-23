@@ -1,0 +1,37 @@
+.comment-input-container {
+    position: fixed;
+    display: flex;
+    bottom: 0;
+    padding: 1rem;
+    align-items: center;
+    width: 100vw;
+    border-radius: 10px;
+    background-color: var(--comment-input-container-background);
+    box-shadow: var(--comment-input-container-shadow);
+    .comment-input-pfp {
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        overflow: hidden;
+    }
+    .comment-input {
+        display: flex;
+        background-color: var(--input-background);
+        flex: 1;
+        margin-left: 0.5rem;
+        border-radius: 10px;
+        textarea {
+            font-size: 1rem;
+            width: 80%;
+            padding: 0.5rem 1rem;
+            &::placeholder {
+                font-weight: bold;
+            }
+        }
+        button {
+            font-weight: bold;
+            color: var(--blue);
+            font-size: 1rem;
+        }
+    }
+}
