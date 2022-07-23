@@ -1,6 +1,13 @@
 .post-page {
     display: flex;
+    padding-bottom: 54px;
     .post-card {
-
+        border-radius: 0 0 10px 10px;
+        cursor: default;
+    }
+    .comments-container {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
     }
 }

@@ -5,6 +5,99 @@ import { Controller } from "../types/controller";
 import { makeId } from "../utils/idgen";
 import JsonResponse from "../utils/Response";
 
+
+export const getComments: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const currentUser: Student|Teacher = res.locals.user;
+    try {
+        const post_id = req.params.post_id;
+        if(!post_id) return jsonResponse.notFound("Comments not found")
+        const comments = await Comments.aggregate([
+            {
+                $match: {
+                    post_id 
+                },
+            },
+            {
+                $lookup: {
+                    from: "teachers",
+                    foreignField: "user_id",
+                    localField: "author_id",
+                    as: "author_data_teacher",
+                    pipeline: [
+                        {
+                            $project: {
+                                profile_picture_url: 1,
+                                full_name: 1,
+                                user_id: 1,
+                                user_type: 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $unwind: {
+                    path: "$author_data_teacher",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "students",
+                    foreignField: "user_id",
+                    localField: "author_id",
+                    as: "author_data_student",
+                    pipeline: [
+                        {
+                            $project: {
+                                profile_picture_url: 1,
+                                full_name: 1,
+                                user_id: 1,
+                                user_type: 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $unwind: {
+                    path: "$author_data_student",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $addFields: {
+                    like_count: { 
+                        $size: "$likes"
+                    },
+                    author_data: {
+                        $ifNull: ["$author_data_teacher", "$author_data_student", "$author_data_teacher"]
+                    },
+                    has_liked: {
+                        $in: [currentUser.user_id, "$likes"]
+                    }
+                }
+            },
+            {
+                $project: {
+                    author_data_student: 0,
+                    author_data_teacher: 0
+                }
+            },
+            {
+                $sort: {
+                    createdAt: -1
+                }
+            }
+        ])
+        return jsonResponse.success(comments)
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError()
+    }
+}
+
 export const addComment: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
     const currentUser: Student|Teacher = res.locals.user;
@@ -29,7 +122,7 @@ export const addComment: Controller = async(req, res) => {
             user_id: currentUser.user_id,
             profile_picture_url: currentUser.profile_picture_url
         }
-        return jsonResponse.success(comment);
+        return jsonResponse.success(_comment);
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()
@@ -54,8 +147,14 @@ export const addReply: Controller = async(req, res) => {
             parent_id,
             post_id: comment.post_id
         })
-        await reply.save();
-        return jsonResponse.success(reply);
+        const _reply = (await reply.save()).toJSON();
+        _reply.author_data = {
+            user_type: currentUser.type,
+            full_name: currentUser.full_name,
+            user_id: currentUser.user_id,
+            profile_picture_url: currentUser.profile_picture_url
+        }
+        return jsonResponse.success(_reply);
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()

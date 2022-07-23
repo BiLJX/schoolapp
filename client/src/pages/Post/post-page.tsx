@@ -1,4 +1,4 @@
-import { Post } from "@shared/Post";
+import { Comment, Post } from "@shared/Post";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
@@ -16,11 +16,16 @@ import CommentInput from "components/Comment-Input/comment-input";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PostOptions from "components/post/post-options";
 import { RootState } from "types/states";
+import CommentComponent from "components/Comment/comment-component";
+import { getComment } from "api/comment";
+import { getMappedComments } from "utils/comments";
 
 export default function PostPage(){
     const post_id = useParams().post_id
     const state:any = useLocation().state;
-    
+    const [comment, setComment] = useState<Comment|null>(null);
+    const [comments, setComments] = useState<Comment[]>([]);
+    const [mappedComments, setMappedComments] = useState<Comment[]>([]);
     const [post, setPost] = useState<Post>(state?.post as Post);
     const getPost = async() => {
         if(post) return;
@@ -31,8 +36,19 @@ export default function PostPage(){
         }
         setPost(res.data);
     }
+    const getComments = async() => {
+        if(!post_id) return;
+        const res = await getComment(post_id);
+        if(res.error) toastError(res.message);
+        setComments(res.data);
+        setMappedComments(getMappedComments(res.data, null));
+    }
+    useEffect(()=>{
+        setMappedComments(getMappedComments(comments, null));
+    }, [comments])
     useEffect(()=>{
         getPost();
+        getComments()
         window.history.replaceState({}, document.title)
     }, [])
     return(
@@ -40,12 +56,22 @@ export default function PostPage(){
             <MobileStackHeader label="Post" />
             <StackContainer className="post-page">
                 {post && <Content data = {post} />}
-                <CommentInput data={post} />
+                <div className = "comments-container">
+                    {
+                        mappedComments.map((x, i)=> <CommentComponent comment={x} key= {i} onReplyClicked={(comment)=>setComment(comment)} />)
+                    }
+                </div>
+                <CommentInput onComment={(c)=>setComments([c, ...comments])} data={post} comment = {comment} />
             </StackContainer>
         </>
         
     )
 }
+
+
+
+
+
 
 function Content({data}: {data: Post}){
     const currentUser = useSelector((state: RootState)=>state.currentUser)

@@ -3,8 +3,8 @@
     flex-direction: column;
     padding: 1rem;
     background-color: var(--post-card-background);
-    border: var(--post-card-border);
-    // box-shadow: var(--post-card-shadow);
+    // border: var(--post-card-border);
+    box-shadow: var(--post-card-shadow);
     border-radius: 10px;
     margin-bottom: 0.5rem;
     cursor: pointer;
@@ -51,12 +51,17 @@
     padding-bottom: 1rem;
 }
 
+.post-card-body {
+    padding-bottom: 1rem;
+}
+
 .post-card-content-container {
     border-radius: 10px;
     width: 100%;
     padding-bottom: 75%;
     position: relative;
     overflow: hidden;
+    margin-bottom: 1rem;
     img {
         position: absolute;
         top: 0; bottom: 0; left: 0; right: 0;
@@ -65,7 +70,6 @@
 
 .post-card-buttons-container {
     display: flex;
-    padding-top: 1rem;
 
     .post-card-button {
         display: flex;

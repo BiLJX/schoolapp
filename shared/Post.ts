@@ -39,7 +39,7 @@ export interface Comment {
     author_id: string,
     post_id: string,
     text: string,
-    children: Comment|null,
+    children: Comment[]|null,
     author_data: {
         user_id: string,
         full_name: string,
