@@ -2,6 +2,7 @@ import KeyboardReturnRoundedIcon from '@mui/icons-material/KeyboardReturnRounded
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import "./comment.scss"
 import { Comment } from '@shared/Post';
+import moment from 'moment';
 
 interface CommentProps {
     onReplyClicked: (comment: Comment) => any;
@@ -18,7 +19,7 @@ export default function CommentComponent(props: CommentProps){
                 <span className = "comment-line" />
             </div>
             <div className = "comment-right">
-                <div className = "comment-name">{data.author_data.full_name}</div>
+                <div className = "comment-name">{data.author_data.full_name} • {moment(data.createdAt).fromNow(true)}</div>
                 <div className = "comment-content">{data.text}</div>
                 <div className = "comment-button-container">
                     <div className = "comment-button" onClick = {()=>props.onReplyClicked(data)}>

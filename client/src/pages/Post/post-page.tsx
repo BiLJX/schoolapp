@@ -61,7 +61,7 @@ export default function PostPage(){
                         mappedComments.map((x, i)=> <CommentComponent comment={x} key= {i} onReplyClicked={(comment)=>setComment(comment)} />)
                     }
                 </div>
-                <CommentInput onComment={(c)=>setComments([c, ...comments])} data={post} comment = {comment} />
+                <CommentInput onReplyClose={()=>setComment(null)} onComment={(c)=>setComments([c, ...comments])} data={post} comment = {comment} />
             </StackContainer>
         </>
         
@@ -133,7 +133,7 @@ function Content({data}: {data: Post}){
                 </div>
                 <div className = "post-card-button">
                     <button><ModeCommentOutlinedIcon /></button>
-                    <span>1k</span>
+                    <span>{data.comment_count}</span>
                 </div>
             </div>
         </article>

@@ -8,6 +8,7 @@ import { Post } from "../models/Post"
 import { Student } from "@shared/User";
 import sharp from "sharp";
 import moment from "moment";
+import { Comments } from "../models/Comment";
 
 
 export const getFeedPost: Controller = async (req, res) => {
@@ -18,6 +19,14 @@ export const getFeedPost: Controller = async (req, res) => {
             {
                 $match: {
                     school_id: currentUser.school_id
+                }
+            },
+            {
+                $lookup: {
+                    from: "comments",
+                    localField: "post_id",
+                    foreignField: "post_id",
+                    as: "comments"
                 }
             },
             {
@@ -66,6 +75,9 @@ export const getFeedPost: Controller = async (req, res) => {
             },
             {
                 $addFields: {
+                    comment_count: {
+                        $size: "$comments"
+                    },
                     like_count: { 
                         $size: "$liked_by"
                     },
@@ -111,6 +123,14 @@ export const getPostById: Controller = async(req, res) => {
             },
             {
                 $lookup: {
+                    from: "comments",
+                    localField: "post_id",
+                    foreignField: "post_id",
+                    as: "comments"
+                }
+            },
+            {
+                $lookup: {
                     from: "teachers",
                     foreignField: "user_id",
                     localField: "author_id",
@@ -158,6 +178,9 @@ export const getPostById: Controller = async(req, res) => {
                     like_count: { 
                         $size: "$liked_by"
                     },
+                    comment_count: {
+                        $size: "$comments"
+                    },
                     author_data: {
                         $ifNull: ["$author_data_teacher", "$author_data_student", "$author_data_teacher"]
                     },
@@ -169,7 +192,8 @@ export const getPostById: Controller = async(req, res) => {
             {
                 $project: {
                     author_data_student: 0,
-                    author_data_teacher: 0
+                    author_data_teacher: 0,
+                    comments: 0
                 }
             },
             {
@@ -280,6 +304,7 @@ export const deletePost: Controller = async(req, res) => {
     const post_id = req.params.post_id;
     try {
         await Post.deleteOne({post_id, author_id: currentUser.user_id});
+        await Comments.deleteMany({post_id});
         jsonResponse.success();
     } catch (error) {
         console.log(error);

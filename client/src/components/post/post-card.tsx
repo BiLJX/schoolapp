@@ -58,7 +58,7 @@ export default function PostCard({data}: {data: Post}){
                 </div>
                 <div className = "post-card-button">
                     <button><ModeCommentOutlinedIcon /></button>
-                    <span>1k</span>
+                    <span>{data.comment_count}</span>
                 </div>
             </div>
         </article>
