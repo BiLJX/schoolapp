@@ -19,7 +19,7 @@ export const uploadPost = async(data: ClientPostDataImage|ClientPostDataText, pi
     }
     if(picture) formData.append("picture", picture);
     const res = await axios.post("/api/post/upload", formData);
-    return res.data as ApiResponse<{post_id: string}>;
+    return res.data as ApiResponse<Post>;
 }
 
 export const likePost = async(post_id: string) => {

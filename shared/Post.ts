@@ -48,5 +48,6 @@ export interface Comment {
     },
     createdAt: string,
     likes: string[],
-    likes_count: number
+    likes_count: number,
+    has_liked: boolean
 }

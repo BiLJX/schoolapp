@@ -1,0 +1,10 @@
+.avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 100%;
+    background-color: var(--input-background);
+}

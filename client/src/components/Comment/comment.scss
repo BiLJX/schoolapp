@@ -1,6 +1,7 @@
 .comment-component {
     display: flex;
     margin-top: 1rem;
+    font-size: 0.9rem;
 }
 
 .comment-left {
@@ -8,8 +9,8 @@
     flex-direction: column;
     align-items: center;
     .comment-pfp {
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 30px;
         background-color: var(--image-background);
         border-radius: 100%;
         overflow: hidden;
@@ -46,12 +47,21 @@
             }
             svg {
                 color: var(--text-secondary-alt);
+                cursor: pointer;
+                font-size: 1rem;
             }
         }
     }
     .comment-children {
         display: flex;
         flex-direction: column;
-        margin-top: 1rem;
     }
+}
+
+.comment-view-more {
+    display: flex;
+    margin-top: 0.5rem;
+    color: var(--blue);
+    font-weight: bold;
+    font-size: 0.8rem;
 }

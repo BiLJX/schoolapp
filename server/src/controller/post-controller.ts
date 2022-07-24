@@ -5,7 +5,7 @@ import JsonResponse from "../utils/Response";
 import { upload, uploadFile } from "../utils/upload";
 import { validatePostBody, validatePostTitle } from "../utils/validator";
 import { Post } from "../models/Post"
-import { Student } from "@shared/User";
+import { Student, Teacher } from "@shared/User";
 import sharp from "sharp";
 import moment from "moment";
 import { Comments } from "../models/Comment";
@@ -13,7 +13,7 @@ import { Comments } from "../models/Comment";
 
 export const getFeedPost: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
-    const currentUser: Student = res.locals.user;
+    const currentUser: Student|Teacher = res.locals.user;
     try {
         const posts = await Post.aggregate([
             {
@@ -110,7 +110,7 @@ export const getFeedPost: Controller = async (req, res) => {
 
 export const getPostById: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
-    const currentUser: Student = res.locals.user;
+    const currentUser: Student|Teacher = res.locals.user;
     const post_id: string = req.params.post_id;
     try {
         if(!post_id) return jsonResponse.notFound("post not found :(");
@@ -212,7 +212,7 @@ export const getPostById: Controller = async(req, res) => {
 
 export const uploadPost: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
-    const currentUser: Student = res.locals.user
+    const currentUser: Student|Teacher = res.locals.user
     upload(req, res, async err=>{
         try {
             if(err) return jsonResponse.serverError();
@@ -223,7 +223,6 @@ export const uploadPost: Controller = async (req, res) => {
             //validation
             const titleValid = validatePostTitle(data.title);
             if(!titleValid.success) return jsonResponse.clientError(titleValid.message);
-            
             if("body" in data && !picture){
                 const bodyValid = validatePostBody(data.body);
                 if(!bodyValid.success) return jsonResponse.clientError(bodyValid.message);
@@ -234,7 +233,13 @@ export const uploadPost: Controller = async (req, res) => {
                     author_id: currentUser.user_id,
                     post_type: "text"
                 })
-                await post.save()
+                const _post = (await post.save()).toJSON();
+                _post.author_data = {
+                    full_name: currentUser.full_name,
+                    profile_picture_url: currentUser.profile_picture_url
+                }
+                jsonResponse.success(_post);
+                return;
             } else {
                 if(!picture.mimetype.includes("image")) return jsonResponse.clientError("Invalid file format");
                 const buffer = await sharp(picture.buffer).jpeg({ quality: 80 }).toBuffer()
@@ -248,9 +253,16 @@ export const uploadPost: Controller = async (req, res) => {
                     author_id: currentUser.user_id,
                     content_src: url
                 })
-                await post.save();
+                const _post = (await post.save()).toJSON();
+                _post.author_data = {
+                    full_name: currentUser.full_name,
+                    profile_picture_url: currentUser.profile_picture_url
+                }
+                _post.like_count = 0;
+                _post.has_liked = false;
+                jsonResponse.success(_post);
+                return;
             }
-            jsonResponse.success({post_id});
         } catch (error) {
             console.log(error);
             jsonResponse.serverError()
@@ -260,7 +272,7 @@ export const uploadPost: Controller = async (req, res) => {
 
 export const likePost: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
-    const currentUser: Student = res.locals.user;
+    const currentUser: Student|Teacher = res.locals.user;
     const post_id = req.params.post_id
     try {
         const post = await Post.findOne({post_id});
@@ -280,7 +292,7 @@ export const likePost: Controller = async (req, res) => {
 
 export const unlikePost: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
-    const currentUser: Student = res.locals.user;
+    const currentUser: Student|Teacher = res.locals.user;
     const post_id = req.params.post_id
     try {
         const post = await Post.findOne({post_id});
@@ -300,7 +312,7 @@ export const unlikePost: Controller = async (req, res) => {
 
 export const deletePost: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
-    const currentUser: Student = res.locals.user;
+    const currentUser: Student|Teacher = res.locals.user;
     const post_id = req.params.post_id;
     try {
         await Post.deleteOne({post_id, author_id: currentUser.user_id});

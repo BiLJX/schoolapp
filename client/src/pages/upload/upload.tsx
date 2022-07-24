@@ -10,6 +10,9 @@ import { toastError } from "components/Toast/toast";
 import { useNavigate } from "react-router-dom";
 import SubjectIcon from '@mui/icons-material/Subject';
 import "./scss/upload.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "types/states";
+import { addFeed } from "redux/Feed/feedActions";
 
 const POSTCATEGORIES = [
     "Nepali",
@@ -25,11 +28,13 @@ const POSTCATEGORIES = [
 ]
 
 export function UploadPost(){
+    const feed = useSelector((state: RootState)=>state.feed)
     const [image, setImage] = useState<File>();
     const [imageUrl, setImageUrl] = useState<string>();
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState<ClientPostDataText|ClientPostDataImage>({ title: "", category: "null", body: "", post_type: "text"})
     const [categories] = useState<FormSelectData[]>([{label: "Subject", value: "null"} ,...POSTCATEGORIES.map(x=>({label: x, value: x}))])
+    const dispatch = useDispatch();
     const navigate = useNavigate()
     const onPost = async() => {
         if(!POSTCATEGORIES.includes(data.category)) return toastError("Select a category")
@@ -40,6 +45,7 @@ export function UploadPost(){
             setIsLoading(false);
             return;
         }
+        dispatch(addFeed([res.data, ...feed]))
         setIsLoading(false);
         navigate("/");
     }

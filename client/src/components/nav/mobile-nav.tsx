@@ -32,7 +32,6 @@ function MobileNavItem(props: NavProps){
     const className = (state: any) => {
         setIsActive(state.isActive);
         if(state.isActive){
-            
             return "nav-item active"
         }
         return "nav-item"

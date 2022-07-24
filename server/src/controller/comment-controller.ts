@@ -68,7 +68,7 @@ export const getComments: Controller = async (req, res) => {
             },
             {
                 $addFields: {
-                    like_count: { 
+                    likes_count: { 
                         $size: "$likes"
                     },
                     author_data: {
@@ -158,5 +158,41 @@ export const addReply: Controller = async(req, res) => {
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()
+    }
+}
+
+export const likeComment: Controller = async(req, res) => {
+    const response = new JsonResponse(res);
+    const currentUser: Student|Teacher = res.locals.user;
+    try {
+        const comment_id: string = req.params.comment_id;
+        const comment = await Comments.findOne({comment_id});
+        if(!comment) return response.clientError("no comment found");
+        if(comment.likes.includes(currentUser.user_id)) return response.clientError("You have already liked the comment");
+        await comment.updateOne({ 
+            $push: { likes: currentUser.user_id }
+        });
+        return response.success()
+    } catch (error) {
+        console.log(error);
+        response.serverError()
+    }
+}
+
+export const unlikeComment: Controller = async(req, res) => {
+    const response = new JsonResponse(res);
+    const currentUser: Student|Teacher = res.locals.user;
+    try {
+        const comment_id: string = req.params.comment_id;
+        const comment = await Comments.findOne({comment_id});
+        if(!comment) return response.clientError("no comment found");
+        if(!comment.likes.includes(currentUser.user_id)) return response.clientError("You have not liked the comment");
+        await comment.updateOne({ 
+            $pull: { likes: currentUser.user_id }
+        });
+        return response.success()
+    } catch (error) {
+        console.log(error);
+        response.serverError()
     }
 }
