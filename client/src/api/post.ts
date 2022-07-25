@@ -11,6 +11,11 @@ export const getPostById = async(id: string) => {
     return res.data as ApiResponse<Post>;
 }
 
+export const getPostByUserId = async(user_id: string) => {
+    const res = await axios.get("/api/post/user/"+user_id);
+    return res.data as ApiResponse<Post[]>;
+}
+
 export const uploadPost = async(data: ClientPostDataImage|ClientPostDataText, picture?: File) => {
     const _data: any = data
     const formData = new FormData();

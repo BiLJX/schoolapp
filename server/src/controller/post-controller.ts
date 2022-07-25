@@ -10,7 +10,6 @@ import sharp from "sharp";
 import moment from "moment";
 import { Comments } from "../models/Comment";
 
-
 export const getFeedPost: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
     const currentUser: Student|Teacher = res.locals.user;
@@ -39,7 +38,13 @@ export const getFeedPost: Controller = async (req, res) => {
                         {
                             $project: {
                                 profile_picture_url: 1,
-                                full_name: 1
+                                full_name: 1,
+                                user_id: 1,
+                            }
+                        },
+                        {
+                            $addFields: {
+                                type: "teacher"
                             }
                         }
                     ]
@@ -61,7 +66,13 @@ export const getFeedPost: Controller = async (req, res) => {
                         {
                             $project: {
                                 profile_picture_url: 1,
-                                full_name: 1
+                                full_name: 1,
+                                user_id: 1,
+                            }
+                        },
+                        {
+                            $addFields: {
+                                type: "student"
                             }
                         }
                     ]
@@ -139,7 +150,13 @@ export const getPostById: Controller = async(req, res) => {
                         {
                             $project: {
                                 profile_picture_url: 1,
-                                full_name: 1
+                                full_name: 1,
+                                user_id: 1,
+                            }
+                        },
+                        {
+                            $addFields: {
+                                type: "teacher"
                             }
                         }
                     ]
@@ -161,7 +178,13 @@ export const getPostById: Controller = async(req, res) => {
                         {
                             $project: {
                                 profile_picture_url: 1,
-                                full_name: 1
+                                full_name: 1,
+                                user_id: 1,
+                            }
+                        },
+                        {
+                            $addFields: {
+                                type: "teacher"
                             }
                         }
                     ]
@@ -210,6 +233,119 @@ export const getPostById: Controller = async(req, res) => {
     }
 }
 
+export const getPostByUserId: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const currentUser: Student|Teacher = res.locals.user;
+    const user_id: string = req.params.user_id;
+    try {
+        if(!user_id) return jsonResponse.notFound("user not found");
+        const posts = await Post.aggregate([
+            {
+                $match: {
+                    school_id: currentUser.school_id,
+                    author_id: user_id,
+                }
+            },
+            {
+                $lookup: {
+                    from: "comments",
+                    localField: "post_id",
+                    foreignField: "post_id",
+                    as: "comments"
+                }
+            },
+            {
+                $lookup: {
+                    from: "teachers",
+                    foreignField: "user_id",
+                    localField: "author_id",
+                    as: "author_data_teacher",
+                    pipeline: [
+                        {
+                            $project: {
+                                profile_picture_url: 1,
+                                full_name: 1,
+                                user_id: 1,
+                            }
+                        },
+                        {
+                            $addFields: {
+                                type: "teacher"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $unwind: {
+                    path: "$author_data_teacher",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "students",
+                    foreignField: "user_id",
+                    localField: "author_id",
+                    as: "author_data_student",
+                    pipeline: [
+                        {
+                            $project: {
+                                profile_picture_url: 1,
+                                full_name: 1,
+                                user_id: 1,
+                            }
+                        },
+                        {
+                            $addFields: {
+                                type: "teacher"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $unwind: {
+                    path: "$author_data_student",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $addFields: {
+                    like_count: { 
+                        $size: "$liked_by"
+                    },
+                    comment_count: {
+                        $size: "$comments"
+                    },
+                    author_data: {
+                        $ifNull: ["$author_data_teacher", "$author_data_student", "$author_data_teacher"]
+                    },
+                    has_liked: {
+                        $in: [currentUser.user_id, "$liked_by"]
+                    }
+                }
+            },
+            {
+                $project: {
+                    author_data_student: 0,
+                    author_data_teacher: 0,
+                    comments: 0
+                }
+            },
+            {
+                $sort: {
+                    createdAt: -1
+                }
+            }
+        ]);
+        jsonResponse.success(posts)
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
+
 export const uploadPost: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
     const currentUser: Student|Teacher = res.locals.user
@@ -236,7 +372,9 @@ export const uploadPost: Controller = async (req, res) => {
                 const _post = (await post.save()).toJSON();
                 _post.author_data = {
                     full_name: currentUser.full_name,
-                    profile_picture_url: currentUser.profile_picture_url
+                    profile_picture_url: currentUser.profile_picture_url,
+                    type: currentUser.type,
+                    user_id: currentUser.user_id
                 }
                 jsonResponse.success(_post);
                 return;
@@ -256,7 +394,9 @@ export const uploadPost: Controller = async (req, res) => {
                 const _post = (await post.save()).toJSON();
                 _post.author_data = {
                     full_name: currentUser.full_name,
-                    profile_picture_url: currentUser.profile_picture_url
+                    profile_picture_url: currentUser.profile_picture_url,
+                    type: currentUser.type,
+                    user_id: currentUser.user_id
                 }
                 _post.like_count = 0;
                 _post.has_liked = false;

@@ -31,7 +31,7 @@ export default function PostCard({data}: {data: Post}){
                     <img className="full-img" src = {data.author_data.profile_picture_url} />
                 </div>
                 <div className="post-card-author-info">
-                    <div className="post-card-author-name">{`${data.author_data.full_name}` }</div>
+                    <NavLink onClick={(e)=>e.stopPropagation()} to = {`/${data.author_data.type}/${data.author_data.user_id}`} className="post-card-author-name">{`${data.author_data.full_name}` }</NavLink>
                     <div className="post-card-category">{data.category} • <span className = "post-card-time">{ moment(data.createdAt).fromNow(true) }</span> </div>
 
                 </div>

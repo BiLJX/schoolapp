@@ -19,10 +19,12 @@ export interface Student extends User {
     class_id: string,
     student_verified: boolean,
     class: ClassSchema,
+    type: "student"
 }
 
 export interface Teacher extends User {
-    teacher_verified: boolean
+    teacher_verified: boolean,
+    type: "teacher"
 }
 
 export interface StudentSignupData {

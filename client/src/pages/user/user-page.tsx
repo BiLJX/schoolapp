@@ -1,0 +1,86 @@
+import { Student, Teacher } from "@shared/User";
+import MobileStackHeader from "components/header/mobile-header";
+import StackContainer from "container/mobile-layouts/stack-container";
+import { useSelector } from "react-redux";
+import { RootState } from "types/states";
+import "./user-page.scss"
+import { UserNav, UserPageInfo } from "./components";
+import { useEffect, useState } from "react";
+import { getStudentById, getTeacherById } from "api/user";
+import { useParams } from "react-router-dom";
+import { toastError } from "components/Toast/toast";
+import { Post } from "@shared/Post";
+import { getPostByUserId } from "api/post";
+import UserPosts from "./user-posts";
+const studentNavData = [
+    {to: "", label: "Posts"},
+    {to: "performance", label: "Performance"},
+    {to: "comments", label: "Comments"},
+]
+type User = Student|Teacher
+
+interface UserPageProps {
+    type: "student"|"teacher"
+}
+export default function UserPage({type}: UserPageProps){
+    const user_id = useParams().user_id
+    const currentUser = useSelector((state: RootState)=>state.currentUser) as User|null;
+    const [user, setUser] = useState<User|null>(null);
+    const [loading, setLoading] = useState(false);
+  
+    const getUser = async() => {
+        setLoading(true);
+        if(!user_id) {
+            setLoading(false)
+            toastError("User not found");
+            return;
+        }
+        if(user_id === currentUser?.user_id){
+            setLoading(false)
+            return setUser(currentUser);
+        }
+        const res = type === "student"?await getStudentById(user_id):await getTeacherById(user_id);
+        if(res.error) {
+            setLoading(false)
+            return toastError(res.message);
+        }
+        setLoading(false)
+        setUser(res.data);
+    }
+    
+    useEffect(()=>{
+        getUser()
+    }, [])
+    if(loading){
+        return(
+            <>
+                <MobileStackHeader label = "Loading" />
+                <StackContainer className="user-page">
+
+                </StackContainer>
+            </>
+        )
+    }
+    if(!user){
+        return(
+            <>
+                <MobileStackHeader label = "User" />
+                <StackContainer className="user-page">
+                    User not found :(
+                </StackContainer>
+            </>
+        )
+    }
+    return(
+        <>
+            <MobileStackHeader label = {user.full_name} />
+            <StackContainer className="user-page">
+                <UserPageInfo user = {user} />
+                <UserNav data = {studentNavData} />
+                <UserPosts user = {user} />
+            </StackContainer>
+        </>
+    )
+}
+
+

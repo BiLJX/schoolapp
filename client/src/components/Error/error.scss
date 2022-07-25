@@ -1,0 +1,19 @@
+.error-component {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: var(--text-secondary-alt);
+    img {
+        width: 100%;
+        object-fit: contain;
+    }
+    .error-component-information {
+        font-size: 5rem;
+        color: var(--text-secondary-alt);
+    }
+    .error-component-icon-wrapper {
+        padding: 1rem;
+    }
+}

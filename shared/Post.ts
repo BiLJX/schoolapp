@@ -13,8 +13,10 @@ export interface Post {
     createdAt: string,
     has_liked: boolean,
     author_data: {
-        profile_picture_url: string,
-        full_name: string
+        user_id: string,
+        full_name: string,
+        type: "student"|"teacher",
+        profile_picture_url: string
     }
 }
 

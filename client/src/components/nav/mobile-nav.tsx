@@ -9,14 +9,18 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PersonIcon from '@mui/icons-material/Person';
 import "./nav.scss"
 import { useState } from "react";
+import { RootState } from "types/states";
+import { useSelector } from "react-redux";
+import { Student, Teacher } from "@shared/User";
 export function MobileNav(){
+    const currentUser = useSelector((state: RootState)=>state.currentUser) as Teacher|Student;
     return(
         <nav className="mobile-nav">
             <MobileNavItem to = "/" Icon={HomeOutlinedIcon} ActiveIcon = {HomeIcon} />
             <MobileNavItem to = "/explore" Icon={SearchIcon} ActiveIcon = {SearchIcon} />
             <UploadItem />
             <MobileNavItem to = "/inbox" Icon={MailOutlinedIcon} ActiveIcon = {MailIcon} />
-            <MobileNavItem to = "/profile" Icon={PersonOutlineIcon} ActiveIcon = {PersonIcon} />
+            <MobileNavItem to = {`/${currentUser.type}/${currentUser.user_id}`} Icon={PersonOutlineIcon} ActiveIcon = {PersonIcon} />
         </nav>
     )
 }

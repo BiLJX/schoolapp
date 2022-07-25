@@ -1,0 +1,70 @@
+.user-page {
+    display: flex;
+    flex-direction: column;   
+}
+
+.user-page-info-container {
+    display: flex;
+    padding: 1rem;
+    background-color: var(--user-info-background);
+    .user-page-info-left {
+        margin-right: 1rem;
+    }
+    .user-page-info-right {
+        display: flex;
+        flex-direction: column;
+        >div {
+            margin-bottom: 0.5rem;
+        }
+        .user-fullname {
+            color: var(--text-title);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .user-class {
+            color: var(--text-secondary);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .user-buttons {
+            display: flex;
+            .user-button {
+                margin-right: 1rem;
+                display: flex;
+                align-items: center;
+                color: var(--text-secondary-alt);
+                svg {
+                    margin-right: .2rem;
+                    color: var(--text-secondary-alt);
+                }
+            }
+        }
+    }
+}
+
+.user-nav {
+    display: flex;
+    position: sticky;
+    top: var(--header-height);
+    background-color: var(--user-info-background);
+    .user-nav-item {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding: .5rem 0;
+        color: var(--text-secondary-alt);
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    .user-nav-item.active {
+        color: var(--text-title);
+        font-weight: bold;
+        border-bottom: 1px solid var(--text-title);
+    }
+}
+
+.user-posts-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+}

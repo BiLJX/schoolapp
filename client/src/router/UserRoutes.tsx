@@ -6,7 +6,7 @@ import LoginPage from "pages/Login/login-page";
 import PostPage from "pages/Post/post-page";
 import AccountReview from "pages/Review/account-review-page";
 import { UploadPost } from "pages/upload/upload";
-import StudentPage from "pages/user/student-page";
+import UserPage from "pages/user/user-page";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
@@ -56,7 +56,8 @@ export default function UserRoutes(){
             </Route>
             {/* Post */}
             <Route path = "/post/:post_id" element = {<PostPage />}/>
-            <Route path = "/student/:student_id" element = {<StudentPage />}/>
+            <Route path = "/student/:user_id/*" element = {<UserPage type="student" />}/>
+            <Route path = "/teacher/:user_id/*" element = {<UserPage type="teacher" />}/>
         </Routes>
     )
 }

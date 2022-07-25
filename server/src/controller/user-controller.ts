@@ -57,16 +57,19 @@ export const getStudentById: Controller = async(req, res) => {
             },
             {
                 $unwind: {
-                    path: "$school"
+                    path: "$school",
+                    preserveNullAndEmptyArrays: true
                 }
             },
             {
                 $unwind: {
-                    path: "$class"
+                    path: "$class",
+                    preserveNullAndEmptyArrays: true
                 }
             },
         ]);
         const user = users[0];
+        console.log(users)
         if(user) {
             user.type = "student";
             return jsonResponse.success(user);
@@ -106,11 +109,6 @@ export const getTeacherById: Controller = async(req, res) => {
             {
                 $unwind: {
                     path: "$school"
-                }
-            },
-            {
-                $unwind: {
-                    path: "$class"
                 }
             },
         ]);
