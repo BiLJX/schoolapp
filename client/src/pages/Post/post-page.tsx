@@ -6,7 +6,7 @@ import moment from "moment"
 import "./post-page.scss";
 import MobileStackHeader from "components/header/mobile-header";
 import StackContainer from "container/mobile-layouts/stack-container";
-import { useLocation, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPostById, likePost, unlikePost } from "api/post";
 import { toastError } from "components/Toast/toast";
@@ -101,7 +101,7 @@ function Content({data}: {data: Post}){
                     <img className="full-img" src = {data.author_data.profile_picture_url} />
                 </div>
                 <div className="post-card-author-info">
-                    <div className="post-card-author-name">{`${data.author_data.full_name}` }</div>
+                <NavLink onClick={(e)=>e.stopPropagation()} to = {`/${data.author_data.type}/${data.author_data.user_id}`} className="post-card-author-name">{`${data.author_data.full_name}`}</NavLink>
                     <div className="post-card-category">{data.category} • <span className = "post-card-time">{ moment(data.createdAt).fromNow(true) }</span> </div>
                 </div>
                 {currentUser?.user_id === data.author_id && <button className = "post-card-more" onClick={()=>setOptionOpened(true)}><MoreVertIcon /></button>}

@@ -12,6 +12,7 @@ import { Class } from "../models/Class";
 import { Students } from "../models/Student";
 import { Controller } from "../types/controller";
 import { Teachers } from "../models/Teacher";
+import { studentAggregation } from "../utils/aggregations";
 
 
 const expiresIn = 60*60*24*14*1000;
@@ -82,51 +83,11 @@ export const studentSignUp = async (req: Request, res: Response) => {
             await student.save()
             const token = jwt.sign({ user_id: student.user_id, type: "student" }, USER_PASSWORD_SECRET, { expiresIn: "10d" })
             res.cookie("user_session", token, options);
-            const _user = await Students.aggregate([
-                {
-                    $match: {
-                        user_id: student.user_id
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "schools",
-                        localField: "school_id",
-                        foreignField: "school_id",
-                        as: "school",
-                        pipeline: [
-                            {
-                                $project: {
-                                    password: 0
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "classes",
-                        localField: "class_id",
-                        foreignField: "class_id",
-                        as: "class",
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$school"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$class"
-                    }
-                },
-                {
-                    $project: {
-                        password: 0
-                    }
+            const _user = await Students.aggregate(studentAggregation({ 
+                $match: {
+                    user_id: student.user_id
                 }
-            ]);
+            }));
             jsonResponse.success(_user[0])
         } catch (error) {
             console.log(error);
@@ -140,46 +101,11 @@ export const studentLogin = async (req: Request, res: Response) => {
     const jsonResponse = new JsonResponse(res)
     try {
         const { email, password } = req.body;
-        const user = await Students.aggregate([
-            {
-                $match: {
-                    email
-                }
-            },
-            {
-                $lookup: {
-                    from: "schools",
-                    localField: "school_id",
-                    foreignField: "school_id",
-                    as: "school",
-                    pipeline: [
-                        {
-                            $project: {
-                                password: 0
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                $lookup: {
-                    from: "classes",
-                    localField: "class_id",
-                    foreignField: "class_id",
-                    as: "class",
-                }
-            },
-            {
-                $unwind: {
-                    path: "$school"
-                }
-            },
-            {
-                $unwind: {
-                    path: "$class"
-                }
-            },
-        ]);
+        const user = await Students.aggregate(studentAggregation({
+            $match: {
+                email
+            }
+        }));
         if(user.length < 1) return jsonResponse.clientError("Student not found");
         const student: any = user[0];
         const result = await bcrypt.compare(password, student.password);
