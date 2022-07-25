@@ -5,6 +5,7 @@ import { USER_PASSWORD_SECRET } from "../secret";
 import { Student, Teacher } from "@shared/User";
 import { Students } from "../models/Student";
 import { Teachers } from "../models/Teacher";
+import { studentAggregation } from "../utils/aggregations";
 
 export const UserAuth = async(req: Request, res: Response, next: NextFunction) => {
     const jsonResponse = new JsonResponse(res);
@@ -14,53 +15,11 @@ export const UserAuth = async(req: Request, res: Response, next: NextFunction) =
         const decodedData: any = jwt.verify(session, USER_PASSWORD_SECRET);
         let user: Student|Teacher|undefined;
         if(decodedData.type === "student"){
-            const _user = await Students.aggregate([
-                {
-                    $match: {
-                        user_id: decodedData.user_id
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "schools",
-                        localField: "school_id",
-                        foreignField: "school_id",
-                        as: "school",
-                        pipeline: [
-                            {
-                                $project: {
-                                    password: 0
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "classes",
-                        localField: "class_id",
-                        foreignField: "class_id",
-                        as: "class",
-                        pipeline: [
-                            {
-                                $project: {
-                                    password: 0
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$school"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$class"
-                    }
-                },
-            ]);
+            const _user = await Students.aggregate(studentAggregation({ 
+                $match: {
+                    user_id: decodedData.user_id
+                }
+            }));
             user = _user[0];
             if(user) user.type = "student"
         }else {

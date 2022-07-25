@@ -19,7 +19,9 @@ export interface Student extends User {
     class_id: string,
     student_verified: boolean,
     class: ClassSchema,
-    type: "student"
+    type: "student",
+    merits_count: number,
+    demerits_count: number
 }
 
 export interface Teacher extends User {

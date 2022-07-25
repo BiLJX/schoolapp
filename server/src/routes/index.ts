@@ -8,6 +8,8 @@ import { PostRoutes } from "./posts";
 import { SchoolRoutes } from "./school";
 import { UserRoutes } from "./user";
 import nodemailer from "nodemailer"
+import { InteractionRoutes } from "./interaction";
+import { TeacherAuth } from "../middleware/teacher";
 const router = Router()
 
 router.use("/auth", AuthRoutes)
@@ -16,6 +18,7 @@ router.use("/admin", AdminAuth, AdminRoutes)
 router.use("/user", UserAuth, UserRoutes);
 router.use("/post", UserAuth, PostRoutes)
 router.use("/comment", UserAuth, CommentRoutes)
+router.use("/interaction", UserAuth, TeacherAuth, InteractionRoutes)
 
 
 
@@ -34,8 +37,7 @@ router.use("/comment", UserAuth, CommentRoutes)
 
 
 
-
-router.get("/email", async (req, res)=>{
+router.get("/email", async (req, res) => {
     try {
         const mail = nodemailer.createTransport({
             service: "gmail",
@@ -50,11 +52,11 @@ router.get("/email", async (req, res)=>{
             subject: "Test",
             text: "Test"
         })
-        res.status(200).json({status: "ok"})
+        res.status(200).json({ status: "ok" })
     } catch (error) {
         console.log(error);
         res.json(error)
     }
-    
+
 })
-export {router as ApiRoutes}
+export { router as ApiRoutes }

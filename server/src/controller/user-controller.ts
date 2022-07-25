@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import { pipeline } from "nodemailer/lib/xoauth2";
 import { Students } from "../models/Student";
 import { Teachers } from "../models/Teacher";
 import { Controller } from "../types/controller";
+import { studentAggregation } from "../utils/aggregations";
 import JsonResponse from "../utils/Response"
 
 export const getCurrentUser = (req: Request, res: Response) => {
@@ -19,57 +21,10 @@ export const getStudentById: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
     try {
         const user_id = req.params.user_id;
-        const users = await Students.aggregate([
-            {
-                $match: {
-                    user_id
-                }
-            },
-            {
-                $lookup: {
-                    from: "schools",
-                    localField: "school_id",
-                    foreignField: "school_id",
-                    as: "school",
-                    pipeline: [
-                        {
-                            $project: {
-                                password: 0
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                $lookup: {
-                    from: "classes",
-                    localField: "class_id",
-                    foreignField: "class_id",
-                    as: "class",
-                    pipeline: [
-                        {
-                            $project: {
-                                password: 0
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                $unwind: {
-                    path: "$school",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $unwind: {
-                    path: "$class",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-        ]);
+        const users = await Students.aggregate(studentAggregation({ $match: {
+            user_id
+        } }));
         const user = users[0];
-        console.log(users)
         if(user) {
             user.type = "student";
             return jsonResponse.success(user);
