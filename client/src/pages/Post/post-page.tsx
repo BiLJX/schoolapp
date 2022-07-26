@@ -53,7 +53,7 @@ export default function PostPage(){
     }, [])
     return(
         <>
-            <MobileStackHeader label="Post" />
+            <MobileStackHeader goBack label="Post" />
             <StackContainer className="post-page" style={comment ? {paddingBottom: "115px"} : {paddingBottom: "74px"}}>
                 {post && <Content data = {post} />}
                 <div className = "comments-container">

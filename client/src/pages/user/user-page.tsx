@@ -73,7 +73,7 @@ export default function UserPage({type}: UserPageProps){
     }
     return(
         <>
-            <MobileStackHeader label = {user.full_name} />
+            <MobileStackHeader goBack label = {user.full_name} />
             <StackContainer className="user-page">
                 <UserPageInfo user = {user} />
                 <UserNav data = {studentNavData} />

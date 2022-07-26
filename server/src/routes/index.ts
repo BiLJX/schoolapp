@@ -10,6 +10,7 @@ import { UserRoutes } from "./user";
 import nodemailer from "nodemailer"
 import { InteractionRoutes } from "./interaction";
 import { TeacherAuth } from "../middleware/teacher";
+import { InboxRoutes } from "./inbox";
 const router = Router()
 
 router.use("/auth", AuthRoutes)
@@ -18,6 +19,7 @@ router.use("/admin", AdminAuth, AdminRoutes)
 router.use("/user", UserAuth, UserRoutes);
 router.use("/post", UserAuth, PostRoutes)
 router.use("/comment", UserAuth, CommentRoutes)
+router.use("/inbox", UserAuth, InboxRoutes)
 router.use("/interaction", UserAuth, TeacherAuth, InteractionRoutes)
 
 

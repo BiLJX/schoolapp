@@ -34,3 +34,18 @@ export interface Notification<T = NotificationLikedPost|NotificationComment|Noti
     title: string,
     createdAt: Date
 }
+
+export interface Inbox {
+    activity: {
+        has_read: boolean
+        count: number
+    },
+    assignment: {
+        has_read: boolean
+        count: number
+    },
+    announcement: {
+        has_read: boolean
+        count: number
+    }
+}
