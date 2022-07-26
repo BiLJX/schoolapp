@@ -2,6 +2,14 @@
     display: flex;
     flex-direction: column;
     padding-top: 1rem;
+    
+}
+
+.inbox-item.active {
+    .inbox-item-sub-title {
+        font-weight: bold !important;
+        color: var(--text-secondary) !important;
+    }
 }
 
 .inbox-item {
@@ -40,5 +48,11 @@
             font-weight: 500;
             color: var(--text-secondary-alt);
         }
+    }
+}
+
+.activity-item {
+    b {
+        color: var(--text-secondary);
     }
 }

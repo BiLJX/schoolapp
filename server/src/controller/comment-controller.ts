@@ -1,4 +1,5 @@
 import { Student, Teacher } from "@shared/User";
+import NotificationHandler from "../handler/notificationHandler";
 import { Comments } from "../models/Comment";
 import { Post } from "../models/Post";
 import { Controller } from "../types/controller";
@@ -102,7 +103,8 @@ export const addComment: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
     const currentUser: Student|Teacher = res.locals.user;
     let text: string = req.body.text;
-    const post_id: string = req.body.post_id
+    const post_id: string = req.body.post_id;
+    const notification: NotificationHandler = req.app.locals.notification;
     try {
         if(!text) return jsonResponse.clientError("Please add a comment.");
         text = text.trim();
@@ -122,7 +124,15 @@ export const addComment: Controller = async(req, res) => {
             user_id: currentUser.user_id,
             profile_picture_url: currentUser.profile_picture_url
         }
-        return jsonResponse.success(_comment);
+        jsonResponse.success(_comment);
+        if(post.author_id === currentUser.user_id) return;
+        await notification.sendComment({ 
+            receiver_id: post.author_id,
+            sender_id: currentUser.user_id,
+            title: "Commented",
+            content: comment.text,
+            content_id: post.post_id,
+        })
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()
@@ -133,7 +143,8 @@ export const addReply: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
     const currentUser: Student|Teacher = res.locals.user;
     let text: string = req.body.text;
-    const parent_id: string = req.body.parent_id
+    const parent_id: string = req.body.parent_id;
+    const notification: NotificationHandler = req.app.locals.notification;
     try {
         if(!text) return jsonResponse.clientError("Please add a reply.");
         text = text.trim();
@@ -154,7 +165,16 @@ export const addReply: Controller = async(req, res) => {
             user_id: currentUser.user_id,
             profile_picture_url: currentUser.profile_picture_url
         }
-        return jsonResponse.success(_reply);
+        jsonResponse.success(_reply);
+        if(comment.author_id === reply.author_id) return;
+        await notification.sendReply({ 
+            receiver_id: comment.author_id,
+            sender_id: reply.author_id,
+            title: "Replied to your comment:",
+            content: reply.text,
+            content_id: reply.post_id,
+        })
+        return 
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()

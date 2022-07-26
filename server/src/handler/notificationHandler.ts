@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { Notification, NotificationComment, NotificationInteraction, NotificationLikedPost, NotificationTypes } from "../../../shared/Notification";
+import { Notification, NotificationComment, NotificationInteraction, NotificationLikedPost } from "../../../shared/Notification";
 import { Notifications } from "../models/Notification";
 import { makeId } from "../utils/idgen";
 interface SendNotificationData {
@@ -8,10 +8,20 @@ interface SendNotificationData {
     type?: NotificationTypes,
     title: string,
     content_id?: string,
-    notification_id?: string
+    notification_id?: string,
+    content?: string
 }
 
-export default class NotifcationHandler {
+export enum NotificationTypes {
+    LIKED_POST,
+    COMMENTED,
+    REPLIED,
+    NEW_ASSIGNMENT,
+    NEW_ANNOUNCEMENT,
+    INTERACTION
+}
+
+export default class NotificationHandler {
     constructor(private io: Server){};
     public async sendInteraction(notification_data: SendNotificationData){
         try {
@@ -27,6 +37,7 @@ export default class NotifcationHandler {
     }
     public async sendLike(notification_data: SendNotificationData, data: NotificationLikedPost){
         try {
+            notification_data.content_id = data.post_id;
             notification_data.type = NotificationTypes.LIKED_POST;
             notification_data.notification_id = makeId();
             const notificationDoc = new Notifications(notification_data);
@@ -37,25 +48,23 @@ export default class NotifcationHandler {
             console.log(error);
         }
     }
-    public async comment(notification_data: SendNotificationData, comment: NotificationComment){
+    public async sendComment(notification_data: SendNotificationData){
         try {
             notification_data.type = NotificationTypes.COMMENTED;
             notification_data.notification_id = makeId();
             const notificationDoc = new Notifications(notification_data);
             const notification = (await notificationDoc.save()).toJSON() as Notification<NotificationComment>;
-            notification.content = comment;
             this.notify(notification);
         } catch (error) {
             console.log(error);
         }
     }
-    public async reply(notification_data: SendNotificationData, comment: NotificationComment){
+    public async sendReply(notification_data: SendNotificationData){
         try {
             notification_data.type = NotificationTypes.REPLIED;
             notification_data.notification_id = makeId();
             const notificationDoc = new Notifications(notification_data);
             const notification = (await notificationDoc.save()).toJSON() as Notification<NotificationComment>;
-            notification.content = comment;
             this.notify(notification);
         } catch (error) {
             console.log(error);

@@ -33,8 +33,12 @@ const schema = new Schema<Notification>({
         type: Schema.Types.Mixed,
         default: null,
         required: false
+    },
+    content: {
+        type: String,
+        required: false,
     }
-})
+}, { timestamps: true })
 
 const Notifications = model("notification", schema);
 

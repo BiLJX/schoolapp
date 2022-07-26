@@ -457,7 +457,7 @@ export const unlikePost: Controller = async (req, res) => {
         });
         jsonResponse.success();
         if(post.author_id === currentUser.user_id) return;
-        Notifications.deleteOne({ receiver_id: post.author_id, sender_id: currentUser.user_id, content_id: post.post_id, type: notification.Types.LIKED_POST  })
+        await Notifications.deleteMany({ receiver_id: post.author_id, sender_id: currentUser.user_id, content_id: post.post_id, type: notification.Types.LIKED_POST  })
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()

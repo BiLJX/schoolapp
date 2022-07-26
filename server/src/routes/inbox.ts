@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getInbox } from "../controller/inbox-controller";
+import { getActivity, getInbox } from "../controller/inbox-controller";
 const router = Router();
 
-router.get("/", getInbox)
-
+router.get("/", getInbox);
+router.get("/activity", getActivity);
 export { router as InboxRoutes }

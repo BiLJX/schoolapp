@@ -28,8 +28,8 @@ export interface Notification<T = NotificationLikedPost|NotificationComment|Noti
     content_id: string|null,
     sender_data: {
         type: "teacher"|"student",
-        sender_name: string,
-        sender_profile_picture_url: string
+        full_name: string,
+        profile_picture_url: string
     },
     title: string,
     createdAt: Date

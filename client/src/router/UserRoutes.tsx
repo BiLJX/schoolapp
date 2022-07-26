@@ -4,6 +4,7 @@ import { getCurrentUser } from "api/user";
 import { toastError } from "components/Toast/toast";
 import MobileNavWrapper from "container/mobile-layouts/nav-wrapper";
 import HomePage from "pages/home/home-page";
+import ActivityPage from "pages/Inbox/activity/activity";
 import InboxPage from "pages/Inbox/inbox";
 import LoginPage from "pages/Login/login-page";
 import PostPage from "pages/Post/post-page";
@@ -27,7 +28,7 @@ export default function UserRoutes(){
     const getUser = async() => {
         const res = await getCurrentUser();
         if(res.data) dispatch(signInUser(res.data));
-        await fetchInbox()
+        if(!res.error) await fetchInbox()
         setIsLoading(false)
     }
     const fetchInbox = async() => {
@@ -64,10 +65,9 @@ export default function UserRoutes(){
                 <Route path = "explore" element = {<HomePage />}/>
                 <Route path = "inbox" element = {<InboxPage />}/>
                 <Route path = "profile" element = {<HomePage />}/>
-                
             </Route>
             <Route path = "/upload" element = {<UploadPost />} />
-            {/* Post */}
+            <Route path = "/inbox/activity" element = {<ActivityPage />} />
             <Route path = "/post/:post_id" element = {<PostPage />}/>
             <Route path = "/student/:user_id/*" element = {<UserPage type="student" />}/>
             <Route path = "/teacher/:user_id/*" element = {<UserPage type="teacher" />}/>

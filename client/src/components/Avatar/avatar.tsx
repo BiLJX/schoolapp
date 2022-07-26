@@ -6,6 +6,7 @@ interface Props {
     to?: string,
     style?: React.CSSProperties,
     src: string,
+    size?: number
     onClick?: (e: any) => any;
 }
 
@@ -15,18 +16,19 @@ export default function Avatar(
         className,
         style,
         src,
-        onClick
+        size = 30,
+        onClick,
     }: Props
 ){
     if(to){
         return(
-            <NavLink style={style} to = {to} className = {"avatar "+className} onClick = {(e)=>onClick?.(e)}>
+            <NavLink style={{width: size + "px", height: size + "px",...style}} to = {to} className = {"avatar "+className||""} onClick = {(e)=>onClick?.(e)}>
                 <img src = {src} className = "full-img" />
             </NavLink>
         )
     }
     return(
-        <div style={style} className = {"avatar "+className} onClick = {(e)=>onClick?.(e)}>
+        <div style={{width: size + "px", height: size + "px",...style}} className = {"avatar "+className||""} onClick = {(e)=>onClick?.(e)}>
             <img src = {src} className = "full-img" />
         </div>
     )
