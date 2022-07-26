@@ -7,8 +7,9 @@ import { validatePostBody, validatePostTitle } from "../utils/validator";
 import { Post } from "../models/Post"
 import { Student, Teacher } from "@shared/User";
 import sharp from "sharp";
-import moment from "moment";
+import NotificationHandler from "../handler/notificationHandler";
 import { Comments } from "../models/Comment";
+import { Notifications } from "../models/Notification";
 
 export const getFeedPost: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
@@ -413,7 +414,8 @@ export const uploadPost: Controller = async (req, res) => {
 export const likePost: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
     const currentUser: Student|Teacher = res.locals.user;
-    const post_id = req.params.post_id
+    const post_id = req.params.post_id;
+    const notification: NotificationHandler = req.app.locals.notification;
     try {
         const post = await Post.findOne({post_id});
         if(!post) return jsonResponse.notFound("Post not found");
@@ -423,7 +425,14 @@ export const likePost: Controller = async (req, res) => {
                 liked_by: currentUser.user_id
             }
         });
-        return jsonResponse.success();
+        jsonResponse.success();
+        if(post.author_id === currentUser.user_id) return;
+        notification.sendLike({
+            receiver_id: post.author_id,
+            sender_id: currentUser.user_id,
+            title: "liked your post",
+            type: notification.Types.LIKED_POST
+        }, { post_id: post.post_id, url: post.content_src });
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()
@@ -433,7 +442,8 @@ export const likePost: Controller = async (req, res) => {
 export const unlikePost: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
     const currentUser: Student|Teacher = res.locals.user;
-    const post_id = req.params.post_id
+    const post_id = req.params.post_id;
+    const notification: NotificationHandler = req.app.locals.notification;
     try {
         const post = await Post.findOne({post_id});
         if(!post) return jsonResponse.notFound("Post not found");
@@ -443,7 +453,9 @@ export const unlikePost: Controller = async (req, res) => {
                 liked_by: currentUser.user_id
             }
         });
-        return jsonResponse.success();
+        jsonResponse.success();
+        if(post.author_id === currentUser.user_id) return;
+        Notifications.deleteOne({ receiver_id: post.author_id, sender_id: currentUser.user_id, content_id: post.post_id, type: notification.Types.LIKED_POST  })
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()

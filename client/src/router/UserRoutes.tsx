@@ -7,7 +7,7 @@ import PostPage from "pages/Post/post-page";
 import AccountReview from "pages/Review/account-review-page";
 import { UploadPost } from "pages/upload/upload";
 import UserPage from "pages/user/user-page";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { signInUser } from "redux/User/userActions";
@@ -17,6 +17,7 @@ export default function UserRoutes(){
     const dispatch = useDispatch();
     const { currentUser } = useSelector((state: RootState)=>state);
     const [loading, setIsLoading] = useState(true);
+    const hasRan = useRef(false);
     const teacher = currentUser as Teacher
     const student = currentUser as Student
     const getUser = async() => {
@@ -25,7 +26,9 @@ export default function UserRoutes(){
         setIsLoading(false)
     }
     useEffect(()=>{
+        if(hasRan.current) return;
         getUser()
+        hasRan.current = true;
     }, []);
 
     if(loading) {

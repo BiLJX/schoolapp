@@ -7,14 +7,18 @@ import StudentLoginPage from "pages/Login/login-student-page";
 import TeacherLoginPage from "pages/Login/login-teacher-page";
 import SignupUpPage from "pages/Signup/signup-page";
 import TeacherSignupPage from "pages/Signup/teacher-signup-page";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify"
+import io from "socket.io-client";
+import { RootState } from "types/states";
 import { UserAuthWrapper } from "./User-Auth-Wrapper";
 import UserRoutes from "./UserRoutes";
+import { useSocket } from "hooks/useSocket";
 export default function App(){
+    useSocket();
     return(
         <Routes>
-
             <Route path = "/*" element = {<UserRoutes />} />
             <Route path = "/admin" element = {<AdminLayout />}>
                 <Route index element = {<Navigate to = "requests" />} />
@@ -31,7 +35,6 @@ export default function App(){
                 <Route path = "student" element = {<SignupUpPage />} />
                 <Route path = "teacher" element = {<TeacherSignupPage />} />
             </Route>
-            
         </Routes>
     )
 }
