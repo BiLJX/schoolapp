@@ -19,15 +19,29 @@ export function MobileNav(){
             <MobileNavItem to = "/" Icon={HomeOutlinedIcon} ActiveIcon = {HomeIcon} />
             <MobileNavItem to = "/explore" Icon={SearchIcon} ActiveIcon = {SearchIcon} />
             <UploadItem />
-            <MobileNavItem to = "/inbox" Icon={MailOutlinedIcon} ActiveIcon = {MailIcon} />
+            
+            <MobileNavItem to = "/inbox" Icon={MailOutlinedIcon} ActiveIcon = {MailIcon} badge = {<Badge />} />
             <MobileNavItem to = {`/${currentUser.type}/${currentUser.user_id}`} Icon={PersonOutlineIcon} ActiveIcon = {PersonIcon} />
         </nav>
+    )
+}
+
+function Badge(){
+    const inbox = useSelector((state: RootState)=>state.inbox);
+    if(!inbox) return <></>
+    const total = inbox?.activity.count + inbox?.announcement.count + inbox?.assignment.count;
+    if(!total) return <></>
+    return(
+        <span className = "nav-badge">
+            {total>9?"9+":total}
+        </span>
     )
 }
 interface NavProps {
     Icon: any,
     to: string,
-    ActiveIcon: any
+    ActiveIcon: any,
+    badge?: React.ReactNode
 }
 
 
@@ -42,6 +56,7 @@ function MobileNavItem(props: NavProps){
     }
     return(
         <NavLink end to = {props.to} className={className}>
+            {props.badge}
             {isActive?<props.ActiveIcon />:<props.Icon />}
         </NavLink>
     )

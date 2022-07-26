@@ -417,6 +417,7 @@ export const likePost: Controller = async (req, res) => {
     const post_id = req.params.post_id;
     const notification: NotificationHandler = req.app.locals.notification;
     try {
+        console.time("like");
         const post = await Post.findOne({post_id});
         if(!post) return jsonResponse.notFound("Post not found");
         if(post.liked_by.includes(currentUser.user_id)) return jsonResponse.clientError("Already liked");
@@ -426,8 +427,9 @@ export const likePost: Controller = async (req, res) => {
             }
         });
         jsonResponse.success();
+        console.timeEnd("like");
         if(post.author_id === currentUser.user_id) return;
-        notification.sendLike({
+        await notification.sendLike({
             receiver_id: post.author_id,
             sender_id: currentUser.user_id,
             title: "liked your post",

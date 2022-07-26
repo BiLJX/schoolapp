@@ -7,6 +7,7 @@
     background-color: var(--nav-background);
     border: var(--nav-border);
     .nav-item {
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -33,4 +34,20 @@
             font-size: 35px;
         }
     }
+}
+
+.nav-badge {
+    position: absolute;
+    background-color: var(--red);
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    top: 2px;
+    right: 25%;
+    border: 2px solid var(--nav-background);
+    font-size: 0.7rem;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
