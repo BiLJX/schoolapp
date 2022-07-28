@@ -1,8 +1,8 @@
-import { Notification } from "@shared/Notification";
-import { Schema, model } from "mongoose";
-import { makeId } from "../utils/idgen";
-
-const schema = new Schema<Notification>({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Notifications = void 0;
+var mongoose_1 = require("mongoose");
+var schema = new mongoose_1.Schema({
     notification_id: {
         type: String,
         required: true,
@@ -30,16 +30,14 @@ const schema = new Schema<Notification>({
         required: true
     },
     content_id: {
-        type: Schema.Types.Mixed,
+        type: mongoose_1.Schema.Types.Mixed,
         default: null,
         required: false
     },
     content: {
-        type: Schema.Types.Mixed,
+        type: String,
         required: false,
     }
-}, { timestamps: true })
-
-const Notifications = model("notification", schema);
-
-export { Notifications };
+}, { timestamps: true });
+var Notifications = mongoose_1.model("notification", schema);
+exports.Notifications = Notifications;

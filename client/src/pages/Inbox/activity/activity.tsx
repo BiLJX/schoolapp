@@ -77,7 +77,7 @@ function ActivityItem({data}: {data: Notification}){
                 <Avatar src={data.sender_data.profile_picture_url} size={55} style = {{ marginRight: "1rem", marginLeft: "1rem" }}/>
                 <div className = "inbox-item-content">
                     <div className = "inbox-item-title">{data.sender_data.full_name}</div>
-                    <div className = "inbox-item-sub-title">{data.title}</div>
+                    <div className = "inbox-item-sub-title">Liked your post</div>
                 </div>
             </NavLink>
         )

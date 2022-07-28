@@ -103,7 +103,7 @@ export const studentLogin = async (req: Request, res: Response) => {
         const { email, password } = req.body;
         const user = await Students.aggregate(studentAggregation({
             $match: {
-                email
+                email: email.toLowerCase()
             }
         }));
         if(user.length < 1) return jsonResponse.clientError("Student not found");
@@ -127,7 +127,7 @@ export const teacherLogin: Controller = async (req, res) => {
         const user = await Teachers.aggregate([
             {
                 $match: {
-                    email
+                    email: email.toLowerCase()
                 }
             },
             {

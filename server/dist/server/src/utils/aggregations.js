@@ -1,7 +1,7 @@
-import { TimePeriods } from "@shared/Student-Performance";
-import moment from "moment";
-
-export const studentAggregation = (match: any) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.studentAggregation = void 0;
+var studentAggregation = function (match) {
     return [
         match,
         {
@@ -86,69 +86,6 @@ export const studentAggregation = (match: any) => {
                 },
             }
         }
-    ]
-}
-
-export const performanceAggregation = (filter: any, period: TimePeriods) => {
-    const date = new Date();
-    
-    switch(period){
-        case "WEEK":
-            return [
-                {$match: filter},
-                {
-                    $match: {
-                        createdAt: {
-                            $gte: moment().startOf('isoWeek').toDate(),
-                            $lt: moment().endOf('isoWeek').toDate()
-                        }
-                    }
-                },
-                {
-                    $sort: {
-                        given_on: 1
-                    }
-                },
-            ]
-        case "MONTH":
-            const month = date.getMonth() + 1;
-            return [
-                {$match: filter},
-                {
-                    $addFields: {
-                        month: {$month: "$given_on"}
-                    }
-                },
-                {
-                    $match: { month }
-                },
-                {
-                    $sort: {
-                        given_on: 1
-                    }
-                },
-            ]
-        case "YEAR":
-            const year = date.getFullYear();
-            return [
-                {$match: filter},
-                {
-                    $addFields: {
-                        year: {$year: "$given_on"}
-                    }
-                },
-                {
-                    $match: { year }
-                },
-                {
-                    $sort: {
-                        given_on: 1
-                    }
-                },
-            ]
-        default:
-            throw new Error("Invalid time period")
-    }
-    
-}
-    
+    ];
+};
+exports.studentAggregation = studentAggregation;

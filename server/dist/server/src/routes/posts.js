@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PostRoutes = void 0;
+var express_1 = require("express");
+var post_controller_1 = require("../controller/post-controller");
+var router = express_1.Router();
+exports.PostRoutes = router;
+router.post("/upload", post_controller_1.uploadPost);
+router.get("/feed", post_controller_1.getFeedPost);
+router.get("/:post_id", post_controller_1.getPostById);
+router.get("/user/:user_id", post_controller_1.getPostByUserId);
+router.put("/:post_id/like", post_controller_1.likePost);
+router.put("/:post_id/unlike", post_controller_1.unlikePost);
+router.delete("/:post_id/delete", post_controller_1.deletePost);

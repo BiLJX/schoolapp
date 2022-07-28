@@ -1,4 +1,4 @@
-import { Inbox, Notification } from "../../../shared/Notification";
+import { Inbox, Notification } from "@shared/Notification";
 import NotificationHandler, { NotificationTypes } from "../handler/notificationHandler";
 import { Notifications } from "../models/Notification";
 import { Controller } from "../types/controller";

@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { Notification, NotificationComment, NotificationInteraction, NotificationLikedPost } from "../../../shared/Notification";
+import { Notification, NotificationComment, NotificationInteraction, NotificationLikedPost } from "@shared/Notification";
 import { Notifications } from "../models/Notification";
 import { makeId } from "../utils/idgen";
 interface SendNotificationData {
@@ -9,7 +9,7 @@ interface SendNotificationData {
     title: string,
     content_id?: string,
     notification_id?: string,
-    content?: string
+    content?: any
 }
 
 export enum NotificationTypes {
@@ -40,6 +40,7 @@ export default class NotificationHandler {
             notification_data.content_id = data.post_id;
             notification_data.type = NotificationTypes.LIKED_POST;
             notification_data.notification_id = makeId();
+            notification_data.content = data;
             const notificationDoc = new Notifications(notification_data);
             const notification = (await notificationDoc.save()).toJSON() as Notification<NotificationLikedPost>;
             notification.content = data;
