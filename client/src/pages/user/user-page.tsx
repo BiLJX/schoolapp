@@ -7,11 +7,10 @@ import "./user-page.scss"
 import { UserNav, UserPageInfo } from "./components";
 import { useEffect, useState } from "react";
 import { getStudentById, getTeacherById } from "api/user";
-import { useParams } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import { toastError } from "components/Toast/toast";
-import { Post } from "@shared/Post";
-import { getPostByUserId } from "api/post";
-import UserPosts from "./user-posts";
+import UserPosts from "./posts/user-posts";
+import UserPerformance from "./performance/user-performance";
 const studentNavData = [
     {to: "", label: "Posts"},
     {to: "performance", label: "Performance"},
@@ -77,7 +76,11 @@ export default function UserPage({type}: UserPageProps){
             <StackContainer className="user-page">
                 <UserPageInfo user = {user} />
                 <UserNav data = {studentNavData} />
-                <UserPosts user = {user} />
+                <Routes>
+                    <Route index element = {<UserPosts user = {user} />} />
+                    <Route path = "performance" element = {<UserPerformance />} />
+                </Routes>
+                
             </StackContainer>
         </>
     )

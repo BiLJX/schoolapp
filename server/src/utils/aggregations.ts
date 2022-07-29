@@ -104,11 +104,6 @@ export const performanceAggregation = (filter: any, period: TimePeriods) => {
                         }
                     }
                 },
-                {
-                    $sort: {
-                        given_on: 1
-                    }
-                },
             ]
         case "MONTH":
             const month = date.getMonth() + 1;
@@ -122,11 +117,6 @@ export const performanceAggregation = (filter: any, period: TimePeriods) => {
                 {
                     $match: { month }
                 },
-                {
-                    $sort: {
-                        given_on: 1
-                    }
-                },
             ]
         case "YEAR":
             const year = date.getFullYear();
@@ -139,11 +129,6 @@ export const performanceAggregation = (filter: any, period: TimePeriods) => {
                 },
                 {
                     $match: { year }
-                },
-                {
-                    $sort: {
-                        given_on: 1
-                    }
                 },
             ]
         default:

@@ -1,0 +1,28 @@
+.user-performance {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0.5rem;
+}
+.performance-item {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cards-background);
+    border-radius: 10px;
+    box-shadow: var(--post-card-shadow);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    .performance-header {
+        display: flex;
+        font-size: 1.2rem;
+        padding: 1rem 0;
+        color: var(--text-secondary);
+        font-weight: bold;
+        select {
+            font-weight: bold;
+            color: var(--text-secondary-alt);
+            margin-left: auto;
+            border-bottom: 1px solid var(--border-color);
+            padding: .3rem;
+        }
+    }
+}

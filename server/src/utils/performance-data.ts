@@ -8,7 +8,8 @@ export const getDateByPeriod = (time_period: TimePeriods) => {
                 dateData.setDate(dateData.getDate()-7);
                 return dateData;
             case "MONTH":
-                dateData.setMonth(dateData.getDate())
+                dateData.setMonth(dateData.getDate());
+                
         }
     } catch (error) {
         
