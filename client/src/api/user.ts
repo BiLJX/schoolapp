@@ -31,3 +31,7 @@ export const getStudentPerformanceDemerit = async(user_id: string, time_period: 
     return res.data as ApiResponse<StudentPerformanceData>;
 }
 
+export const getStudentPerormanceMDOverall = async(user_id: string) => {
+    const res = await axios.get(`/api/user/student/${user_id}/performance/overall/md`)
+    return res.data as ApiResponse<{ratio: number, difference: number}>;
+}

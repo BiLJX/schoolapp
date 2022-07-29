@@ -13,8 +13,8 @@
     margin-bottom: 1rem;
     .performance-header {
         display: flex;
-        font-size: 1.2rem;
-        padding: 1rem 0;
+        font-size: 1rem;
+        padding-bottom: 1rem;
         color: var(--text-secondary);
         font-weight: bold;
         select {
@@ -23,6 +23,29 @@
             margin-left: auto;
             border-bottom: 1px solid var(--border-color);
             padding: .3rem;
+            font-size: 0.8rem;
+        }
+        span {
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+.performance-list-items-container {
+    display: flex;
+    flex-direction: column;
+    .performance-list-item {
+        display: flex;
+        font-weight: bold;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        .performance-list-label {
+            color: var(--text-secondary-alt);
+        }
+        .performance-list-value {
+            margin-left: auto;
+            color: var(--text-secondary);
         }
     }
 }

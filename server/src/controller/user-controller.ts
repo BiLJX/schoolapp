@@ -138,7 +138,6 @@ export const getStudentMeritsPerformance: Controller = async(req, res) => {
     }
 }
 
-
 export const getStudentDemeritsPerformance: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
     try {
@@ -193,5 +192,26 @@ export const getStudentDemeritsPerformance: Controller = async(req, res) => {
     } catch (error) {
         console.log(error)
         jsonResponse.serverError()
+    }
+}
+
+export const getStudentMDOverall: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    try {
+        const user_id: string = req.params.user_id
+        const total_interactions = await Interactions.find({given_to: user_id}).lean();
+        let merits_sum = 0;
+        let demerits_sum = 0;
+        for(let x of total_interactions){
+            if(x.type === "merit") merits_sum += x.amount;
+            else demerits_sum += x.amount;
+        };
+        if(demerits_sum === 0) demerits_sum = 1;
+        const ratio = (merits_sum/demerits_sum).toFixed(2);
+        const difference = merits_sum-demerits_sum;
+        return jsonResponse.success({ratio, difference});
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
     }
 }

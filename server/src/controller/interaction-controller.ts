@@ -23,11 +23,17 @@ export const giveInteraction: Controller = async(req, res) => {
         })
         await interaction.save();
         jsonResponse.success(null, `gave ${interaction.amount} ${interaction.type} to ${student.full_name}`);
-        await notification.sendInteraction({
-            sender_id: currentUser.user_id,
-            receiver_id: clientData.given_to,
-            title: `gave you ${interaction.type}`,
-        })
+        //background
+        try {
+            await notification.sendInteraction({
+                sender_id: currentUser.user_id,
+                receiver_id: clientData.given_to,
+                title: `gave you ${interaction.type}`,
+            }) 
+        } catch (error) {
+            console.log(error);
+        }
+
     } catch (error) {
         console.log(error);
         jsonResponse.serverError();
