@@ -1,7 +1,7 @@
 import { Inbox, Notification } from "@shared/Notification";
 import { InboxTypes } from "./inboxTypes";
 
-export default function inboxReducer(_state: Inbox|null = null, action: Action<InboxTypes, Inbox>): Inbox|null {
+export default function inboxReducer(_state: Inbox|null = null, action: Action<InboxTypes, any>): Inbox|null {
     const state = _state as Inbox
     switch(action.type){
         case InboxTypes.INIT_INBOX:
@@ -29,6 +29,15 @@ export default function inboxReducer(_state: Inbox|null = null, action: Action<I
                     count: state.announcement.count+1,
                     has_read: false,
                 }
+            }
+        case InboxTypes.READ_NOTIFICATION:
+            return {
+                ...state,
+                activity: {
+                    count: state.activity.count-1,
+                    has_read: state.activity.count  === 0
+                },
+
             }
         default: 
             return state

@@ -38,7 +38,7 @@ function InboxItem(props: ItemProps){
                 {props.Icon}
             </div>
             <div className = "inbox-item-content">
-                <div className = "inbox-item-title">{props.title}</div>
+                <div className = "inbox-item-title" style={{color: "var(--text-secondary)"}}>{props.title}</div>
                 <div className = "inbox-item-sub-title">{props.sub_title}</div>
             </div>
         </NavLink>

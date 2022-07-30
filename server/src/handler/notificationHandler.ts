@@ -6,10 +6,12 @@ interface SendNotificationData {
     sender_id: string,
     receiver_id: string,
     type?: NotificationTypes,
-    title: string,
-    content_id?: string,
-    notification_id?: string,
-    content?: any
+    content?: any,
+    sender_data: {
+        type: "teacher"|"student",
+        full_name: string,
+        profile_picture_url: string
+    }
 }
 
 export enum NotificationTypes {
@@ -18,61 +20,24 @@ export enum NotificationTypes {
     REPLIED,
     NEW_ASSIGNMENT,
     NEW_ANNOUNCEMENT,
-    INTERACTION
+    MERIT,
+    DEMERIT
 }
 
 export default class NotificationHandler {
     constructor(private io: Server){};
-    public async sendInteraction(notification_data: SendNotificationData){
+    public async notify(data: SendNotificationData){
         try {
-            notification_data.type = NotificationTypes.INTERACTION;
-            notification_data.notification_id = makeId();
-            const notificationDoc = new Notifications(notification_data);
-            const notification = (await notificationDoc.save()).toJSON() as Notification<NotificationInteraction>;
-            notification.content = notification_data.title;
-            this.notify(notification);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    public async sendLike(notification_data: SendNotificationData, data: NotificationLikedPost){
-        try {
-            notification_data.content_id = data.post_id;
-            notification_data.type = NotificationTypes.LIKED_POST;
-            notification_data.notification_id = makeId();
-            notification_data.content = data;
-            const notificationDoc = new Notifications(notification_data);
-            const notification = (await notificationDoc.save()).toJSON() as Notification<NotificationLikedPost>;
-            notification.content = data;
-            this.notify(notification);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    public async sendComment(notification_data: SendNotificationData){
-        try {
-            notification_data.type = NotificationTypes.COMMENTED;
-            notification_data.notification_id = makeId();
-            const notificationDoc = new Notifications(notification_data);
+            if(data.receiver_id === data.sender_id) return;
+            const notificationDoc = new Notifications({
+                ...data,
+                notification_id: makeId(),
+            });
             const notification = (await notificationDoc.save()).toJSON() as Notification<NotificationComment>;
-            this.notify(notification);
+            this.io.to(data.receiver_id).emit("newNotification", notification);
         } catch (error) {
             console.log(error);
         }
-    }
-    public async sendReply(notification_data: SendNotificationData){
-        try {
-            notification_data.type = NotificationTypes.REPLIED;
-            notification_data.notification_id = makeId();
-            const notificationDoc = new Notifications(notification_data);
-            const notification = (await notificationDoc.save()).toJSON() as Notification<NotificationComment>;
-            this.notify(notification);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    private notify(data: Notification){
-        this.io.to(data.receiver_id).emit("newNotification", data)
     }
     get Types(){
         return NotificationTypes

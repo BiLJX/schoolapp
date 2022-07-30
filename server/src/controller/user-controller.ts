@@ -111,21 +111,21 @@ export const getStudentMeritsPerformance: Controller = async(req, res) => {
         switch(time_period){
             case "WEEK":
                 performance_data = {
-                    name: "Total Merits",
+                    name: "Merits Obtained in",
                     labels: merits.map(x=>`${x._id}`),
                     data: merits.map(x=>x.total)
                 }
                 break;
             case "MONTH":
                 performance_data = {
-                    name: "Total Merits",
+                    name: "Merits Obtained in",
                     labels: merits.map(x=>`${moment(new Date()).format("MMM")} ${x._id}`),
                     data: merits.map(x=>x.total)
                 }
                 break;
             case "YEAR":
                 performance_data = {
-                    name: "Total Merits",
+                    name: "Merits Obtained in",
                     labels: merits.map(x=>`${moment(x._id, "M").format("MMM")}`),
                     data: merits.map(x=>x.total)
                 }
@@ -168,21 +168,21 @@ export const getStudentDemeritsPerformance: Controller = async(req, res) => {
         switch(time_period){
             case "WEEK":
                 performance_data = {
-                    name: "Total Demerits",
+                    name: "Demerits Obtained in",
                     labels: demerits.map(x=>`${x._id}`),
                     data: demerits.map(x=>x.total)
                 }
                 break;
             case "MONTH":
                 performance_data = {
-                    name: "Total Demerits",
+                    name: "Demerits Obtained in",
                     labels: demerits.map(x=>`${moment(new Date()).format("MMM")} ${x._id}`),
                     data: demerits.map(x=>x.total)
                 }
                 break;
             case "YEAR":
                 performance_data = {
-                    name: "Total Demerits",
+                    name: "Demerits Obtained in",
                     labels: demerits.map(x=>`${moment(x._id, "M").format("MMM")}`),
                     data: demerits.map(x=>x.total)
                 }

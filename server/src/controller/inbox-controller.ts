@@ -4,7 +4,7 @@ import { Notifications } from "../models/Notification";
 import { Controller } from "../types/controller";
 import JsonResponse from "../utils/Response";
 
-const activity_filter = (x: Notification) =>x.type === NotificationTypes.LIKED_POST || x.type === NotificationTypes.INTERACTION || x.type === NotificationTypes.COMMENTED || x.type === NotificationTypes.REPLIED
+const activity_filter = (x: Notification) =>x.type === NotificationTypes.LIKED_POST || x.type === NotificationTypes.MERIT || x.type === NotificationTypes.COMMENTED || x.type === NotificationTypes.REPLIED ||  x.type === NotificationTypes.DEMERIT
 const announcement_filter = (x: Notification) => x.type === NotificationTypes.NEW_ANNOUNCEMENT;
 const assignment_filter = (x: Notification) => x.type === NotificationTypes.NEW_ASSIGNMENT;
 
@@ -113,7 +113,7 @@ export const getActivity: Controller = async (req, res) => {
                 $match: { 
                     receiver_id: currentUser.user_id, 
                     type: { 
-                        $in: [NotificationTypes.LIKED_POST, NotificationTypes.COMMENTED, NotificationTypes.INTERACTION, NotificationTypes.REPLIED]
+                        $in: [NotificationTypes.LIKED_POST, NotificationTypes.COMMENTED, NotificationTypes.MERIT, NotificationTypes.REPLIED, NotificationTypes.DEMERIT]
                     }
                 }
             },
@@ -178,10 +178,32 @@ export const getActivity: Controller = async (req, res) => {
                     sender_data_teacher: 0
                 }
             },
+            {
+                $sort: {
+                    createdAt: -1
+                }
+            }
         ]);
         jsonResponse.success(notifications);
     } catch (error) {
         console.log(error);
         jsonResponse.serverError();
+    }
+}
+
+export const readNotification: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const { user_id } = res.locals.user;
+    try {
+        const notification_id: string = req.params.id;
+        await Notifications.findOneAndUpdate({notification_id, receiver_id: user_id }, {
+            $set: {
+                has_read: true
+            }
+        })
+        jsonResponse.success();
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError()
     }
 }

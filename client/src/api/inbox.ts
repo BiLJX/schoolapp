@@ -10,3 +10,8 @@ export const getActivty = async () => {
     const res = await axios.get("/api/inbox/activity");
     return res.data as ApiResponse<Notification[]>;
 }
+
+export const readNotification = async (notification_id: string) => {
+    const res = await axios.put("/api/inbox/"+notification_id+"/read");
+    return res.data as ApiResponse;
+}

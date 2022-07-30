@@ -1,5 +1,5 @@
 import { Student, Teacher } from "@shared/User";
-import NotificationHandler from "../handler/notificationHandler";
+import NotificationHandler, { NotificationTypes } from "../handler/notificationHandler";
 import { Comments } from "../models/Comment";
 import { Post } from "../models/Post";
 import { Controller } from "../types/controller";
@@ -126,12 +126,19 @@ export const addComment: Controller = async(req, res) => {
         }
         jsonResponse.success(_comment);
         if(post.author_id === currentUser.user_id) return;
-        await notification.sendComment({ 
+        await notification.notify({ 
+            type: NotificationTypes.COMMENTED,
             receiver_id: post.author_id,
             sender_id: currentUser.user_id,
-            title: "Commented",
-            content: comment.text,
-            content_id: post.post_id,
+            content: {
+                post_id: comment.post_id,
+                comment: comment.text
+            },
+            sender_data: {
+                full_name: currentUser.full_name,
+                type: currentUser.type,
+                profile_picture_url: currentUser.profile_picture_url
+            }
         })
     } catch (error) {
         console.log(error);
@@ -167,12 +174,19 @@ export const addReply: Controller = async(req, res) => {
         }
         jsonResponse.success(_reply);
         if(comment.author_id === reply.author_id) return;
-        await notification.sendReply({ 
+        await notification.notify({ 
+            type: NotificationTypes.REPLIED,
             receiver_id: comment.author_id,
             sender_id: reply.author_id,
-            title: "Replied to your comment:",
-            content: reply.text,
-            content_id: reply.post_id,
+            content: {
+                post_id: reply.post_id,
+                comment: reply.text
+            },
+            sender_data: {
+                full_name: currentUser.full_name,
+                type: currentUser.type,
+                profile_picture_url: currentUser.profile_picture_url
+            }
         })
         return 
     } catch (error) {

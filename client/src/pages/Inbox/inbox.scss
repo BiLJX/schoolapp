@@ -40,13 +40,17 @@
         .inbox-item-title {
             margin-bottom: .3rem;
             font-weight: bold;
-            color: var(--text-title);
+            color: var(--text-secondary-alt);
             font-size: 1rem;
         }
 
         .inbox-item-sub-title {
             font-weight: 500;
             color: var(--text-secondary-alt);
+        }
+        .inbox-item-sub-title.active, .inbox-item-title.active {
+            font-weight: bold;
+            color: var(--text-secondary);
         }
     }
 }
@@ -56,3 +60,4 @@
         color: var(--text-secondary);
     }
 }
+

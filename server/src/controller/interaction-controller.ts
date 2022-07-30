@@ -4,6 +4,7 @@ import NotificationHandler from "../handler/notificationHandler";
 import { Interactions } from "../models/Interaction";
 import { Students } from "../models/Student";
 import { Controller } from "../types/controller";
+import { makeId } from "../utils/idgen";
 import JsonResponse from "../utils/Response";
 
 export const giveInteraction: Controller = async(req, res) => {
@@ -25,11 +26,17 @@ export const giveInteraction: Controller = async(req, res) => {
         jsonResponse.success(null, `gave ${interaction.amount} ${interaction.type} to ${student.full_name}`);
         //background
         try {
-            await notification.sendInteraction({
+            await notification.notify({
+                type: interaction.type === "merit"?notification.Types.MERIT:notification.Types.DEMERIT,
+                receiver_id: student.user_id,
                 sender_id: currentUser.user_id,
-                receiver_id: clientData.given_to,
-                title: `gave you ${interaction.type}`,
-            }) 
+                content: clientData.reason,
+                sender_data: {
+                    full_name: currentUser.full_name,
+                    profile_picture_url: currentUser.profile_picture_url,
+                    type: currentUser.type
+                }
+            })
         } catch (error) {
             console.log(error);
         }

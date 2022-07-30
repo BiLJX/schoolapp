@@ -4,5 +4,6 @@ export enum NotificationTypes {
     REPLIED,
     NEW_ASSIGNMENT,
     NEW_ANNOUNCEMENT,
-    INTERACTION
+    MERIT,
+    DEMERIT
 }

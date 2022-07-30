@@ -25,15 +25,6 @@ const schema = new Schema<Notification>({
         required: false,
         default: false
     },
-    title: {
-        type: String,
-        required: true
-    },
-    content_id: {
-        type: Schema.Types.Mixed,
-        default: null,
-        required: false
-    },
     content: {
         type: Schema.Types.Mixed,
         required: false,

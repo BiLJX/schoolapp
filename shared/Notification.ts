@@ -4,12 +4,12 @@ export enum NotificationTypes {
     REPLIED,
     NEW_ASSIGNMENT,
     NEW_ANNOUNCEMENT,
-    INTERACTION
+    MERIT,
+    DEMERIT
 }
 
 export interface NotificationLikedPost {
     post_id: string,
-    url: string
 }
 
 export interface NotificationComment extends NotificationLikedPost {
@@ -25,13 +25,11 @@ export interface Notification<T = NotificationLikedPost|NotificationComment|Noti
     type: NotificationTypes,
     content: T,
     has_read: boolean,
-    content_id: string|null,
     sender_data: {
         type: "teacher"|"student",
         full_name: string,
         profile_picture_url: string
     },
-    title: string,
     createdAt: Date
 }
 

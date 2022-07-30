@@ -1,7 +1,7 @@
 import { Inbox, Notification } from "@shared/Notification";
 import { NotificationTypes } from "types";
 import { InboxTypes } from "./inboxTypes";
-const activity_filter = (x: Notification) =>x.type === NotificationTypes.LIKED_POST || x.type === NotificationTypes.INTERACTION || x.type === NotificationTypes.COMMENTED || x.type === NotificationTypes.REPLIED
+const activity_filter = (x: Notification) =>x.type === NotificationTypes.LIKED_POST || x.type === NotificationTypes.MERIT || x.type === NotificationTypes.DEMERIT || x.type === NotificationTypes.COMMENTED || x.type === NotificationTypes.REPLIED
 const announcement_filter = (x: Notification) => x.type === NotificationTypes.NEW_ANNOUNCEMENT;
 const assignment_filter = (x: Notification) => x.type === NotificationTypes.NEW_ASSIGNMENT;
 export function initInbox(inbox: Inbox): Action<InboxTypes, Inbox>{
@@ -18,6 +18,12 @@ export function newNotification(data: Notification): Action<InboxTypes, any>{
     else inboxType = InboxTypes.NEW_ACTIVITY;
     return {
         type: inboxType,
+        payload: null
+    }
+}
+export function readNotificationAction(): Action<InboxTypes, any>{
+    return {
+        type: InboxTypes.READ_NOTIFICATION,
         payload: null
     }
 }

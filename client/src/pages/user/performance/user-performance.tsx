@@ -82,10 +82,11 @@ function LineGraph({color, fetchFunction}: LineGraphProps){
                         label: data.name,
                         borderColor: color,
                         pointRadius: 0,
+                        borderWidth: 1,
                         backgroundColor: (context)=>{
                             const ctx = context.chart.ctx;
-                            const gradient = ctx.createLinearGradient(0, 0, 0, 180);
-                            gradient.addColorStop(0, color+"5A");
+                            const gradient = ctx.createLinearGradient(0, 0, 0, 150);
+                            gradient.addColorStop(0, color+"4b");
                             gradient.addColorStop(1, "#FFFFFF00");
                             return gradient;
                         },
