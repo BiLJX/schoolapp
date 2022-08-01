@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import "./user-performance.scss"
 import "chart.js/auto"
 export default function UserPerformance(){
-    const { user_id } = useParams();
     return(
         <div className = "user-performance">
             <MDOverall />
@@ -37,7 +36,7 @@ function MDOverall(){
                     <span className="performance-list-value">{data.ratio}</span>
                 </div>
                 <div className="performance-list-item" style={{margin: "0"}}>
-                    <span className="performance-list-label">Points</span>
+                    <span className="performance-list-label">Point difference</span>
                     <span className="performance-list-value">{data.difference}</span>
                 </div>
             </div>

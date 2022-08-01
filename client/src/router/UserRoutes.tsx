@@ -9,7 +9,9 @@ import InboxPage from "pages/Inbox/inbox";
 import LoginPage from "pages/Login/login-page";
 import PostPage from "pages/Post/post-page";
 import AccountReview from "pages/Review/account-review-page";
-import { UploadPost } from "pages/upload/upload";
+import UploadAssignment from "pages/upload/assignment/assignment-page";
+import UploadPage from "pages/upload/upload";
+import { UploadPost } from "pages/upload/upload-post/upload-post";
 import UserPage from "pages/user/user-page";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,13 +62,16 @@ export default function UserRoutes(){
     return(
         <Routes>
             <Route path = "/" element = {<MobileNavWrapper />}>
-                {/* Main Routes */}
                 <Route index element = {<HomePage />}/>
                 <Route path = "explore" element = {<HomePage />}/>
                 <Route path = "inbox" element = {<InboxPage />}/>
                 <Route path = "profile" element = {<HomePage />}/>
             </Route>
-            <Route path = "/upload" element = {<UploadPost />} />
+            <Route path = "/upload/*">
+                <Route index element = {<UploadPage />} />
+                <Route path = "post" element = {<UploadPost />} />
+                <Route path = "assignment" element = {<UploadAssignment />} />
+            </Route>
             <Route path = "/inbox/activity" element = {<ActivityPage />} />
             <Route path = "/post/:post_id" element = {<PostPage />}/>
             <Route path = "/student/:user_id/*" element = {<UserPage type="student" />}/>

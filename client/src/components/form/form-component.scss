@@ -3,7 +3,7 @@
     margin-bottom: 1rem;
     .input-container {
         flex: 1;
-        input, select {
+        input, select, textarea {
             width: 100%;
             font-size: 1rem;
             border-bottom: 1px solid var(--border-color);

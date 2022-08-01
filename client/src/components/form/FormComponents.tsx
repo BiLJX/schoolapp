@@ -1,10 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import ReactTextareaAutosize from "react-textarea-autosize";
 import "./form-component.scss"
 
 interface FormInputProps {
     className?: string,
-    onChange?: (text: string) => any;
+    onChange?: (val: string) => any;
     Icon: any;
     placeholder: string,
     type?: string
@@ -18,6 +19,26 @@ export function FormInput({className, Icon, onChange, placeholder, type}: FormIn
             </div>
             <div className = "input-container">
                 <input placeholder={placeholder} type={type || "text"} onChange={(e)=>onChange?.(e.target.value)} />
+            </div>
+        </div>
+    )
+}
+
+interface FormTextAreatProps {
+    className?: string,
+    onChange?: (text: string) => any;
+    Icon: any;
+    placeholder: string,
+}
+
+export function FormTextArea({className, Icon, onChange, placeholder}: FormTextAreatProps){
+    return(
+        <div className = {`form-input-container ${className || ""}`}>
+            <div className = "icon-container">
+                <Icon />
+            </div>
+            <div className = "input-container">
+                <ReactTextareaAutosize placeholder={placeholder} minRows={3} onChange={(e)=>onChange?.(e.target.value)} />
             </div>
         </div>
     )
@@ -77,6 +98,7 @@ interface FormButtonProps {
     isDisabled?: boolean;
     color?: string;
     isLoading?: boolean;
+
 }
 
 export function FormSubmit(props: FormButtonProps){
