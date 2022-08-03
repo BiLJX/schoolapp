@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,28 +57,28 @@ var NotificationTypes;
     NotificationTypes[NotificationTypes["REPLIED"] = 2] = "REPLIED";
     NotificationTypes[NotificationTypes["NEW_ASSIGNMENT"] = 3] = "NEW_ASSIGNMENT";
     NotificationTypes[NotificationTypes["NEW_ANNOUNCEMENT"] = 4] = "NEW_ANNOUNCEMENT";
-    NotificationTypes[NotificationTypes["INTERACTION"] = 5] = "INTERACTION";
+    NotificationTypes[NotificationTypes["MERIT"] = 5] = "MERIT";
+    NotificationTypes[NotificationTypes["DEMERIT"] = 6] = "DEMERIT";
 })(NotificationTypes = exports.NotificationTypes || (exports.NotificationTypes = {}));
 var NotificationHandler = /** @class */ (function () {
     function NotificationHandler(io) {
         this.io = io;
     }
     ;
-    NotificationHandler.prototype.sendInteraction = function (notification_data) {
+    NotificationHandler.prototype.notify = function (data) {
         return __awaiter(this, void 0, void 0, function () {
             var notificationDoc, notification, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        notification_data.type = NotificationTypes.INTERACTION;
-                        notification_data.notification_id = idgen_1.makeId();
-                        notificationDoc = new Notification_1.Notifications(notification_data);
+                        if (data.receiver_id === data.sender_id)
+                            return [2 /*return*/];
+                        notificationDoc = new Notification_1.Notifications(__assign(__assign({}, data), { notification_id: idgen_1.makeId() }));
                         return [4 /*yield*/, notificationDoc.save()];
                     case 1:
                         notification = (_a.sent()).toJSON();
-                        notification.content = notification_data.title;
-                        this.notify(notification);
+                        this.io.to(data.receiver_id).emit("newNotification", notification);
                         return [3 /*break*/, 3];
                     case 2:
                         error_1 = _a.sent();
@@ -77,83 +88,6 @@ var NotificationHandler = /** @class */ (function () {
                 }
             });
         });
-    };
-    NotificationHandler.prototype.sendLike = function (notification_data, data) {
-        return __awaiter(this, void 0, void 0, function () {
-            var notificationDoc, notification, error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        notification_data.content_id = data.post_id;
-                        notification_data.type = NotificationTypes.LIKED_POST;
-                        notification_data.notification_id = idgen_1.makeId();
-                        notificationDoc = new Notification_1.Notifications(notification_data);
-                        return [4 /*yield*/, notificationDoc.save()];
-                    case 1:
-                        notification = (_a.sent()).toJSON();
-                        notification.content = data;
-                        this.notify(notification);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_2 = _a.sent();
-                        console.log(error_2);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    NotificationHandler.prototype.sendComment = function (notification_data) {
-        return __awaiter(this, void 0, void 0, function () {
-            var notificationDoc, notification, error_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        notification_data.type = NotificationTypes.COMMENTED;
-                        notification_data.notification_id = idgen_1.makeId();
-                        notificationDoc = new Notification_1.Notifications(notification_data);
-                        return [4 /*yield*/, notificationDoc.save()];
-                    case 1:
-                        notification = (_a.sent()).toJSON();
-                        this.notify(notification);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_3 = _a.sent();
-                        console.log(error_3);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    NotificationHandler.prototype.sendReply = function (notification_data) {
-        return __awaiter(this, void 0, void 0, function () {
-            var notificationDoc, notification, error_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        notification_data.type = NotificationTypes.REPLIED;
-                        notification_data.notification_id = idgen_1.makeId();
-                        notificationDoc = new Notification_1.Notifications(notification_data);
-                        return [4 /*yield*/, notificationDoc.save()];
-                    case 1:
-                        notification = (_a.sent()).toJSON();
-                        this.notify(notification);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_4 = _a.sent();
-                        console.log(error_4);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    NotificationHandler.prototype.notify = function (data) {
-        this.io.to(data.receiver_id).emit("newNotification", data);
     };
     Object.defineProperty(NotificationHandler.prototype, "Types", {
         get: function () {

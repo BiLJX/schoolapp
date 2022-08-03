@@ -55,7 +55,7 @@ var Interaction_1 = require("../models/Interaction");
 var Student_1 = require("../models/Student");
 var Response_1 = __importDefault(require("../utils/Response"));
 var giveInteraction = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var jsonResponse, currentUser, notification, clientData, student, interaction, error_1;
+    var jsonResponse, currentUser, notification, clientData, student, interaction, error_1, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -64,7 +64,7 @@ var giveInteraction = function (req, res) { return __awaiter(void 0, void 0, voi
                 notification = req.app.locals.notification;
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 5, , 6]);
+                _a.trys.push([1, 8, , 9]);
                 clientData = req.body;
                 if (!clientData.reason)
                     return [2 /*return*/, jsonResponse.clientError("Please provide a reason!")];
@@ -81,20 +81,34 @@ var giveInteraction = function (req, res) { return __awaiter(void 0, void 0, voi
             case 3:
                 _a.sent();
                 jsonResponse.success(null, "gave " + interaction.amount + " " + interaction.type + " to " + student.full_name);
-                return [4 /*yield*/, notification.sendInteraction({
-                        sender_id: currentUser.user_id,
-                        receiver_id: clientData.given_to,
-                        title: "gave you " + interaction.type,
-                    })];
+                _a.label = 4;
             case 4:
-                _a.sent();
-                return [3 /*break*/, 6];
+                _a.trys.push([4, 6, , 7]);
+                return [4 /*yield*/, notification.notify({
+                        type: interaction.type === "merit" ? notification.Types.MERIT : notification.Types.DEMERIT,
+                        receiver_id: student.user_id,
+                        sender_id: currentUser.user_id,
+                        content: clientData.reason,
+                        sender_data: {
+                            full_name: currentUser.full_name,
+                            profile_picture_url: currentUser.profile_picture_url,
+                            type: currentUser.type
+                        }
+                    })];
             case 5:
+                _a.sent();
+                return [3 /*break*/, 7];
+            case 6:
                 error_1 = _a.sent();
                 console.log(error_1);
+                return [3 /*break*/, 7];
+            case 7: return [3 /*break*/, 9];
+            case 8:
+                error_2 = _a.sent();
+                console.log(error_2);
                 jsonResponse.serverError();
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [3 /*break*/, 9];
+            case 9: return [2 /*return*/];
         }
     });
 }); };

@@ -53,7 +53,7 @@ var createSchool = function () { return __awaiter(void 0, void 0, void 0, functi
             case 0: return [4 /*yield*/, bcrypt_1.default.genSalt(10)];
             case 1:
                 salt = _c.sent();
-                _a = School_1.School.bind;
+                _a = School_1.Schools.bind;
                 _b = {
                     school_id: idgen_1.makeId(),
                     name: "Euro School",
@@ -61,7 +61,7 @@ var createSchool = function () { return __awaiter(void 0, void 0, void 0, functi
                 };
                 return [4 /*yield*/, bcrypt_1.default.hash(SCHOOL_PASSWORD, salt)];
             case 2:
-                school = new (_a.apply(School_1.School, [void 0, (_b.password = _c.sent(),
+                school = new (_a.apply(School_1.Schools, [void 0, (_b.password = _c.sent(),
                         _b)]))();
                 return [4 /*yield*/, school.save()];
             case 3:

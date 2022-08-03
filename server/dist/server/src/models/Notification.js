@@ -25,17 +25,8 @@ var schema = new mongoose_1.Schema({
         required: false,
         default: false
     },
-    title: {
-        type: String,
-        required: true
-    },
-    content_id: {
-        type: mongoose_1.Schema.Types.Mixed,
-        default: null,
-        required: false
-    },
     content: {
-        type: String,
+        type: mongoose_1.Schema.Types.Mixed,
         required: false,
     }
 }, { timestamps: true });

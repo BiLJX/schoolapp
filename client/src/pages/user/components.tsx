@@ -12,13 +12,13 @@ import { useState } from "react";
 import { giveInteraction } from "api/interaction";
 import { toastError, toastSuccess } from "components/Toast/toast";
 interface NavProps {
-    data: Array<{to: string, label: string}>
+    data: Array<{to: string, label: string, replace?: boolean}>,
 }
 
 export function UserNav({data}: NavProps){
     return(
         <nav className="user-nav">
-            {data.map((x, i)=><NavLink end to = {x.to} className = "user-nav-item">{x.label}</NavLink>)}
+            {data.map((x, i)=><NavLink end replace = {x.replace} to = {x.to} className = "user-nav-item">{x.label}</NavLink>)}
         </nav>
     )
 }

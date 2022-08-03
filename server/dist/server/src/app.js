@@ -54,7 +54,7 @@ var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var routes_1 = require("./routes");
 var secret_1 = require("./secret");
 //constants
-var CONNECTION_URL = "mongodb+srv://billjesh:Billu456@cluster0.vyegx.mongodb.net/Schoolapp?retryWrites=true&w=majority";
+var CONNECTION_URL = "mongodb+srv://Classital:ofhlUSsqYXioMRXM@cluster0.vyegx.mongodb.net/Schoolapp?retryWrites=true&w=majority";
 var PORT = process.env.PORT || 5000;
 //app
 var app = express_1.default();
@@ -102,4 +102,8 @@ function _INIT_() {
         });
     });
 }
-mongoose_1.default.connect(CONNECTION_URL).then(_INIT_);
+var options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: false
+};
+mongoose_1.default.connect(CONNECTION_URL, options).then(_INIT_);

@@ -8,5 +8,6 @@ var NotificationTypes;
     NotificationTypes[NotificationTypes["REPLIED"] = 2] = "REPLIED";
     NotificationTypes[NotificationTypes["NEW_ASSIGNMENT"] = 3] = "NEW_ASSIGNMENT";
     NotificationTypes[NotificationTypes["NEW_ANNOUNCEMENT"] = 4] = "NEW_ANNOUNCEMENT";
-    NotificationTypes[NotificationTypes["INTERACTION"] = 5] = "INTERACTION";
+    NotificationTypes[NotificationTypes["MERIT"] = 5] = "MERIT";
+    NotificationTypes[NotificationTypes["DEMERIT"] = 6] = "DEMERIT";
 })(NotificationTypes = exports.NotificationTypes || (exports.NotificationTypes = {}));

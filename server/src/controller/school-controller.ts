@@ -17,7 +17,7 @@ export const getSchools = async (req: Request, res: Response) => {
 
 export const getClasses = async (req: Request, res: Response) => {
     const jsonResponse = new JsonResponse(res);
-    const school_id: string = req.params.school_id
+    const school_id: string = req.params.school_id;
     try {
         const classes = await Class.find({school_id}).sort({grade: 1}).lean().exec();
         jsonResponse.success(classes)

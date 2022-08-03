@@ -7,3 +7,4 @@ var router = express_1.Router();
 exports.InboxRoutes = router;
 router.get("/", inbox_controller_1.getInbox);
 router.get("/activity", inbox_controller_1.getActivity);
+router.put("/:id/read", inbox_controller_1.readNotification);

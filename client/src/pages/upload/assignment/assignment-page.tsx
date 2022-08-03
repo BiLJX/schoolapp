@@ -7,16 +7,37 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import "../scss/upload-assignment.scss"
 import ReactTextareaAutosize from "react-textarea-autosize";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "types/states";
+import { UploadAssignmentActions } from "redux/UploadAssignment/uploadAssignmentActions";
 export default function UploadAssignment(){
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const assignmentData = useSelector((state: RootState)=>state.uploadAssignmentData);
     return(
         <>
             <MobileStackHeader label = "Upload an Assignment" goBack />
             <StackContainer>
                 <form className = "upload-assignment-form">
-                    <FormInput value = "" placeholder="Title" Icon={TitleOutlinedIcon} />
-                    <FormTextArea value = "" placeholder="Describe homework..." Icon={AssignmentOutlinedIcon} />
-                    <FormInput value = "" placeholder="Due" Icon={CalendarMonthOutlinedIcon} type = "date" />
-                    <div className = "form-input-container">
+                    <FormInput 
+                    value = {assignmentData.title || ""} 
+                    placeholder="Title" Icon={TitleOutlinedIcon} 
+                    onChange = {(text)=>dispatch(UploadAssignmentActions.changeAssignmentTitle(text))} />
+                    
+                    <FormTextArea 
+                    value = {assignmentData.description || ""} 
+                    placeholder="Describe homework..." 
+                    Icon={AssignmentOutlinedIcon} 
+                    onChange = {(text)=>dispatch(UploadAssignmentActions.changeAssignmentDescription(text))} />
+                    
+                    <FormInput 
+                    value = {assignmentData.due || ""} 
+                    placeholder="Due" Icon={CalendarMonthOutlinedIcon} 
+                    type = "date" 
+                    onChange = {(date)=>dispatch(UploadAssignmentActions.changeAssignmentDue(date))} />
+                    
+                    <div className = "form-input-container" onClick={()=>navigate("assign")}>
                         <div className = "icon-container">
                             <GroupAddOutlinedIcon />
                         </div>
@@ -40,7 +61,7 @@ interface FormInputProps {
     value: string
 }
 
-export function FormInput({
+function FormInput({
     className, 
     Icon, 
     onChange, 
@@ -60,7 +81,6 @@ export function FormInput({
     )
 }
 
-
 interface FormTextAreatProps {
     className?: string,
     onChange?: (text: string) => any;
@@ -69,7 +89,7 @@ interface FormTextAreatProps {
     value: string
 }
 
-export function FormTextArea({
+function FormTextArea({
     className, 
     Icon, 
     onChange, 

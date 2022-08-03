@@ -14,7 +14,7 @@ import { ApiRoutes } from "./routes"
 import { USER_PASSWORD_SECRET } from "./secret"
 
 //constants
-const CONNECTION_URL = "mongodb+srv://billjesh:Billu456@cluster0.vyegx.mongodb.net/Schoolapp?retryWrites=true&w=majority"
+const CONNECTION_URL = "mongodb+srv://Classital:ofhlUSsqYXioMRXM@cluster0.vyegx.mongodb.net/Schoolapp?retryWrites=true&w=majority"
 const PORT = process.env.PORT || 5000
 
 
@@ -58,6 +58,8 @@ async function _INIT_(){
         // console.log("user connected " + socket.user_id)
     })
 }
-
-
-mongoose.connect(CONNECTION_URL).then(_INIT_)
+const options: Object = {
+    useNewUrlParser: true,
+    useUnifiedTopology: false
+}
+mongoose.connect(CONNECTION_URL, options).then(_INIT_)

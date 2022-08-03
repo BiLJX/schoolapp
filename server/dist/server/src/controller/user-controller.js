@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,15 +46,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTeacherById = exports.getStudentById = exports.getCurrentUser = void 0;
+exports.getStudentMDOverall = exports.getStudentDemeritsPerformance = exports.getStudentMeritsPerformance = exports.getTeacherById = exports.getStudentById = exports.getCurrentUser = void 0;
+var Interaction_1 = require("../models/Interaction");
 var Student_1 = require("../models/Student");
 var Teacher_1 = require("../models/Teacher");
 var aggregations_1 = require("../utils/aggregations");
 var Response_1 = __importDefault(require("../utils/Response"));
+var moment_1 = __importDefault(require("moment"));
 var getCurrentUser = function (req, res) {
     var jsonResponse = new Response_1.default(res);
     try {
@@ -144,3 +162,181 @@ var getTeacherById = function (req, res) { return __awaiter(void 0, void 0, void
     });
 }); };
 exports.getTeacherById = getTeacherById;
+var getStudentMeritsPerformance = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var jsonResponse, periods, time_period, user_id, agg, group, merits, performance_data, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                jsonResponse = new Response_1.default(res);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                periods = ["WEEK", "MONTH", "YEAR"];
+                time_period = req.query.time_period;
+                if (!periods.includes(time_period))
+                    return [2 /*return*/, jsonResponse.clientError("Invalid time period")];
+                user_id = req.params.user_id;
+                agg = aggregations_1.performanceAggregation({ given_to: user_id, type: "merit" }, time_period);
+                group = time_period === "YEAR" ? ({
+                    $group: {
+                        _id: { $month: "$given_on" },
+                        total: { $sum: "$amount" }
+                    }
+                }) : ({
+                    $group: {
+                        _id: { $dayOfMonth: "$given_on" },
+                        total: { $sum: "$amount" }
+                    }
+                });
+                return [4 /*yield*/, Interaction_1.Interactions.aggregate(__spreadArray(__spreadArray([], agg), [
+                        __assign({}, group),
+                        {
+                            $sort: { _id: 1 }
+                        }
+                    ]))];
+            case 2:
+                merits = _a.sent();
+                performance_data = void 0;
+                switch (time_period) {
+                    case "WEEK":
+                        performance_data = {
+                            name: "Merits Obtained in",
+                            labels: merits.map(function (x) { return "" + x._id; }),
+                            data: merits.map(function (x) { return x.total; })
+                        };
+                        break;
+                    case "MONTH":
+                        performance_data = {
+                            name: "Merits Obtained in",
+                            labels: merits.map(function (x) { return moment_1.default(new Date()).format("MMM") + " " + x._id; }),
+                            data: merits.map(function (x) { return x.total; })
+                        };
+                        break;
+                    case "YEAR":
+                        performance_data = {
+                            name: "Merits Obtained in",
+                            labels: merits.map(function (x) { return "" + moment_1.default(x._id, "M").format("MMM"); }),
+                            data: merits.map(function (x) { return x.total; })
+                        };
+                        break;
+                }
+                jsonResponse.success(performance_data);
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                console.log(error_3);
+                jsonResponse.serverError();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getStudentMeritsPerformance = getStudentMeritsPerformance;
+var getStudentDemeritsPerformance = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var jsonResponse, periods, time_period, user_id, agg, group, demerits, performance_data, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                jsonResponse = new Response_1.default(res);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                periods = ["WEEK", "MONTH", "YEAR"];
+                time_period = req.query.time_period;
+                if (!periods.includes(time_period))
+                    return [2 /*return*/, jsonResponse.clientError("Invalid time period")];
+                user_id = req.params.user_id;
+                agg = aggregations_1.performanceAggregation({ given_to: user_id, type: "demerit" }, time_period);
+                group = time_period === "YEAR" ? ({
+                    $group: {
+                        _id: { $month: "$given_on" },
+                        total: { $sum: "$amount" }
+                    }
+                }) : ({
+                    $group: {
+                        _id: { $dayOfMonth: "$given_on" },
+                        total: { $sum: "$amount" }
+                    }
+                });
+                return [4 /*yield*/, Interaction_1.Interactions.aggregate(__spreadArray(__spreadArray([], agg), [
+                        __assign({}, group),
+                        {
+                            $sort: { _id: 1 }
+                        }
+                    ]))];
+            case 2:
+                demerits = _a.sent();
+                performance_data = void 0;
+                switch (time_period) {
+                    case "WEEK":
+                        performance_data = {
+                            name: "Demerits Obtained in",
+                            labels: demerits.map(function (x) { return "" + x._id; }),
+                            data: demerits.map(function (x) { return x.total; })
+                        };
+                        break;
+                    case "MONTH":
+                        performance_data = {
+                            name: "Demerits Obtained in",
+                            labels: demerits.map(function (x) { return moment_1.default(new Date()).format("MMM") + " " + x._id; }),
+                            data: demerits.map(function (x) { return x.total; })
+                        };
+                        break;
+                    case "YEAR":
+                        performance_data = {
+                            name: "Demerits Obtained in",
+                            labels: demerits.map(function (x) { return "" + moment_1.default(x._id, "M").format("MMM"); }),
+                            data: demerits.map(function (x) { return x.total; })
+                        };
+                        break;
+                }
+                jsonResponse.success(performance_data);
+                return [3 /*break*/, 4];
+            case 3:
+                error_4 = _a.sent();
+                console.log(error_4);
+                jsonResponse.serverError();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getStudentDemeritsPerformance = getStudentDemeritsPerformance;
+var getStudentMDOverall = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var jsonResponse, user_id, total_interactions, merits_sum, demerits_sum, _i, total_interactions_1, x, ratio, difference, error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                jsonResponse = new Response_1.default(res);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                user_id = req.params.user_id;
+                return [4 /*yield*/, Interaction_1.Interactions.find({ given_to: user_id }).lean()];
+            case 2:
+                total_interactions = _a.sent();
+                merits_sum = 0;
+                demerits_sum = 0;
+                for (_i = 0, total_interactions_1 = total_interactions; _i < total_interactions_1.length; _i++) {
+                    x = total_interactions_1[_i];
+                    if (x.type === "merit")
+                        merits_sum += x.amount;
+                    else
+                        demerits_sum += x.amount;
+                }
+                ;
+                if (demerits_sum === 0)
+                    demerits_sum = 1;
+                ratio = (merits_sum / demerits_sum).toFixed(2);
+                difference = merits_sum - demerits_sum;
+                return [2 /*return*/, jsonResponse.success({ ratio: ratio, difference: difference })];
+            case 3:
+                error_5 = _a.sent();
+                console.log(error_5);
+                jsonResponse.serverError();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getStudentMDOverall = getStudentMDOverall;

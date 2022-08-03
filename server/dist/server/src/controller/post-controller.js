@@ -541,12 +541,19 @@ var likePost = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 console.timeEnd("like");
                 if (post.author_id === currentUser.user_id)
                     return [2 /*return*/];
-                return [4 /*yield*/, notification.sendLike({
+                return [4 /*yield*/, notification.notify({
                         receiver_id: post.author_id,
                         sender_id: currentUser.user_id,
-                        title: "liked your post",
-                        type: notification.Types.LIKED_POST
-                    }, { post_id: post.post_id, url: post.content_src })];
+                        type: notification.Types.LIKED_POST,
+                        content: {
+                            post_id: post.post_id,
+                        },
+                        sender_data: {
+                            full_name: currentUser.user_id,
+                            profile_picture_url: currentUser.profile_picture_url,
+                            type: currentUser.type
+                        }
+                    })];
             case 4:
                 _a.sent();
                 return [3 /*break*/, 6];

@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unlikeComment = exports.likeComment = exports.addReply = exports.addComment = exports.getComments = void 0;
+var notificationHandler_1 = require("../handler/notificationHandler");
 var Comment_1 = require("../models/Comment");
 var Post_1 = require("../models/Post");
 var idgen_1 = require("../utils/idgen");
@@ -190,12 +191,19 @@ var addComment = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 jsonResponse.success(_comment);
                 if (post.author_id === currentUser.user_id)
                     return [2 /*return*/];
-                return [4 /*yield*/, notification.sendComment({
+                return [4 /*yield*/, notification.notify({
+                        type: notificationHandler_1.NotificationTypes.COMMENTED,
                         receiver_id: post.author_id,
                         sender_id: currentUser.user_id,
-                        title: "Commented",
-                        content: comment.text,
-                        content_id: post.post_id,
+                        content: {
+                            post_id: comment.post_id,
+                            comment: comment.text
+                        },
+                        sender_data: {
+                            full_name: currentUser.full_name,
+                            type: currentUser.type,
+                            profile_picture_url: currentUser.profile_picture_url
+                        }
                     })];
             case 4:
                 _a.sent();
@@ -252,12 +260,19 @@ var addReply = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 jsonResponse.success(_reply);
                 if (comment.author_id === reply.author_id)
                     return [2 /*return*/];
-                return [4 /*yield*/, notification.sendReply({
+                return [4 /*yield*/, notification.notify({
+                        type: notificationHandler_1.NotificationTypes.REPLIED,
                         receiver_id: comment.author_id,
                         sender_id: reply.author_id,
-                        title: "Replied to your comment:",
-                        content: reply.text,
-                        content_id: reply.post_id,
+                        content: {
+                            post_id: reply.post_id,
+                            comment: reply.text
+                        },
+                        sender_data: {
+                            full_name: currentUser.full_name,
+                            type: currentUser.type,
+                            profile_picture_url: currentUser.profile_picture_url
+                        }
                     })];
             case 4:
                 _a.sent();

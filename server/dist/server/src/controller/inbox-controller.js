@@ -39,11 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getActivity = exports.getInbox = void 0;
+exports.readNotification = exports.getActivity = exports.getInbox = void 0;
 var notificationHandler_1 = require("../handler/notificationHandler");
 var Notification_1 = require("../models/Notification");
 var Response_1 = __importDefault(require("../utils/Response"));
-var activity_filter = function (x) { return x.type === notificationHandler_1.NotificationTypes.LIKED_POST || x.type === notificationHandler_1.NotificationTypes.INTERACTION || x.type === notificationHandler_1.NotificationTypes.COMMENTED || x.type === notificationHandler_1.NotificationTypes.REPLIED; };
+var activity_filter = function (x) { return x.type === notificationHandler_1.NotificationTypes.LIKED_POST || x.type === notificationHandler_1.NotificationTypes.MERIT || x.type === notificationHandler_1.NotificationTypes.COMMENTED || x.type === notificationHandler_1.NotificationTypes.REPLIED || x.type === notificationHandler_1.NotificationTypes.DEMERIT; };
 var announcement_filter = function (x) { return x.type === notificationHandler_1.NotificationTypes.NEW_ANNOUNCEMENT; };
 var assignment_filter = function (x) { return x.type === notificationHandler_1.NotificationTypes.NEW_ASSIGNMENT; };
 var getInbox = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -167,7 +167,7 @@ var getActivity = function (req, res) { return __awaiter(void 0, void 0, void 0,
                             $match: {
                                 receiver_id: currentUser.user_id,
                                 type: {
-                                    $in: [notificationHandler_1.NotificationTypes.LIKED_POST, notificationHandler_1.NotificationTypes.COMMENTED, notificationHandler_1.NotificationTypes.INTERACTION, notificationHandler_1.NotificationTypes.REPLIED]
+                                    $in: [notificationHandler_1.NotificationTypes.LIKED_POST, notificationHandler_1.NotificationTypes.COMMENTED, notificationHandler_1.NotificationTypes.MERIT, notificationHandler_1.NotificationTypes.REPLIED, notificationHandler_1.NotificationTypes.DEMERIT]
                                 }
                             }
                         },
@@ -232,6 +232,11 @@ var getActivity = function (req, res) { return __awaiter(void 0, void 0, void 0,
                                 sender_data_teacher: 0
                             }
                         },
+                        {
+                            $sort: {
+                                createdAt: -1
+                            }
+                        }
                     ])];
             case 2:
                 notifications = _a.sent();
@@ -247,3 +252,33 @@ var getActivity = function (req, res) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 exports.getActivity = getActivity;
+var readNotification = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var jsonResponse, user_id, notification_id, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                jsonResponse = new Response_1.default(res);
+                user_id = res.locals.user.user_id;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                notification_id = req.params.id;
+                return [4 /*yield*/, Notification_1.Notifications.findOneAndUpdate({ notification_id: notification_id, receiver_id: user_id }, {
+                        $set: {
+                            has_read: true
+                        }
+                    })];
+            case 2:
+                _a.sent();
+                jsonResponse.success();
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                console.log(error_3);
+                jsonResponse.serverError();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.readNotification = readNotification;

@@ -9,6 +9,7 @@ import InboxPage from "pages/Inbox/inbox";
 import LoginPage from "pages/Login/login-page";
 import PostPage from "pages/Post/post-page";
 import AccountReview from "pages/Review/account-review-page";
+import AssignPage from "pages/upload/assignment/assign-page";
 import UploadAssignment from "pages/upload/assignment/assignment-page";
 import UploadPage from "pages/upload/upload";
 import { UploadPost } from "pages/upload/upload-post/upload-post";
@@ -71,6 +72,7 @@ export default function UserRoutes(){
                 <Route index element = {<UploadPage />} />
                 <Route path = "post" element = {<UploadPost />} />
                 <Route path = "assignment" element = {<UploadAssignment />} />
+                <Route path = "assignment/assign" element = {<AssignPage />} />
             </Route>
             <Route path = "/inbox/activity" element = {<ActivityPage />} />
             <Route path = "/post/:post_id" element = {<PostPage />}/>

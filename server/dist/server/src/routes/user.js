@@ -7,4 +7,7 @@ var router = express_1.Router();
 exports.UserRoutes = router;
 router.get("/current", user_controller_1.getCurrentUser);
 router.get("/student/:user_id", user_controller_1.getStudentById);
+router.get("/student/:user_id/performance/merits", user_controller_1.getStudentMeritsPerformance);
+router.get("/student/:user_id/performance/demerits", user_controller_1.getStudentDemeritsPerformance);
+router.get("/student/:user_id/performance/overall/md", user_controller_1.getStudentMDOverall);
 router.get("/teacher/:user_id", user_controller_1.getTeacherById);

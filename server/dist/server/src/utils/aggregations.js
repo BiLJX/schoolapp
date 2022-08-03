@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.studentAggregation = void 0;
+exports.performanceAggregation = exports.studentAggregation = void 0;
+var moment_1 = __importDefault(require("moment"));
 var studentAggregation = function (match) {
     return [
         match,
@@ -89,3 +93,49 @@ var studentAggregation = function (match) {
     ];
 };
 exports.studentAggregation = studentAggregation;
+var performanceAggregation = function (filter, period) {
+    var date = new Date();
+    switch (period) {
+        case "WEEK":
+            return [
+                { $match: filter },
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: moment_1.default().startOf('isoWeek').toDate(),
+                            $lt: moment_1.default().endOf('isoWeek').toDate()
+                        }
+                    }
+                },
+            ];
+        case "MONTH":
+            var month = date.getMonth() + 1;
+            return [
+                { $match: filter },
+                {
+                    $addFields: {
+                        month: { $month: "$given_on" }
+                    }
+                },
+                {
+                    $match: { month: month }
+                },
+            ];
+        case "YEAR":
+            var year = date.getFullYear();
+            return [
+                { $match: filter },
+                {
+                    $addFields: {
+                        year: { $year: "$given_on" }
+                    }
+                },
+                {
+                    $match: { year: year }
+                },
+            ];
+        default:
+            throw new Error("Invalid time period");
+    }
+};
+exports.performanceAggregation = performanceAggregation;

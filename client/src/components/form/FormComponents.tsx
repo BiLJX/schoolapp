@@ -98,7 +98,6 @@ interface FormButtonProps {
     isDisabled?: boolean;
     color?: string;
     isLoading?: boolean;
-
 }
 
 export function FormSubmit(props: FormButtonProps){

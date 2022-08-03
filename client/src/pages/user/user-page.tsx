@@ -12,9 +12,9 @@ import { toastError } from "components/Toast/toast";
 import UserPosts from "./posts/user-posts";
 import UserPerformance from "./performance/user-performance";
 const studentNavData = [
-    {to: "", label: "Posts"},
-    {to: "performance", label: "Performance"},
-    {to: "comments", label: "Comments"},
+    {to: "", label: "Posts", replace: false},
+    {to: "performance", label: "Performance", replace: true},
+    {to: "comments", label: "Comments", replace: true},
 ]
 type User = Student|Teacher
 
