@@ -8,11 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "types/states";
 import DoneIcon from '@mui/icons-material/Done';
 import { UploadAssignmentActions } from "redux/UploadAssignment/uploadAssignmentActions";
+import { useNavigate } from "react-router-dom";
 export default function AssignPage(){
     const [classes, setClasses] = useState<ClassSchema[]>([]);
     const [tempClass, setTempClass] = useState<ClassSchema[]>([])
     const school_id = useSelector((state: RootState)=>state.currentUser?.school_id) as string;
     const selectedClasses = useSelector((state: RootState)=>state.uploadAssignmentData.assigned_to)
+    const navigate = useNavigate();
     const fetchClass = async() => {
         const res = await getClasses(school_id);
         if(res.error) return toastError(res.message);
@@ -32,7 +34,7 @@ export default function AssignPage(){
     }, [])
     return(
         <>
-            <MobileSearchHeader buttonLabel="Done" goBack onChange={search} />
+            <MobileSearchHeader buttonLabel="Done" goBack onChange={search} onSearch = {()=>navigate(-1)} />
             <StackContainer className="assign-items-container">
                 {classes.map((x, i)=><ClassItem data = {x} key = {i} />)}
             </StackContainer>
@@ -46,7 +48,8 @@ interface ItemProps {
 function ClassItem({data}: ItemProps){
     const selectedClasses = useSelector((state: RootState)=>state.uploadAssignmentData.assigned_to)
     const isActive = selectedClasses.find(x=>x.class_id === data.class_id) ? true : false
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    
     const handleClick = () => {
         if(isActive) dispatch(UploadAssignmentActions.removeClass(data.class_id));
         else dispatch(UploadAssignmentActions.addClass(data));

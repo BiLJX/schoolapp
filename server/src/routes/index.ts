@@ -11,17 +11,18 @@ import nodemailer from "nodemailer"
 import { InteractionRoutes } from "./interaction";
 import { TeacherAuth } from "../middleware/teacher";
 import { InboxRoutes } from "./inbox";
+import { AssignmentRoutes } from "./assignment";
 const router = Router()
 
 router.use("/auth", AuthRoutes)
 router.use("/schools", SchoolRoutes)
 router.use("/admin", AdminAuth, AdminRoutes)
 router.use("/user", UserAuth, UserRoutes);
-router.use("/post", UserAuth, PostRoutes)
-router.use("/comment", UserAuth, CommentRoutes)
-router.use("/inbox", UserAuth, InboxRoutes)
-router.use("/interaction", UserAuth, TeacherAuth, InteractionRoutes)
-
+router.use("/post", UserAuth, PostRoutes);
+router.use("/comment", UserAuth, CommentRoutes);
+router.use("/inbox", UserAuth, InboxRoutes);
+router.use("/interaction", UserAuth, TeacherAuth, InteractionRoutes);
+router.use("/assignment", UserAuth, AssignmentRoutes);
 
 
 

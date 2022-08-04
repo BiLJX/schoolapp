@@ -6,9 +6,10 @@ const defaultState: UploadAssignmentData = {
     title: null,
     description: null,
     due: null,
+    points: null,
     assigned_to: []
 }
-export function uploadAssignmentReducer(state: UploadAssignmentData = defaultState, action: Action<UploadAssignmentActionTypes, string|ClassSchema>): UploadAssignmentData{
+export function uploadAssignmentReducer(state: UploadAssignmentData = defaultState, action: Action<UploadAssignmentActionTypes, string|ClassSchema|number>): UploadAssignmentData{
     switch(action.type){
         case UploadAssignmentActionTypes.CHANGE_TITLE: {
             return {
@@ -40,8 +41,13 @@ export function uploadAssignmentReducer(state: UploadAssignmentData = defaultSta
                 assigned_to: state.assigned_to.filter(x=>x.class_id !== class_id)
             }
         }
+        case UploadAssignmentActionTypes.ADD_POINTS:
+            return {
+                ...state,
+                points: action.payload as number
+            }
         case UploadAssignmentActionTypes.CLEAR:
-            return state;
+            return defaultState;
         default:
             return state;
     }

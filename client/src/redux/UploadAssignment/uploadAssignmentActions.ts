@@ -38,4 +38,11 @@ export namespace UploadAssignmentActions {
             payload: ""
         }
     }
+
+    export function addPoints(points: number): Action<UploadAssignmentActionTypes, number> {
+        return {
+            type: UploadAssignmentActionTypes.ADD_POINTS,
+            payload: points
+        }
+    }
 }
