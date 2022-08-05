@@ -5,6 +5,7 @@ import { toastError } from "components/Toast/toast";
 import MobileNavWrapper from "container/mobile-layouts/nav-wrapper";
 import HomePage from "pages/home/home-page";
 import ActivityPage from "pages/Inbox/activity/activity";
+import AssignmentsPage from "pages/Inbox/assignment/assignment";
 import InboxPage from "pages/Inbox/inbox";
 import LoginPage from "pages/Login/login-page";
 import PostPage from "pages/Post/post-page";
@@ -75,6 +76,7 @@ export default function UserRoutes(){
                 <Route path = "assignment/assign" element = {<AssignPage />} />
             </Route>
             <Route path = "/inbox/activity" element = {<ActivityPage />} />
+            <Route path = "/inbox/assignment" element = {<AssignmentsPage />} /> 
             <Route path = "/post/:post_id" element = {<PostPage />}/>
             <Route path = "/student/:user_id/*" element = {<UserPage type="student" />}/>
             <Route path = "/teacher/:user_id/*" element = {<UserPage type="teacher" />}/>

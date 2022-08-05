@@ -1,0 +1,35 @@
+.assignments-page {
+    padding: 1rem;
+}
+
+.assignment-filter-container {
+    margin-bottom: 1rem;
+}
+
+.assignment-filter {
+    display: flex;
+    border: 1px solid var(--border-color-alt);
+    border-radius: 10px;
+    padding: .6rem;
+    select {
+        flex: 1;
+        font-size: 1rem;
+        color: var(--text-secondary)
+    }
+    .select-icon {
+        svg {
+            color: var(--text-secondary);
+        }
+    }
+}
+
+.assignment-items-container {
+    display: flex;
+    flex-direction: column;
+    .assignment-date {
+        padding: 1rem 0;
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: var(--text-title);
+    }
+}
