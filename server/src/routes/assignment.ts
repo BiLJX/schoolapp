@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { createAssignment } from "../controller/assignment-controller";
+import { createAssignment, getStudentsAssignment } from "../controller/assignment-controller";
 import { TeacherAuth } from "../middleware/teacher";
-import { UserAuth } from "../middleware/user";
 
 const router = Router();
 
+router.get("/", getStudentsAssignment);
 router.post("/create", TeacherAuth, createAssignment);
 
 

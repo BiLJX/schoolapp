@@ -1,9 +1,11 @@
+import { ClassSchema } from "./School"
+
 export interface UploadAssignmentData {
     title: string|null,
     description: string|null,
     due: string|null,
     points: number|null, 
-    assigned_to: string[]
+    assigned_to: ClassSchema[]
 }
 
 
@@ -24,4 +26,13 @@ export interface Assignment {
         full_name: string,
     }
     createdAt: Date,
+    given_on: string,
+    status: "completed"|"pending"|"redo"
+}
+
+export type AssignmentStatus = "completed"|"pending"|"redo"
+
+export interface AssignmentFeed {
+    given_on: string,
+    assignments: Assignment[]
 }

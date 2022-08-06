@@ -30,6 +30,12 @@
         .assignment-item-status.completed {
             background-color: #48FF91;
         } 
+        .assignment-item-status.redo {
+            background-color: #FF6A6A;
+        }
+        .assignment-item-status.pending {
+            background-color: #FFC75B;
+        } 
     }
     .assignment-item-description {
         font-size: .9rem;
