@@ -1,25 +1,56 @@
 import { Assignment, AssignmentFeed, AssignmentStatus, UploadAssignmentData } from "@shared/Assignment";
 import { Student, Teacher } from "@shared/User";
 import moment from "moment";
+import NotificationHandler from "../handler/notificationHandler";
 import { Assignments } from "../models/Assignment";
+import { Students } from "../models/Student";
 import { Controller } from "../types/controller";
 import { makeId } from "../utils/idgen";
 import JsonResponse from "../utils/Response";
 
-const groupAssignment = async(assignments: Assignment[]) => {
-    let map: Record<string, Assignment[]> = {};
-    for(let assignment of assignments){
-        if(!map[assignment.given_on]){
-            map[assignment.given_on] = assignments.filter(x=>x.given_on === assignment.given_on);
-        }
-    }
-    const data: AssignmentFeed[] = Object.keys(map).map(x=>{
-        return {
-            given_on: x,
-            assignments: map[x]
-        }
-    })
-    return data
+export const getAssignmentById: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const currentUser = res.locals.user as Student;
+    const assignment_id = req.params.id
+    try {
+        if(!assignment_id) return jsonResponse.notFound("Assignment not found!")
+        let assignment = (await Assignments.aggregate<Assignment>([
+            {
+                $match: {
+                    assigned_class: {
+                        $in: [currentUser.class_id]
+                    },
+                    assignment_id
+                }
+            },
+            {
+                $lookup: {
+                    from: "teachers",
+                    as: "author_data",
+                    foreignField: "user_id",
+                    localField: "assigned_by",
+                    pipeline: [
+                        {
+                            $project: {
+                                profile_picture_url: 1,
+                                full_name: 1
+                            }
+                        }
+                    ]
+                }
+            },
+
+        ]))[0]
+        if(!assignment) return jsonResponse.notFound("Assignment not found!");
+        if(assignment.completed_by.includes(currentUser.user_id)) assignment.status = "completed";
+        else if(assignment.redo_by.includes(currentUser.user_id)) assignment.status = "redo";
+        else assignment.status = "pending";
+        assignment.given_on = moment(assignment.createdAt).format("MMMM Do YYYY")
+        jsonResponse.success(assignment)
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError()
+    } 
 }
 
 export const getStudentsAssignment: Controller = async(req, res) => {
@@ -78,7 +109,8 @@ export const getStudentsAssignment: Controller = async(req, res) => {
 
 export const createAssignment: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
-    const currentUser = res.locals.user as Teacher
+    const currentUser = res.locals.user as Teacher;
+    const notification = req.app.locals.notification as NotificationHandler;
     try {
         const upload_data: UploadAssignmentData = req.body;
         //reasign
@@ -109,8 +141,49 @@ export const createAssignment: Controller = async(req, res) => {
 
         await assignment.save();
         jsonResponse.success(assignment.toJSON());
+        try {
+            const users = await Students.find({class_id: {
+                $in: assignment.assigned_class
+            }})
+            const receiver_ids = users.map(x=>x.user_id);
+            receiver_ids.forEach(async x=>{
+                try {
+                    await notification.notify({
+                        type: notification.Types.NEW_ASSIGNMENT,
+                        receiver_id: x,
+                        sender_id: currentUser.user_id,
+                        content: null,
+                        sender_data: {
+                            full_name: currentUser.full_name,
+                            profile_picture_url: currentUser.profile_picture_url,
+                            type: "teacher"
+                        },
+                    })
+                } catch (error) {
+                    console.log(error);
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
     } catch (error) {
         console.log(error);
         jsonResponse.serverError();
     }
+}
+
+const groupAssignment = async(assignments: Assignment[]) => {
+    let map: Record<string, Assignment[]> = {};
+    for(let assignment of assignments){
+        if(!map[assignment.given_on]){
+            map[assignment.given_on] = assignments.filter(x=>x.given_on === assignment.given_on);
+        }
+    }
+    const data: AssignmentFeed[] = Object.keys(map).map(x=>{
+        return {
+            given_on: x,
+            assignments: map[x]
+        }
+    })
+    return data
 }

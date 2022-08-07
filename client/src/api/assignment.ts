@@ -15,3 +15,8 @@ export const getStudentsAssignment = async(filter: AssignmentStatus|"all") => {
     });
     return res.data as ApiResponse<AssignmentFeed[]>
 }
+
+export const getAssignmentById = async(id: string) => {
+    const res = await axios.get("/api/assignment/"+id);
+    return res.data as ApiResponse<Assignment>;
+}

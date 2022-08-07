@@ -16,7 +16,7 @@ export default function InboxPage(){
             <div className = "inbox-page">
                 <InboxItem to = "activity" style={{ backgroundColor: "rgb(255 212 0)" }} Icon = {<NotificationsIcon />} title = "Activity" sub_title={`${inbox.activity.count} new activity`} isActive = {!inbox.activity.has_read} />
                 <InboxItem to = "announcement" style={{ backgroundColor: "var(--red)" }} Icon = {<CampaignOutlinedIcon />} title = "Announcements" sub_title={`${inbox.announcement.count} new activity`} isActive = {!inbox.announcement.has_read} />
-                <InboxItem to = "assignment" style = {{ backgroundColor: "var(--blue)" }} Icon = {<MenuBookOutlinedIcon />} title = "Assignments" sub_title={`${inbox.assignment.count} new activity`} isActive = {!inbox.assignment.has_read} />
+                <InboxItem to = "assignment" style = {{ backgroundColor: "var(--blue)" }} Icon = {<MenuBookOutlinedIcon />} title = "Assignments" sub_title={`${inbox.assignment.count} new assignments`} isActive = {!inbox.assignment.has_read} />
             </div>
         </>
     )

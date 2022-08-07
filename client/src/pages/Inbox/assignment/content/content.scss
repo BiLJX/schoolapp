@@ -1,0 +1,55 @@
+.assignment-content-info {
+    display: flex;
+    background-color: var(--cards-background);
+    flex-direction: column;
+    padding: 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    .assignment-content-info-item{
+        display: flex;
+        margin-bottom: 1rem;
+    }
+    .assignment-content-info-title {
+        font-size: 2rem;
+        color: var(--text-title);
+        font-weight: 500;
+    }
+    .assignment-content-info-due {
+        color: var(--text-secondary-alt);
+        margin-bottom: 0;
+    }
+}
+
+.assignment-content-nav {
+    display: flex;
+    background-color: var(--cards-background);
+    .assignment-content-nav-item{
+        font-weight: 500;
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem 0;
+        color: var(--text-secondary-alt);
+    }
+    .assignment-content-nav-item.active {
+        color: var(--text-title);
+        border-bottom: 1px solid var(--text-title);
+    }
+}
+
+.assignment-content-info-status {
+    span {
+        margin-left: .4rem;
+        font-weight: bold;
+    }
+    .completed {
+        color: #48FF91;
+    }
+    .redo {
+        color: #FF6A6A;
+    }
+    .pending {
+        color: #FFC75B;
+    } 
+}
