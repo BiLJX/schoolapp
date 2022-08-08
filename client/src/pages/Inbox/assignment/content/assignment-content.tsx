@@ -34,16 +34,17 @@ export default function AssignmentContent(){
                 <h2 className="assignment-content-info-item assignment-content-info-title">{assignment.title}</h2>
                 <p className = "assignment-content-info-item assignment-content-info-desc">{assignment.description}</p>
                 <div className="assignment-content-info-item assignment-content-info-points">Points: {assignment.points}</div>
-                <div className="assignment-content-info-item assignment-content-info-status">Status:<span className={assignment.status}>{assignment.status}</span></div>
+                {assignment.status && <div className="assignment-content-info-item assignment-content-info-status">Status:<span className={assignment.status}>{assignment.status}</span></div>}
                 <div className="assignment-content-info-item assignment-content-info-due">Due: {moment(assignment.due).format("MMMM Do YYYY")}</div>
             </div>
             <Nav />
+            <ChangeStatus />
         </>
     )
     return(
         <>
             <MobileStackHeader goBack label = "Assignment" />
-            <StackContainer>
+            <StackContainer style={{position: "relative"}}>
                {Content}
             </StackContainer>
         </>
@@ -58,5 +59,13 @@ function Nav(){
             <NavLink to = "pending" className="assignment-content-nav-item">Pending</NavLink>
             <NavLink to = "redo" className="assignment-content-nav-item">Redo</NavLink>
         </nav>
+    )
+}
+
+function ChangeStatus(){
+    return(
+        <div className = "assignment-change-status-button">
+            <button>Change Status</button>
+        </div>
     )
 }

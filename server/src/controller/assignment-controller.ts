@@ -8,43 +8,94 @@ import { Controller } from "../types/controller";
 import { makeId } from "../utils/idgen";
 import JsonResponse from "../utils/Response";
 
+export const getGivenAssignments: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const currentUser=  res.locals.user as Teacher;
+    try {
+        let assignments = await Assignments.find({
+            school_id: currentUser.school_id,
+            assigned_by: currentUser.user_id
+        }).lean();
+        assignments = assignments.map(x=>{
+            x.given_on = moment(x.createdAt).format("MMMM Do YYYY");
+            return x;
+        })
+        jsonResponse.success(await groupAssignment(assignments));
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError()
+    }
+}
+
 export const getAssignmentById: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
-    const currentUser = res.locals.user as Student;
+    const currentUser = res.locals.user as Student | Teacher;
     const assignment_id = req.params.id
     try {
-        if(!assignment_id) return jsonResponse.notFound("Assignment not found!")
-        let assignment = (await Assignments.aggregate<Assignment>([
-            {
-                $match: {
-                    assigned_class: {
-                        $in: [currentUser.class_id]
-                    },
-                    assignment_id
-                }
-            },
-            {
-                $lookup: {
-                    from: "teachers",
-                    as: "author_data",
-                    foreignField: "user_id",
-                    localField: "assigned_by",
-                    pipeline: [
-                        {
-                            $project: {
-                                profile_picture_url: 1,
-                                full_name: 1
+        if(!assignment_id) return jsonResponse.notFound("Assignment not found!");
+        let assignment: Assignment;
+        if(currentUser.type === "student"){
+            assignment = (await Assignments.aggregate<Assignment>([
+                {
+                    $match: {
+                        assigned_class: {
+                            $in: [currentUser.class_id]
+                        },
+                        assignment_id
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "teachers",
+                        as: "author_data",
+                        foreignField: "user_id",
+                        localField: "assigned_by",
+                        pipeline: [
+                            {
+                                $project: {
+                                    profile_picture_url: 1,
+                                    full_name: 1
+                                }
                             }
-                        }
-                    ]
-                }
-            },
-
-        ]))[0]
+                        ]
+                    }
+                },
+    
+            ]))[0]
+        }else{
+            assignment = (await Assignments.aggregate<Assignment>([
+                {
+                    $match: {
+                        assigned_by: currentUser.user_id,
+                        assignment_id
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "teachers",
+                        as: "author_data",
+                        foreignField: "user_id",
+                        localField: "assigned_by",
+                        pipeline: [
+                            {
+                                $project: {
+                                    profile_picture_url: 1,
+                                    full_name: 1
+                                }
+                            }
+                        ]
+                    }
+                },
+    
+            ]))[0]
+        }
+       
+        if(currentUser.type === "student"){
+            if(assignment.completed_by.includes(currentUser.user_id)) assignment.status = "completed";
+            else if(assignment.redo_by.includes(currentUser.user_id)) assignment.status = "redo";
+            else assignment.status = "pending";
+        }
         if(!assignment) return jsonResponse.notFound("Assignment not found!");
-        if(assignment.completed_by.includes(currentUser.user_id)) assignment.status = "completed";
-        else if(assignment.redo_by.includes(currentUser.user_id)) assignment.status = "redo";
-        else assignment.status = "pending";
         assignment.given_on = moment(assignment.createdAt).format("MMMM Do YYYY")
         jsonResponse.success(assignment)
     } catch (error) {

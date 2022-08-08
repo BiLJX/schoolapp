@@ -53,3 +53,20 @@
         color: #FFC75B;
     } 
 }
+
+.assignment-change-status-button {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    padding: 1rem;
+    button{
+        height: 55px;
+        background-color: var(--blue);
+        border-radius: 10px;
+        width: 100%;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+}

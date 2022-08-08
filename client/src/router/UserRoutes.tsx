@@ -7,6 +7,7 @@ import HomePage from "pages/home/home-page";
 import ActivityPage from "pages/Inbox/activity/activity";
 import AssignmentsPage from "pages/Inbox/assignment/assignment";
 import AssignmentContent from "pages/Inbox/assignment/content/assignment-content";
+import AssignmentGivenPage from "pages/Inbox/assignment/given/assignment-given";
 import InboxPage from "pages/Inbox/inbox";
 import LoginPage from "pages/Login/login-page";
 import PostPage from "pages/Post/post-page";
@@ -77,7 +78,7 @@ export default function UserRoutes(){
                 <Route path = "assignment/assign" element = {<AssignPage />} />
             </Route>
             <Route path = "/inbox/activity" element = {<ActivityPage />} />
-            <Route path = "/inbox/assignment" element = {<AssignmentsPage />} /> 
+            <Route path = "/inbox/assignment" element = {currentUser.type === "teacher"?<AssignmentGivenPage />:<AssignmentsPage />} /> 
             <Route path = "/inbox/assignment/:id" element = {<AssignmentContent />} /> 
             <Route path = "/post/:post_id" element = {<PostPage />}/>
             <Route path = "/student/:user_id/*" element = {<UserPage type="student" />}/>

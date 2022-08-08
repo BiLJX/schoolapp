@@ -20,3 +20,8 @@ export const getAssignmentById = async(id: string) => {
     const res = await axios.get("/api/assignment/"+id);
     return res.data as ApiResponse<Assignment>;
 }
+
+export const getGivenAssignments = async () => {
+    const res = await axios.get("/api/assignment/given");
+    return res.data as ApiResponse<AssignmentFeed[]>;
+}

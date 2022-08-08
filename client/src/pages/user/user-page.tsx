@@ -53,7 +53,7 @@ export default function UserPage({type}: UserPageProps){
     if(loading){
         return(
             <>
-                <MobileStackHeader label = "Loading" />
+                <MobileStackHeader goBack label = "Loading" />
                 <StackContainer className="user-page">
 
                 </StackContainer>
@@ -63,7 +63,7 @@ export default function UserPage({type}: UserPageProps){
     if(!user){
         return(
             <>
-                <MobileStackHeader label = "User" />
+                <MobileStackHeader label = "User" goBack />
                 <StackContainer className="user-page">
                     User not found :(
                 </StackContainer>
@@ -80,7 +80,6 @@ export default function UserPage({type}: UserPageProps){
                     <Route index element = {<UserPosts user = {user} />} />
                     <Route path = "performance" element = {<UserPerformance />} />
                 </Routes>
-                
             </StackContainer>
         </>
     )

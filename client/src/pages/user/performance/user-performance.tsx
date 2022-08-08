@@ -104,7 +104,8 @@ function LineGraph({color, fetchFunction}: LineGraphProps){
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1,
+                            // stepSize: 1,
+                            precision: 0
                         },
                         grid: {
                             display: false
