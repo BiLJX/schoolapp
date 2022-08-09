@@ -36,3 +36,18 @@ export interface AssignmentFeed {
     given_on: string,
     assignments: Assignment[]
 }
+
+export interface AssignmentLog {
+    log_id: string,
+    assignment_id: string,
+    school_id: string,
+    log_of: string,
+    assigned_by: string
+    user_data: {
+        profile_picture_url: string,
+        user_id: string,
+        full_name: string
+    }
+    log_type: "redo"|"completed",
+    createdAt: Date
+}

@@ -2,7 +2,7 @@ import { Assignment, AssignmentFeed, AssignmentStatus, UploadAssignmentData } fr
 import { Student, Teacher } from "@shared/User";
 import moment from "moment";
 import NotificationHandler from "../handler/notificationHandler";
-import { Assignments } from "../models/Assignment";
+import { AssignmentLog, Assignments } from "../models/Assignment";
 import { Students } from "../models/Student";
 import { Controller } from "../types/controller";
 import { makeId } from "../utils/idgen";
@@ -15,7 +15,7 @@ export const getGivenAssignments: Controller = async (req, res) => {
         let assignments = await Assignments.find({
             school_id: currentUser.school_id,
             assigned_by: currentUser.user_id
-        }).lean();
+        }).sort({createdAt: -1}).exec();
         assignments = assignments.map(x=>{
             x.given_on = moment(x.createdAt).format("MMMM Do YYYY");
             return x;
@@ -168,7 +168,7 @@ export const getAssignedStudents: Controller = async(req, res) => {
                 $match:{
                     assignment_id,
                     school_id,
-                    assigned_by: user_id
+                    assigned_by: user_id,
                 }
             },
             {
@@ -176,13 +176,18 @@ export const getAssignedStudents: Controller = async(req, res) => {
                     from: "students",
                     as: "assigned_students",
                     let: {
-                        clases: "$assigned_class"
+                        clases: "$assigned_class",
+                        completed_by: "$completed_by"
                     },
                     pipeline: [
                         {
                             $match: {
                                 $expr: {
-                                    $in: ["$class_id", "$$clases"]
+                                    $and: [
+                                        {$in: ["$class_id", "$$clases"]},
+                                        {$not: { $in: ["$user_id", "$$completed_by"] }}
+                                    ]
+                                   
                                 }
                             }
                         },
@@ -271,7 +276,69 @@ export const createAssignment: Controller = async(req, res) => {
         jsonResponse.serverError();
     }
 }
+export const submitAssignment: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const { user_id, school_id } = res.locals.user;
+    try {
+        const assignment_id = req.params.id;
+        const student_id = req.body.student_id;
+        if(!student_id) return jsonResponse.notFound("Student not found.");
+        if(!assignment_id) return jsonResponse.notFound("Assignment Not Found.");
+        const assignment = await Assignments.findOne({assignment_id, assigned_by: user_id});
+        if(!assignment) return jsonResponse.notFound("Assignment Not Found.");
+        if(assignment.completed_by.includes(student_id)) return jsonResponse.clientError("The student has already submitted");
+        await assignment.updateOne({
+            $push: {
+                completed_by: student_id
+            }
+        })
+        const log = new AssignmentLog({
+            log_id: makeId(),
+            log_type: "completed",
+            school_id,
+            assigned_by: user_id,
+            assignment_id,
+            log_of: student_id
+        })
+        await log.save();
+        jsonResponse.success();
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
 
+export const redoAssignment: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const { user_id, school_id } = res.locals.user;
+    try {
+        const assignment_id = req.params.id;
+        const student_id = req.body.student_id;
+        if(!student_id) return jsonResponse.notFound("Student not found.");
+        if(!assignment_id) return jsonResponse.notFound("Assignment Not Found.");
+        const assignment = await Assignments.findOne({assignment_id, assigned_by: user_id});
+        if(!assignment) return jsonResponse.notFound("Assignment Not Found.");
+        if(assignment.redo_by.includes(student_id)) return jsonResponse.clientError("The student has already submitted");
+        await assignment.updateOne({
+            $push: {
+                redo_by: student_id
+            }
+        })
+        const log = new AssignmentLog({
+            log_id: makeId(),
+            log_type: "redo",
+            school_id,
+            assigned_by: user_id,
+            assignment_id,
+            log_of: student_id
+        })
+        await log.save();
+        jsonResponse.success();
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
 const groupAssignment = async(assignments: Assignment[]) => {
     let map: Record<string, Assignment[]> = {};
     for(let assignment of assignments){
@@ -287,3 +354,5 @@ const groupAssignment = async(assignments: Assignment[]) => {
     })
     return data
 }
+
+

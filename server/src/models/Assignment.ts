@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { Assignment } from "@shared/Assignment"
+import { Assignment, AssignmentLog } from "@shared/Assignment"
 const schema = new Schema<Assignment>({
     assignment_id: {
         type: String,
@@ -46,5 +46,35 @@ const schema = new Schema<Assignment>({
     }
 }, { timestamps: true });
 
+const schema2 = new Schema<AssignmentLog>({
+    log_id: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    school_id: {
+        type: String,
+        required: true
+    },
+    assigned_by: {
+        type: String,
+        required: true
+    },
+    assignment_id: {
+        type: String,
+        required: true
+    },
+    log_type: {
+        type: String,
+        required: true,
+        enum: ["completed", "redo"]
+    },
+    log_of: {
+        type: String,
+        required: true
+    }
+})
+
 const Assignments = model("assignment", schema);
-export { Assignments }
+const AssignmentLog = model("assignment_log", schema2);
+export { Assignments, AssignmentLog};

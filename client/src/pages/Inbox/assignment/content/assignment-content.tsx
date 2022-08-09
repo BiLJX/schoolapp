@@ -1,4 +1,5 @@
 import { Assignment } from "@shared/Assignment";
+import { Student, Teacher } from "@shared/User";
 import { getAssignmentById } from "api/assignment";
 import { NotFound } from "components/Error/error-component";
 import MobileStackHeader from "components/header/mobile-header";
@@ -6,7 +7,9 @@ import { toastError } from "components/Toast/toast";
 import StackContainer from "container/mobile-layouts/stack-container";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { RootState } from "types/states";
 import "./content.scss";
 export default function AssignmentContent(){
     const [assignment, setAssignment] = useState<Assignment>();
@@ -38,7 +41,7 @@ export default function AssignmentContent(){
                 <div className="assignment-content-info-item assignment-content-info-due">Due: {moment(assignment.due).format("MMMM Do YYYY")}</div>
             </div>
             <Nav />
-            <ChangeStatus />
+            {!assignment.status && <ChangeStatus />}
         </>
     )
     return(

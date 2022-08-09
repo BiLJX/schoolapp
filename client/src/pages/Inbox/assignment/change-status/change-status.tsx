@@ -1,4 +1,4 @@
-import { getAssignedStudents } from "api/assignment";
+import { getAssignedStudents, redoAssignment, submitAssignment } from "api/assignment";
 import Avatar from "components/Avatar/avatar";
 import MobileSearchHeader from "components/header/mobile-search-header";
 import { toastError } from "components/Toast/toast";
@@ -50,15 +50,24 @@ interface ItemData {
 }
 
 function Item({data}:{data: ItemData}){
+    const [isRemoved, setIsRemoved] = useState(false)
     const [modalState, setModalState] = useState<{state: boolean, type: "Redo"|"Complete"}>({
         state: false,
         type: "Complete"
     })
+    if(isRemoved) return <></>
     return(
         <>
-            <Modal isOpen = {modalState.state} onClose = {()=>setModalState({...modalState, state: false})} type = {modalState.type} />
+            <Modal 
+            isOpen = {modalState.state} 
+            onClose = {()=>setModalState({...modalState, state: false})} 
+            type = {modalState.type}
+            student_id = {data.user_id}
+            onRemoveItem = {()=>setIsRemoved(true)}
+            />
+
             <div className ="assignment-assigned-student-item">
-                <Avatar to = {"/user/"+data.user_id} src = {data.profile_picture_url} size = {35} />
+                <Avatar to = {"/student/"+data.user_id} src = {data.profile_picture_url} size = {35} />
                 <span className="ellipsis">{data.full_name}</span>
                 <button className = "redo-button" onClick = {()=>setModalState({state: true, type: "Redo"})}>
                     <ReplayIcon />
@@ -70,27 +79,58 @@ function Item({data}:{data: ItemData}){
         </>
     )
 }
+interface ModalProps {
+    isOpen: boolean, 
+    onClose: ()=>any,
+    student_id: string
+    type: "Redo"|"Complete"
+    onRemoveItem: ()=>void
+}
+    
 
-
-function Modal({isOpen, type, onClose}: {isOpen: boolean, onClose: ()=>any,type: "Redo"|"Complete"}){
+function Modal({
+    isOpen, 
+    type, 
+    onClose,
+    student_id,
+    onRemoveItem
+}: ModalProps){
     const [reason, setReason] = useState("");
     const [loading, setLoading] = useState(false);
+    const id = useParams().id as string;
     const onRedo = async() => {
-
+        if(loading) return;
+        setLoading(true);
+        const res = await redoAssignment(id, student_id);
+        if(res.error){
+            toastError(res.message);
+            return setLoading(false);
+        }
+        setLoading(false);
+        onClose();
     }
     const onComplete = async() => {
-
+        if(loading) return;
+        setLoading(true);
+        const res = await submitAssignment(id, student_id);
+        if(res.error){
+            toastError(res.message);
+            return setLoading(false);
+        }
+        setLoading(false);
+        onRemoveItem();
+        onClose();
     }
     return(
         <ReactModal overlayClassName="modal-overlay" className = "change-status-modal" isOpen = {isOpen}>
             <div className = "change-status-modal-remarks">
-                <div className = "reason-icon">
+                {/* <div className = "reason-icon">
                     <ShortTextOutlined />
                 </div>
-                <ReactTextareaAutosize onChange = {(e)=>setReason(e.target.value)} minRows={10} className = "reason-input" placeholder={"(optional) Remarks for "+type} />
+                <ReactTextareaAutosize onChange = {(e)=>setReason(e.target.value)} minRows={10} className = "reason-input" placeholder={"(optional) Remarks for "+type} /> */}
             </div>
             <div className = "change-status-modal-buttons">
-                <button className = "change-status-button">{type}</button>
+                <button className = "change-status-button" onClick={type === "Complete"?onComplete:onRedo}>{loading?"Loading...":type}</button>
                 <button className = "change-status-button cancel" onClick = {onClose}>Cancel</button>
             </div>
         </ReactModal>

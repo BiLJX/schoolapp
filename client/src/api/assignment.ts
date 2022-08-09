@@ -30,3 +30,13 @@ export const getAssignedStudents = async (id: string) => {
     const res = await axios.get(`/api/assignment/${id}/assigned`);
     return res.data as ApiResponse<{full_name: string, user_id: string, profile_picture_url: string}[]>
 }
+
+export const submitAssignment = async (id: string, student_id: string) => {
+    const res = await axios.put(`/api/assignment/${id}/submit`, {student_id});
+    return res.data as ApiResponse;
+}
+
+export const redoAssignment = async (id: string, student_id: string) => {
+    const res = await axios.put(`/api/assignment/${id}/redo`, {student_id});
+    return res.data as ApiResponse;
+}
