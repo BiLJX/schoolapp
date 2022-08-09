@@ -6,7 +6,7 @@ import { toastError } from "components/Toast/toast";
 import StackContainer from "container/mobile-layouts/stack-container";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import "./content.scss";
 export default function AssignmentContent(){
     const [assignment, setAssignment] = useState<Assignment>();
@@ -63,9 +63,10 @@ function Nav(){
 }
 
 function ChangeStatus(){
+    const navigate = useNavigate();
     return(
         <div className = "assignment-change-status-button">
-            <button>Change Status</button>
+            <button onClick={()=>navigate("students")}>Change Status</button>
         </div>
     )
 }

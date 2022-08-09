@@ -158,6 +158,55 @@ export const getStudentsAssignment: Controller = async(req, res) => {
     }
 }
 
+export const getAssignedStudents: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const { user_id, school_id } = res.locals.user;
+    try {
+        const assignment_id = req.params.id;
+        const assignments = await Assignments.aggregate([
+            {
+                $match:{
+                    assignment_id,
+                    school_id,
+                    assigned_by: user_id
+                }
+            },
+            {
+                $lookup: {
+                    from: "students",
+                    as: "assigned_students",
+                    let: {
+                        clases: "$assigned_class"
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $in: ["$class_id", "$$clases"]
+                                }
+                            }
+                        },
+                        {
+                            $project: {
+                                user_id: 1,
+                                full_name: 1,
+                                profile_picture_url: 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ])
+        const data = assignments[0]?.assigned_students;
+        if(!data) return jsonResponse.notFound("Assignment Not Found.")
+        jsonResponse.success(data);
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
+
+
 export const createAssignment: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
     const currentUser = res.locals.user as Teacher;
