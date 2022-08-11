@@ -1,6 +1,6 @@
-import { StudentPerformanceData, TimePeriods } from "@shared/Student-Performance";
+import { StudentPerformanceData, StudentPerformanceOverall, TimePeriods } from "@shared/Student-Performance";
 import { Line, Bar } from "react-chartjs-2";
-import { getStudentPerformanceDemerit, getStudentPerformanceMerit, getStudentPerormanceMDOverall } from "api/user";
+import { getStudentPerformanceDemerit, getStudentPerformanceMerit, getStudentPerormanceMDOverall, getStudentsAssignmentOverall } from "api/user";
 import { toastError } from "components/Toast/toast";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -9,9 +9,38 @@ import "chart.js/auto"
 export default function UserPerformance(){
     return(
         <div className = "user-performance">
+            <AssignmentOverall />
             <MDOverall />
             <LineGraph fetchFunction={getStudentPerformanceMerit} color = "#4083ff" />
             <LineGraph fetchFunction={getStudentPerformanceDemerit} color = "#EB4747" />
+        </div>
+    )
+}
+
+function AssignmentOverall(){
+    const [data, setData] = useState<StudentPerformanceOverall[]>();
+    const { user_id } = useParams();
+    useEffect(()=>{
+        if(!user_id) return;
+        getStudentsAssignmentOverall(user_id).then(x=>{
+            if(x.error) return toastError(x.message);
+            setData(x.data);
+        })
+    }, [])
+    if(!data) return <></>
+    return(
+        <div className="performance-item">
+            <div className = "performance-header">
+                <span>Performance of Assignments</span>
+            </div>
+            <div className = "performance-list-items-container">
+               {data.map((x, i)=>(
+                    <div className="performance-list-item" key = {i}>
+                        <span className="performance-list-label">{x.label}</span>
+                        <span className="performance-list-value">{x.value}</span>
+                    </div>
+               ))}
+            </div>
         </div>
     )
 }

@@ -42,7 +42,8 @@ export interface AssignmentLog {
     assignment_id: string,
     school_id: string,
     log_of: string,
-    assigned_by: string
+    assigned_by: string,
+    points_gained: number,
     user_data: {
         profile_picture_url: string,
         user_id: string,

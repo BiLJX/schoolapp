@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createAssignment, getAssignedStudents, getAssignmentById, getGivenAssignments, getStudentsAssignment, redoAssignment, submitAssignment } from "../controller/assignment-controller";
+import { createAssignment, deleteAssignment, getAssignedStudents, getAssignmentById, getGivenAssignments, getStudentsAssignment, redoAssignment, submitAssignment } from "../controller/assignment-controller";
 import { TeacherAuth } from "../middleware/teacher";
 
 const router = Router();
@@ -14,5 +14,5 @@ router.put("/:id/submit", TeacherAuth, submitAssignment);
 router.put("/:id/redo", TeacherAuth, redoAssignment)
 router.post("/create", TeacherAuth, createAssignment);
 
-
+router.delete("/:id/delete", TeacherAuth, deleteAssignment);
 export { router as AssignmentRoutes }

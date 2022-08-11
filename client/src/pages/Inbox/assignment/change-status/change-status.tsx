@@ -11,10 +11,17 @@ import "./change-status.scss"
 import ReactModal from "react-modal";
 import { ShortTextOutlined } from "@material-ui/icons";
 import ReactTextareaAutosize from "react-textarea-autosize";
+
+interface ItemData {
+    full_name: string, 
+    user_id: string, 
+    profile_picture_url: string,
+    has_to_redo: boolean
+}
 export default function ChangeStatusAssignment(){
     const { id } = useParams()
-    const [students, setStudents] = useState<{full_name: string, user_id: string, profile_picture_url: string}[]>([]);
-    const [temp, setTemp] = useState<{full_name: string, user_id: string, profile_picture_url: string}[]>([]);
+    const [students, setStudents] = useState<ItemData[]>([]);
+    const [temp, setTemp] = useState<ItemData[]>([]);
     const fetchStudents = async() => {
         if(!id) return;
         const res = await getAssignedStudents(id);
@@ -43,14 +50,11 @@ export default function ChangeStatusAssignment(){
     )
 }
 
-interface ItemData {
-    full_name: string, 
-    user_id: string, 
-    profile_picture_url: string
-}
+
 
 function Item({data}:{data: ItemData}){
     const [isRemoved, setIsRemoved] = useState(false)
+    const [has_to_redo, setHas_to_redo] = useState(data.has_to_redo);
     const [modalState, setModalState] = useState<{state: boolean, type: "Redo"|"Complete"}>({
         state: false,
         type: "Complete"
@@ -64,12 +68,13 @@ function Item({data}:{data: ItemData}){
             type = {modalState.type}
             student_id = {data.user_id}
             onRemoveItem = {()=>setIsRemoved(true)}
+            onHasToRedo = {()=>setHas_to_redo(true)}
             />
 
             <div className ="assignment-assigned-student-item">
                 <Avatar to = {"/student/"+data.user_id} src = {data.profile_picture_url} size = {35} />
                 <span className="ellipsis">{data.full_name}</span>
-                <button className = "redo-button" onClick = {()=>setModalState({state: true, type: "Redo"})}>
+                <button disabled = {has_to_redo} className = "redo-button" onClick = {()=>!has_to_redo && setModalState({state: true, type: "Redo"})}>
                     <ReplayIcon />
                 </button>
                 <button className = "complete-button" onClick = {()=>setModalState({state: true, type: "Complete"})}>
@@ -84,7 +89,8 @@ interface ModalProps {
     onClose: ()=>any,
     student_id: string
     type: "Redo"|"Complete"
-    onRemoveItem: ()=>void
+    onRemoveItem: ()=>void,
+    onHasToRedo: ()=>void
 }
     
 
@@ -93,7 +99,8 @@ function Modal({
     type, 
     onClose,
     student_id,
-    onRemoveItem
+    onRemoveItem,
+    onHasToRedo
 }: ModalProps){
     const [reason, setReason] = useState("");
     const [loading, setLoading] = useState(false);
@@ -107,6 +114,7 @@ function Modal({
             return setLoading(false);
         }
         setLoading(false);
+        onHasToRedo();
         onClose();
     }
     const onComplete = async() => {

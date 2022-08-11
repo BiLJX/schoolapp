@@ -64,6 +64,10 @@ const schema2 = new Schema<AssignmentLog>({
         type: String,
         required: true
     },
+    points_gained: {
+        type: Number,
+        default: 0
+    },
     log_type: {
         type: String,
         required: true,
@@ -73,7 +77,7 @@ const schema2 = new Schema<AssignmentLog>({
         type: String,
         required: true
     }
-})
+}, {timestamps: true});
 
 const Assignments = model("assignment", schema);
 const AssignmentLog = model("assignment_log", schema2);

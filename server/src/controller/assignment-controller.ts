@@ -200,10 +200,14 @@ export const getAssignedStudents: Controller = async(req, res) => {
                         }
                     ]
                 }
-            }
+            },
         ])
-        const data = assignments[0]?.assigned_students;
+        let data = assignments[0]?.assigned_students;
         if(!data) return jsonResponse.notFound("Assignment Not Found.")
+        data = data.map((x: any)=>{
+            x.has_to_redo = assignments[0].redo_by.includes(x.user_id);
+            return x;
+        })
         jsonResponse.success(data);
     } catch (error) {
         console.log(error);
@@ -292,13 +296,16 @@ export const submitAssignment: Controller = async (req, res) => {
                 completed_by: student_id
             }
         })
+        if(assignment.redo_by.includes(student_id)) await assignment.updateOne({$pull: {redo_by: student_id}});
+        const total_points = calcAssignmentPoints(assignment);
         const log = new AssignmentLog({
             log_id: makeId(),
             log_type: "completed",
             school_id,
             assigned_by: user_id,
             assignment_id,
-            log_of: student_id
+            log_of: student_id,
+            points_gained: total_points
         })
         await log.save();
         jsonResponse.success();
@@ -324,13 +331,14 @@ export const redoAssignment: Controller = async(req, res) => {
                 redo_by: student_id
             }
         })
+        
         const log = new AssignmentLog({
             log_id: makeId(),
             log_type: "redo",
             school_id,
             assigned_by: user_id,
             assignment_id,
-            log_of: student_id
+            log_of: student_id,
         })
         await log.save();
         jsonResponse.success();
@@ -339,6 +347,20 @@ export const redoAssignment: Controller = async(req, res) => {
         jsonResponse.serverError();
     }
 }
+
+export const deleteAssignment: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const { user_id } = res.locals.user;
+    try {
+        const assignment_id = req.params.id;
+        await Assignments.deleteOne({assigned_by: user_id, assignment_id});
+        return jsonResponse.success();
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
+
 const groupAssignment = async(assignments: Assignment[]) => {
     let map: Record<string, Assignment[]> = {};
     for(let assignment of assignments){
@@ -353,6 +375,19 @@ const groupAssignment = async(assignments: Assignment[]) => {
         }
     })
     return data
+}
+
+const calcAssignmentPoints = (assignment_obj: Assignment) => {
+    const submitted_date = moment(new Date());
+    const due_date = moment(assignment_obj.due);
+    const created_date = moment(assignment_obj.createdAt);
+    let submitted = submitted_date.diff(created_date, "days", false) - 1;
+    if(submitted < 0) submitted = 0;
+    const due = due_date.diff(created_date, "days", false) + 1;
+    if(due < submitted) return 0;
+    const points = assignment_obj.points;
+    const decimal_points = points * ((due - submitted)/due);
+    return Math.round(decimal_points);
 }
 
 

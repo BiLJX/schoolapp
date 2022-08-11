@@ -1,5 +1,5 @@
 import { Student, Teacher } from "@shared/User";
-import { StudentPerformanceData, TimePeriods } from "@shared/Student-Performance"
+import { StudentPerformanceData, StudentPerformanceOverall, TimePeriods } from "@shared/Student-Performance"
 import axios from "./instance";
 
 export const getCurrentUser = async() => {
@@ -34,4 +34,9 @@ export const getStudentPerformanceDemerit = async(user_id: string, time_period: 
 export const getStudentPerormanceMDOverall = async(user_id: string) => {
     const res = await axios.get(`/api/user/student/${user_id}/performance/overall/md`)
     return res.data as ApiResponse<{ratio: number, difference: number}>;
+}
+
+export const getStudentsAssignmentOverall = async(user_id: string) => {
+    const res = await axios.get(`/api/user/student/${user_id}/performance/overall/assignment`)
+    return res.data as ApiResponse<StudentPerformanceOverall[]>;
 }

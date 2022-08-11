@@ -5,3 +5,8 @@ export interface StudentPerformanceData {
     data: number[],
     labels: string[]
 }
+
+export interface StudentPerformanceOverall {
+    label: string,
+    value: number|string
+}

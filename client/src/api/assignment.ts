@@ -28,7 +28,7 @@ export const getGivenAssignments = async () => {
 
 export const getAssignedStudents = async (id: string) => {
     const res = await axios.get(`/api/assignment/${id}/assigned`);
-    return res.data as ApiResponse<{full_name: string, user_id: string, profile_picture_url: string}[]>
+    return res.data as ApiResponse<{full_name: string, user_id: string, profile_picture_url: string, has_to_redo: boolean}[]>
 }
 
 export const submitAssignment = async (id: string, student_id: string) => {
@@ -38,5 +38,10 @@ export const submitAssignment = async (id: string, student_id: string) => {
 
 export const redoAssignment = async (id: string, student_id: string) => {
     const res = await axios.put(`/api/assignment/${id}/redo`, {student_id});
+    return res.data as ApiResponse;
+}
+
+export const deleteAssignment = async (id: string) => {
+    const res = await axios.delete(`/api/assignment/${id}/delete`);
     return res.data as ApiResponse;
 }

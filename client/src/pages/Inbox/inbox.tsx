@@ -8,15 +8,17 @@ import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import "./inbox.scss"
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { Student, Teacher } from "@shared/User";
 export default function InboxPage(){
     const inbox = useSelector((state: RootState)=>state.inbox) as Inbox;
+    const { type } = useSelector((state: RootState)=>state.currentUser) as Student|Teacher;
     return(
         <>
             <MobileStackHeader label="Inbox" />
             <div className = "inbox-page">
                 <InboxItem to = "activity" style={{ backgroundColor: "rgb(255 212 0)" }} Icon = {<NotificationsIcon />} title = "Activity" sub_title={`${inbox.activity.count} new activity`} isActive = {!inbox.activity.has_read} />
                 <InboxItem to = "announcement" style={{ backgroundColor: "var(--red)" }} Icon = {<CampaignOutlinedIcon />} title = "Announcements" sub_title={`${inbox.announcement.count} new activity`} isActive = {!inbox.announcement.has_read} />
-                <InboxItem to = "assignment" style = {{ backgroundColor: "var(--blue)" }} Icon = {<MenuBookOutlinedIcon />} title = "Assignments" sub_title={`${inbox.assignment.count} new assignments`} isActive = {!inbox.assignment.has_read} />
+                <InboxItem to = "assignment" style = {{ backgroundColor: "var(--blue)" }} Icon = {<MenuBookOutlinedIcon />} title = {type === "student"?"Assignments":"Given Assignments"} sub_title={type === "student"?`${inbox.assignment.count} new assignments`:"See given assignments"} isActive = {!inbox.assignment.has_read} />
             </div>
         </>
     )
