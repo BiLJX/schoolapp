@@ -139,7 +139,6 @@ export const getStudentsAssignment: Controller = async(req, res) => {
                     ]
                 }
             },
-
         ])
         assignments = assignments.map(x=>{
             if(x.completed_by.includes(currentUser.user_id)) x.status = "completed";
@@ -342,6 +341,91 @@ export const redoAssignment: Controller = async(req, res) => {
         })
         await log.save();
         jsonResponse.success();
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
+
+export const getSubmittedStudents: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const { school_id } = res.locals.user;
+    try {
+        const assignment_id = req.params.id;
+        const assignment = (await Assignments.findOne({assignment_id, school_id}))?.toJSON();
+        if(!assignment) return jsonResponse.clientError("Assignment not found");
+        const submitted_students_id = assignment.completed_by;
+        const submitted_students = await Students.find({user_id: { $in: submitted_students_id }}).select("user_id full_name profile_picture_url").exec();
+        jsonResponse.success(submitted_students);
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
+
+export const getPendingStudents: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const { school_id } = res.locals.user;
+    try {
+        const assignment_id = req.params.id;
+        const assignments = await Assignments.aggregate([
+            {
+                $match:{
+                    assignment_id,
+                    school_id,
+                }
+            },
+            {
+                $lookup: {
+                    from: "students",
+                    as: "assigned_students",
+                    let: {
+                        clases: "$assigned_class",
+                        completed_by: "$completed_by"
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {$in: ["$class_id", "$$clases"]},
+                                        {$not: { $in: ["$user_id", "$$completed_by"] }}
+                                    ]
+                                   
+                                }
+                            }
+                        },
+                        {
+                            $project: {
+                                user_id: 1,
+                                full_name: 1,
+                                profile_picture_url: 1
+                            }
+                        }
+                    ]
+                }
+            },
+        ])
+        let students = assignments[0]?.assigned_students;
+        if(!students) return jsonResponse.clientError("Assignment not found");
+        students = students.filter((x: Student)=>!assignments[0].completed_by.includes(x.user_id));
+        jsonResponse.success(students);
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
+
+export const getRedoStudents: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const { school_id } = res.locals.user;
+    try {
+        const assignment_id = req.params.id;
+        const assignment = (await Assignments.findOne({assignment_id, school_id}))?.toJSON();
+        if(!assignment) return jsonResponse.clientError("Assignment not found");
+        const redo_students_id = assignment.redo_by;
+        const redo_students = await Students.find({user_id: { $in: redo_students_id }}).select("user_id full_name profile_picture_url");
+        jsonResponse.success(redo_students);
     } catch (error) {
         console.log(error);
         jsonResponse.serverError();

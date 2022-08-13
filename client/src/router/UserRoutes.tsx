@@ -80,7 +80,7 @@ export default function UserRoutes(){
             </Route>
             <Route path = "/inbox/activity" element = {<ActivityPage />} />
             <Route path = "/inbox/assignment" element = {currentUser.type === "teacher"?<AssignmentGivenPage />:<AssignmentsPage />} /> 
-            <Route path = "/inbox/assignment/:id" element = {<AssignmentContent />} /> 
+            <Route path = "/inbox/assignment/:id/*" element = {<AssignmentContent />} /> 
             <Route path = "/inbox/assignment/:id/students" element = {<ChangeStatusAssignment />} /> 
             <Route path = "/post/:post_id" element = {<PostPage />}/>
             <Route path = "/student/:user_id/*" element = {<UserPage type="student" />}/>

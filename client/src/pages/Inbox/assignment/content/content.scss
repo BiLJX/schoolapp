@@ -20,9 +20,26 @@
     }
 }
 
+.assignment-content-info-header {
+    display: flex;
+    align-items: center;
+    .more-icon {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        cursor: pointer;
+        svg {
+            color: var(--text-secondary-alt); 
+        }
+    }
+   
+}
+
 .assignment-content-nav {
     display: flex;
     background-color: var(--cards-background);
+    position: sticky;
+    top: var(--header-height);
     .assignment-content-nav-item{
         font-weight: 500;
         display: flex;
@@ -54,11 +71,29 @@
     } 
 }
 
+.assignment-content-student-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    .assignment-content-student-item {
+        display: flex;
+        padding: 0 1rem 1rem 1rem;
+        align-items: center;
+        .assignment-content-student-name {
+            margin-left: .5rem;
+            font-size: .9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+    }
+}
+
 .assignment-change-status-button {
     width: 100%;
     position: fixed;
     bottom: 0;
     padding: 1rem;
+    background-color: var(--cards-background);
     button{
         height: 55px;
         background-color: var(--blue);
@@ -68,5 +103,21 @@
         font-size: 1rem;
         font-weight: bold;
     }
+}
 
+.assignment-options {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--post-card-background);
+    border: 1px solid var(--border-color);
+    width: 90%;
+    border-radius: 20px;
+    font-weight: bold;
+    .assignment-options-item {
+        display: flex;
+        padding: 1rem;
+        color: var(--text-title);
+        width: 100%;
+        justify-content: center;
+    }
 }

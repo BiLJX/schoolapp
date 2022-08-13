@@ -1,6 +1,7 @@
 import { UploadAssignmentData } from "redux/UploadAssignment/uploadAssignmentTypes";
 import { Assignment, AssignmentFeed, AssignmentStatus } from "@shared/Assignment"
 import axios from "./instance";
+import { Student } from "@shared/User";
 
 export const createAssignment = async(assignment_data: UploadAssignmentData) => {
     const res = await axios.post("/api/assignment/create", assignment_data);
@@ -39,6 +40,21 @@ export const submitAssignment = async (id: string, student_id: string) => {
 export const redoAssignment = async (id: string, student_id: string) => {
     const res = await axios.put(`/api/assignment/${id}/redo`, {student_id});
     return res.data as ApiResponse;
+}
+
+export const getSubmittedStudents = async (id: string) => {
+    const res = await axios.get(`/api/assignment/${id}/submitted`);
+    return res.data as ApiResponse<Student[]>;
+}
+
+export const getPendingStudents = async (id: string) => {
+    const res = await axios.get(`/api/assignment/${id}/pending`);
+    return res.data as ApiResponse<Student[]>;
+}
+
+export const getRedoStudents = async (id: string) => {
+    const res = await axios.get(`/api/assignment/${id}/redo`);
+    return res.data as ApiResponse<Student[]>;
 }
 
 export const deleteAssignment = async (id: string) => {

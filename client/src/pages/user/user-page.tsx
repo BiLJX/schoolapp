@@ -16,6 +16,9 @@ const studentNavData = [
     {to: "performance", label: "Performance", replace: true},
     {to: "comments", label: "Comments", replace: true},
 ]
+const teacherNavData = [
+    {to: "", label: "Posts", replace: false},
+]
 type User = Student|Teacher
 
 interface UserPageProps {
@@ -75,7 +78,7 @@ export default function UserPage({type}: UserPageProps){
             <MobileStackHeader goBack label = {user.full_name} />
             <StackContainer className="user-page">
                 <UserPageInfo user = {user} />
-                <UserNav data = {studentNavData} />
+                <UserNav data = {user.type === "student"?studentNavData:teacherNavData} />
                 <Routes>
                     <Route index element = {<UserPosts user = {user} />} />
                     <Route path = "performance" element = {<UserPerformance />} />
