@@ -12,6 +12,7 @@ import { InteractionRoutes } from "./interaction";
 import { TeacherAuth } from "../middleware/teacher";
 import { InboxRoutes } from "./inbox";
 import { AssignmentRoutes } from "./assignment";
+import { ExploreRoutes } from "./explore";
 const router = Router()
 
 router.use("/auth", AuthRoutes)
@@ -23,7 +24,7 @@ router.use("/comment", UserAuth, CommentRoutes);
 router.use("/inbox", UserAuth, InboxRoutes);
 router.use("/interaction", UserAuth, TeacherAuth, InteractionRoutes);
 router.use("/assignment", UserAuth, AssignmentRoutes);
-
+router.use("/explore", UserAuth, ExploreRoutes);
 
 
 

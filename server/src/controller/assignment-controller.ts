@@ -473,5 +473,3 @@ const calcAssignmentPoints = (assignment_obj: Assignment) => {
     const decimal_points = points * ((due - submitted)/due);
     return Math.round(decimal_points);
 }
-
-

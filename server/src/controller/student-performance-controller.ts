@@ -171,7 +171,7 @@ export const getStudentsAssignmentPerformance: Controller = async (req, res) => 
                 value: completed_assignments.length
             },
             {
-                label: "Completed to Given Ration",
+                label: "Completed to Given Ratio",
                 value: assignment_ratio.toFixed(2)
             },
             {
