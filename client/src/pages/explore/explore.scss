@@ -1,0 +1,34 @@
+.explore-items-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin-top: 0;
+}
+
+.explore-items-title {
+    margin-bottom: 1.5rem;
+    color: var(--text-title);
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.explore-item {
+    display: flex;
+    margin-bottom: 1.5rem;
+    .explore-item-info {
+        display: flex;
+        flex-direction: column;
+        margin-left: .5rem;
+        .explore-item-name {
+            padding-bottom: .25rem;
+            font-weight: bold;
+            color: var(--text-title);
+            font-size: 1.1rem;
+        }
+        .explore-item-stats {
+            padding-bottom: .25rem;
+            color: var(--text-secondary-alt);
+            font-size: .9rem;
+        }
+    }
+}

@@ -19,13 +19,17 @@ export default function MobileSearchHeader({
     onSearch
 }: SearchHeaderProps){
     const navigate = useNavigate();
-    const [text, setText] = useState("")
+    const [text, setText] = useState("");
+    const style = {
+        flex: .95,
+        left: 0
+    }
     return(
         <HeaderContainer className="stack-header-search">
             {goBack && (<button className = "stack-header-icon" onClick={()=>goBackTo?navigate(goBackTo):navigate(-1)}>
                 <ChevronLeftRoundedIcon />
             </button>)}
-            <div className = "stack-header-search-container">
+            <div style = {goBack?{}:style} className = "stack-header-search-container">
                 <div className = "stack-header-search-icon">
                     <SearchIcon />
                 </div>

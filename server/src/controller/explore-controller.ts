@@ -75,7 +75,7 @@ export const getTopStudents: Controller = async (req, res) => {
             {
                 $lookup: {
                     from: "assignments",
-                    as: "pending_assignments",
+                    as: "given_assignments",
                     let: {
                         class_id: "$class_id",
                         user_id: "$user_id"
@@ -86,7 +86,6 @@ export const getTopStudents: Controller = async (req, res) => {
                                 $expr: {
                                     $and: [
                                         {$in: ["$$class_id", "$assigned_class"]},
-                                        { $not: {$in: ["$$user_id", "$completed_by"]} }
                                     ]
                                     
                                 }
@@ -150,7 +149,7 @@ export const getTopStudents: Controller = async (req, res) => {
             },
             {
                 $unwind: {
-                    path: "$pending_assignments",
+                    path: "$given_assignments",
                     preserveNullAndEmptyArrays: true
                 }
             },
@@ -163,7 +162,7 @@ export const getTopStudents: Controller = async (req, res) => {
             {
                 $addFields: {
                     WEIGHTS: WEIGHTS,
-                    pending_assignments_count: {$add: [{$ifNull: ["$pending_assignments.count", 0]}, 1]},
+                    given_assignments_count: {$add: [{$ifNull: ["$given_assignments.count", 0]}, 1]},
                     completed_assignments_count: { $ifNull: ["$completed_assignments.count", 0] }
                 }
             },
@@ -171,7 +170,7 @@ export const getTopStudents: Controller = async (req, res) => {
                 $addFields: {
                     merits_ratio: { $divide: ["$merits.total_points", "$demerits.total_points"] },
                     merits_difference: { $subtract: ["$merits.total_points", "$demerits.total_points"] },
-                    assignment_ratio: { $divide: ["$completed_assignments_count", "$pending_assignments_count"] }
+                    assignment_ratio: { $divide: ["$completed_assignments_count", "$given_assignments_count"] }
                 }
             },
             {
@@ -192,12 +191,23 @@ export const getTopStudents: Controller = async (req, res) => {
                 }
             },
             {
+                $addFields: {
+                    assignment_points: "$assignment_logs.total_points",
+                    merits_count: "$merits.total_points",
+                    demerits_count: "$demerits.total_points",
+                }
+            },
+            {
                 $project: {
                     full_name: 1,
                     profile_picture_url: 1,
-                    user_id: 1
+                    user_id: 1,
+                    merits_count: 1,
+                    demerits_count: 1,
+                    assignment_points: 1
                 }
-            }
+            },
+            
         ])
         jsonResponse.success(students)
     } catch (error) {

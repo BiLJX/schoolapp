@@ -3,6 +3,7 @@ import { getInbox } from "api/inbox";
 import { getCurrentUser } from "api/user";
 import { toastError } from "components/Toast/toast";
 import MobileNavWrapper from "container/mobile-layouts/nav-wrapper";
+import ExplorePage from "pages/explore/explore-page";
 import HomePage from "pages/home/home-page";
 import ActivityPage from "pages/Inbox/activity/activity";
 import AssignmentsPage from "pages/Inbox/assignment/assignment";
@@ -68,7 +69,7 @@ export default function UserRoutes(){
         <Routes>
             <Route path = "/" element = {<MobileNavWrapper />}>
                 <Route index element = {<HomePage />}/>
-                <Route path = "explore" element = {<HomePage />}/>
+                <Route path = "explore" element = {<ExplorePage />}/>
                 <Route path = "inbox" element = {<InboxPage />}/>
                 <Route path = "profile" element = {<HomePage />}/>
             </Route>
