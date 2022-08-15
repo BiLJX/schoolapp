@@ -1,5 +1,6 @@
 import { AssignmentLog } from "../models/Assignment";
 import { Students } from "../models/Student";
+import { Teachers } from "../models/Teacher";
 import { Controller } from "../types/controller";
 import JsonResponse from "../utils/Response";
 
@@ -210,6 +211,131 @@ export const getTopStudents: Controller = async (req, res) => {
             
         ])
         jsonResponse.success(students)
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
+
+export const searchExplore: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    try {
+        const { school_id } = res.locals.user;
+        const searchQuery: string = req.query.s as string;
+        if(!searchQuery) return jsonResponse.success([]);
+        const studentQuery = Students.aggregate([
+            {
+                $match: {
+                    full_name: {$regex : searchQuery, $options: 'i'},
+                    school_id
+                }
+            },
+            {
+                $lookup: {
+                    from: "interactions",
+                    localField: "user_id",
+                    foreignField: "given_to",
+                    as: "merits_count",
+                    pipeline: [
+                        {
+                            $match: {
+                                type: "merit"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: "interactions",
+                    localField: "user_id",
+                    foreignField: "given_to",
+                    as: "demerits_count",
+                    pipeline: [
+                        {
+                            $match: {
+                                type: "demerit"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: "classes",
+                    localField: "class_id",
+                    foreignField: "class_id",
+                    as: "class",
+                    pipeline: [
+                        {
+                            $project: {
+                                section: 1,
+                                grade: 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $unwind: {
+                    path: "$school",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $unwind: {
+                    path: "$class",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $addFields: {
+                    merits_count: {
+                        $size: "$merits_count"
+                    },
+                    demerits_count: {
+                        $size: "$demerits_count"
+                    },
+                    type: "student"
+                }
+            },
+            {
+                $project: {
+                    merits_count: 1,
+                    demerits_count: 1,
+                    profile_picture_url: 1,
+                    full_name: 1,
+                    school: 1,
+                    class: 1,
+                    user_id: 1,
+                    type: 1
+                }
+            }
+        ])
+        const teacherQuery = Teachers.aggregate([
+            {
+                $match: {
+                    full_name: { $regex: searchQuery, $options: 'i' },
+                    school_id
+                }
+            },
+            {
+                $addFields: {
+                    type: "teacher"
+                }
+            },
+            {
+                $project: {
+                    profile_picture_url: 1,
+                    full_name: 1,
+                    school: 1,
+                    user_id: 1,
+                    type: 1
+                }
+            }
+        ])
+        const [students, teacher] = await Promise.all([studentQuery, teacherQuery])
+        jsonResponse.success([...students, ...teacher]);
     } catch (error) {
         console.log(error);
         jsonResponse.serverError();

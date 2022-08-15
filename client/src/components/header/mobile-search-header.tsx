@@ -33,7 +33,7 @@ export default function MobileSearchHeader({
                 <div className = "stack-header-search-icon">
                     <SearchIcon />
                 </div>
-                <input className = "stack-header-search-input" placeholder="Search" onChange={(e)=>{onChange?.(e.target.value); setText(e.target.value)}} />
+                <input className = "stack-header-search-input" onKeyUp={(e)=>e.key === "Enter" && onSearch?.(text)} placeholder="Search" onChange={(e)=>{onChange?.(e.target.value); setText(e.target.value)}} />
             </div>
             <div className = "stack-header-search-button" onClick={()=>onSearch?.(text)}>{buttonLabel}</div>
         </HeaderContainer>

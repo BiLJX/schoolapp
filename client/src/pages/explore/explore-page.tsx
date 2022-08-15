@@ -5,9 +5,10 @@ import "./explore.scss"
 import Avatar from "components/Avatar/avatar"
 import { useEffect, useState } from "react"
 import { toastError } from "components/Toast/toast"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 export default function ExplorePage(){
     const [topStudents, setTopStudents] = useState<TopStudent[]>([]);
+    const navigate = useNavigate()
     const fetchTopStudent = async() => {
         const res = await getTopStudents();
         if(res.error){
@@ -20,7 +21,7 @@ export default function ExplorePage(){
     }, [])
     return(
         <>
-            <MobileSearchHeader buttonLabel="Search" />
+            <MobileSearchHeader buttonLabel="Search" onSearch={(val)=>navigate("/explore/results?s="+val)} />
             <StackContainer className = "explore-items-container">
                 <span className = "explore-items-title">Top Students</span>
                 {
