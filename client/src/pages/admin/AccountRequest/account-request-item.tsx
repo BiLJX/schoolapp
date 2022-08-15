@@ -49,7 +49,7 @@ export function AccountRequestItem({classes, user}: Props){
             </div>
             <div className="info">
                 <div className = "info-item"><b style = {{ marginRight: "0.5rem" }}>Name:</b>{user.full_name}</div>
-                {userClass && <div className = "info-item"><b style = {{ marginRight: "0.5rem" }}>Class:</b> <SimpleSelect onChange={setUserClass} value={userClass} data = {classes} style = {{flex: "1", marginRight: "0.5rem"}} /> </div>}
+                {userClass && <div className = "info-item"><b style = {{ marginRight: "0.5rem", marginBottom: "1rem" }}>Class:</b> <SimpleSelect onChange={setUserClass} value={userClass} data = {classes} style = {{flex: "1", marginRight: "0.5rem"}} /> </div>}
                 <div className = "info-item"><b style = {{ marginRight: "0.5rem" }}>Email:</b>{user.email}</div>
                 <div className = "info-item"><b style = {{ marginRight: "0.5rem" }}>Type:</b>{"class_id" in user?"Student":"Teacher"}</div>
                 <div className = "button-container">

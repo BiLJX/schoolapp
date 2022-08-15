@@ -39,35 +39,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ApiRoutes = void 0;
-var express_1 = require("express");
-var admin_1 = require("../middleware/admin");
-var user_1 = require("../middleware/user");
-var admin_2 = require("./admin");
-var auth_1 = require("./auth");
-var comment_1 = require("./comment");
-var posts_1 = require("./posts");
-var school_1 = require("./school");
-var user_2 = require("./user");
+exports.sendMail = void 0;
 var nodemailer_1 = __importDefault(require("nodemailer"));
-var interaction_1 = require("./interaction");
-var teacher_1 = require("../middleware/teacher");
-var inbox_1 = require("./inbox");
-var assignment_1 = require("./assignment");
-var explore_1 = require("./explore");
-var router = express_1.Router();
-exports.ApiRoutes = router;
-router.use("/auth", auth_1.AuthRoutes);
-router.use("/schools", school_1.SchoolRoutes);
-router.use("/admin", admin_1.AdminAuth, admin_2.AdminRoutes);
-router.use("/user", user_1.UserAuth, user_2.UserRoutes);
-router.use("/post", user_1.UserAuth, posts_1.PostRoutes);
-router.use("/comment", user_1.UserAuth, comment_1.CommentRoutes);
-router.use("/inbox", user_1.UserAuth, inbox_1.InboxRoutes);
-router.use("/interaction", user_1.UserAuth, teacher_1.TeacherAuth, interaction_1.InteractionRoutes);
-router.use("/assignment", user_1.UserAuth, assignment_1.AssignmentRoutes);
-router.use("/explore", user_1.UserAuth, explore_1.ExploreRoutes);
-router.get("/email", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var sendMail = function (data) { return __awaiter(void 0, void 0, void 0, function () {
     var mail, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -82,20 +56,19 @@ router.get("/email", function (req, res) { return __awaiter(void 0, void 0, void
                 });
                 return [4 /*yield*/, mail.sendMail({
                         from: "DjBillje Official",
-                        to: "billjesh.baidya_1391@euroschool.edu.np",
-                        subject: "Test",
-                        text: "Test"
+                        to: data.to,
+                        subject: data.subject,
+                        text: data.body
                     })];
             case 1:
                 _a.sent();
-                res.status(200).json({ status: "ok" });
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
                 console.log(error_1);
-                res.json(error_1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
-}); });
+}); };
+exports.sendMail = sendMail;

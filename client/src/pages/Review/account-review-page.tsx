@@ -11,6 +11,9 @@ export default function AccountReview(){
             <p style = {{ padding: "1rem", color: "var(--text-secondary)", fontWeight: "500", fontSize: "1.2rem" }}>
                 If your account is approved, you will be able to access the app. If account is rejected your account is deleted and you have to re-signup.
             </p>
+            <p style = {{ padding: "1rem", color: "var(--text-secondary)", fontWeight: "500", fontSize: "1.2rem" }}>
+                You will be notified in your email.
+            </p>
         </div>
     )
 } 

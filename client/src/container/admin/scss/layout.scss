@@ -2,6 +2,7 @@ $nav-width:210px;
 
 .admin-app-container {
     display: flex;
+    width: 100vw;
     nav {
         position: fixed;
         display: flex;
@@ -54,5 +55,17 @@ $nav-width:210px;
         margin-right: .5rem;
         display: flex;
         align-items: center;
+    }
+}
+
+@media (orientation: portrait) {
+    .admin-app-container {
+        nav {
+            display: none;
+        }
+        main {
+            margin-left: 0;
+            width: 100%;
+        }
     }
 }

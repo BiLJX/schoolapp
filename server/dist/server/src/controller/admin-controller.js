@@ -46,6 +46,7 @@ var idgen_1 = require("../utils/idgen");
 var Response_1 = __importDefault(require("../utils/Response"));
 var firebase_admin_1 = __importDefault(require("firebase-admin"));
 var Teacher_1 = require("../models/Teacher");
+var mail_1 = require("../utils/mail");
 var st = firebase_admin_1.default.storage();
 var getCurrentAdmin = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var jsonResponse, admin_1;
@@ -210,7 +211,7 @@ var AdminUser;
     }); };
     //put
     AdminUser.approveStudentAccount = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-        var jsonResponse, admin, user_id, updated_data, error_6;
+        var jsonResponse, admin, user_id, updated_data, student, error_6;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -220,7 +221,7 @@ var AdminUser;
                     updated_data = req.body;
                     _a.label = 1;
                 case 1:
-                    _a.trys.push([1, 6, , 7]);
+                    _a.trys.push([1, 8, , 9]);
                     if (!updated_data) return [3 /*break*/, 3];
                     return [4 /*yield*/, Student_1.Students.findOneAndUpdate({ user_id: user_id, school_id: admin.school_id }, {
                             $set: {
@@ -229,7 +230,7 @@ var AdminUser;
                             }
                         })];
                 case 2:
-                    _a.sent();
+                    student = _a.sent();
                     return [3 /*break*/, 5];
                 case 3: return [4 /*yield*/, Student_1.Students.findOneAndUpdate({ user_id: user_id, school_id: admin.school_id }, {
                         $set: {
@@ -237,20 +238,31 @@ var AdminUser;
                         }
                     })];
                 case 4:
-                    _a.sent();
+                    student = _a.sent();
                     _a.label = 5;
-                case 5: return [2 /*return*/, jsonResponse.success("Student Approved")];
+                case 5:
+                    jsonResponse.success("Student Approved");
+                    if (!student) return [3 /*break*/, 7];
+                    return [4 /*yield*/, mail_1.sendMail({
+                            to: student.email,
+                            subject: "Your Account has been approved",
+                            body: "Your account has been approved you can now login to your account"
+                        })];
                 case 6:
+                    _a.sent();
+                    _a.label = 7;
+                case 7: return [3 /*break*/, 9];
+                case 8:
                     error_6 = _a.sent();
                     console.log(error_6);
                     jsonResponse.serverError();
-                    return [3 /*break*/, 7];
-                case 7: return [2 /*return*/];
+                    return [3 /*break*/, 9];
+                case 9: return [2 /*return*/];
             }
         });
     }); };
     AdminUser.approveTeacherAccount = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-        var jsonResponse, admin, user_id, error_7;
+        var jsonResponse, admin, user_id, teacher, error_7;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -259,21 +271,31 @@ var AdminUser;
                     user_id = req.params.user_id;
                     _a.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _a.trys.push([1, 5, , 6]);
                     return [4 /*yield*/, Teacher_1.Teachers.findOneAndUpdate({ user_id: user_id, school_id: admin.school_id }, {
                             $set: {
                                 teacher_verified: true
                             }
                         })];
                 case 2:
-                    _a.sent();
-                    return [2 /*return*/, jsonResponse.success("Teacher Approved")];
+                    teacher = _a.sent();
+                    jsonResponse.success("Teacher Approved");
+                    if (!teacher) return [3 /*break*/, 4];
+                    return [4 /*yield*/, mail_1.sendMail({
+                            to: teacher.email,
+                            subject: "Your Account has been accepted",
+                            body: "Your account has been accepted by admin. You can now login to your account"
+                        })];
                 case 3:
+                    _a.sent();
+                    _a.label = 4;
+                case 4: return [3 /*break*/, 6];
+                case 5:
                     error_7 = _a.sent();
                     console.log(error_7);
                     jsonResponse.serverError();
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
             }
         });
     }); };
@@ -288,7 +310,7 @@ var AdminUser;
                     user_id = req.params.user_id;
                     _a.label = 1;
                 case 1:
-                    _a.trys.push([1, 5, , 6]);
+                    _a.trys.push([1, 7, , 8]);
                     return [4 /*yield*/, Student_1.Students.findOneAndDelete({ user_id: user_id, school_id: school_id })];
                 case 2:
                     student = _a.sent();
@@ -297,13 +319,24 @@ var AdminUser;
                 case 3:
                     _a.sent();
                     _a.label = 4;
-                case 4: return [2 /*return*/, jsonResponse.success("User rejected")];
+                case 4:
+                    jsonResponse.success("User rejected");
+                    if (!student) return [3 /*break*/, 6];
+                    return [4 /*yield*/, mail_1.sendMail({
+                            to: student.email,
+                            subject: "Your Account has been rejected",
+                            body: "Your account has been rejected by admin. Please consult with your school admin about it."
+                        })];
                 case 5:
+                    _a.sent();
+                    _a.label = 6;
+                case 6: return [3 /*break*/, 8];
+                case 7:
                     error_8 = _a.sent();
                     console.log(error_8);
                     jsonResponse.serverError();
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
+                    return [3 /*break*/, 8];
+                case 8: return [2 /*return*/];
             }
         });
     }); };
@@ -317,7 +350,7 @@ var AdminUser;
                     user_id = req.params.user_id;
                     _a.label = 1;
                 case 1:
-                    _a.trys.push([1, 5, , 6]);
+                    _a.trys.push([1, 7, , 8]);
                     return [4 /*yield*/, Teacher_1.Teachers.findOneAndDelete({ user_id: user_id, school_id: school_id })];
                 case 2:
                     teacher = _a.sent();
@@ -326,13 +359,24 @@ var AdminUser;
                 case 3:
                     _a.sent();
                     _a.label = 4;
-                case 4: return [2 /*return*/, jsonResponse.success("User rejected")];
+                case 4:
+                    jsonResponse.success("User rejected");
+                    if (!teacher) return [3 /*break*/, 6];
+                    return [4 /*yield*/, mail_1.sendMail({
+                            to: teacher.email,
+                            subject: "Your Account has been rejected",
+                            body: "Your account has been rejected by admin. Please consult with your school admin about it."
+                        })];
                 case 5:
+                    _a.sent();
+                    _a.label = 6;
+                case 6: return [3 /*break*/, 8];
+                case 7:
                     error_9 = _a.sent();
                     console.log(error_9);
                     jsonResponse.serverError();
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
+                    return [3 /*break*/, 8];
+                case 8: return [2 /*return*/];
             }
         });
     }); };

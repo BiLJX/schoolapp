@@ -4,8 +4,8 @@
     height: 100vh;
     justify-content: center;
     align-items: center;
-    background-image: url("https://wallpaperaccess.com/full/545486.jpg");
-    background-size: 100vw 120vh;
+    // background-image: url("https://wallpaperaccess.com/full/545486.jpg");
+    background-color: var(--background);
     .admin-login-form {
         display: flex;
         flex-direction: column;
@@ -33,3 +33,4 @@
         }
     }
 }
+

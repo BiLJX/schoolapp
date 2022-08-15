@@ -124,6 +124,7 @@ export const addComment: Controller = async(req, res) => {
             user_id: currentUser.user_id,
             profile_picture_url: currentUser.profile_picture_url
         }
+        _comment.likes_count =0;
         jsonResponse.success(_comment);
         if(post.author_id === currentUser.user_id) return;
         await notification.notify({ 
@@ -172,6 +173,7 @@ export const addReply: Controller = async(req, res) => {
             user_id: currentUser.user_id,
             profile_picture_url: currentUser.profile_picture_url
         }
+        _reply.likes_count = 0;
         jsonResponse.success(_reply);
         if(comment.author_id === reply.author_id) return;
         await notification.notify({ 

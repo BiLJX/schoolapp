@@ -8,6 +8,8 @@ import { makeId } from "../utils/idgen";
 import JsonResponse from "../utils/Response";
 import admin from "firebase-admin";
 import { Teachers } from "../models/Teacher";
+import { sendMail } from "../utils/mail";
+import { Student } from "@shared/User";
 
 const st = admin.storage()
 
@@ -116,22 +118,28 @@ export namespace AdminUser {
         const admin = res.locals.admin;
         const user_id = req.params.user_id;
         const updated_data = req.body;
+        let student: Student|null;
         try {
             if(updated_data){
-                await Students.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
+                student = await Students.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
                     $set: {
                         student_verified: true,
                         class_id: updated_data.class_id
                     }
                 });
             }else{
-                await Students.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
+                student = await Students.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
                     $set: {
                         student_verified: true
                     }
                 });
             }
-            return jsonResponse.success("Student Approved")
+            jsonResponse.success("Student Approved")
+            if(student) await sendMail({
+                to: student.email,
+                subject: "Your Account has been approved",
+                body: `Your account has been approved you can now login to your account`
+            })
         } catch (error) {
             console.log(error);
             jsonResponse.serverError()
@@ -143,12 +151,17 @@ export namespace AdminUser {
         const admin = res.locals.admin;
         const user_id = req.params.user_id;
         try {
-            await Teachers.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
+            const teacher = await Teachers.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
                 $set: {
                     teacher_verified: true
                 }
             });
-            return jsonResponse.success("Teacher Approved")
+            jsonResponse.success("Teacher Approved");
+            if(teacher) await sendMail({
+                to: teacher.email,
+                subject: "Your Account has been accepted",
+                body: `Your account has been accepted by admin. You can now login to your account`
+            })
         } catch (error) {
             console.log(error);
             jsonResponse.serverError()
@@ -163,7 +176,12 @@ export namespace AdminUser {
         try {
             const student = await Students.findOneAndDelete({user_id, school_id});
             if(student) await st.bucket().deleteFiles({ prefix: "user/"+student?.user_id });
-            return jsonResponse.success("User rejected")
+            jsonResponse.success("User rejected");
+            if(student) await sendMail({
+                to: student.email,
+                subject: "Your Account has been rejected",
+                body: `Your account has been rejected by admin. Please consult with your school admin about it.`
+            })
         } catch (error) {
             console.log(error);
             jsonResponse.serverError()
@@ -177,7 +195,12 @@ export namespace AdminUser {
         try {
             const teacher = await Teachers.findOneAndDelete({user_id, school_id});
             if(teacher) await st.bucket().deleteFiles({ prefix: "user/"+teacher?.user_id });
-            return jsonResponse.success("User rejected")
+            jsonResponse.success("User rejected")
+            if(teacher) await sendMail({
+                to: teacher.email,
+                subject: "Your Account has been rejected",
+                body: `Your account has been rejected by admin. Please consult with your school admin about it.`
+            })
         } catch (error) {
             console.log(error);
             jsonResponse.serverError()

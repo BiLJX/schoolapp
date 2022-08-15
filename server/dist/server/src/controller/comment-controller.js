@@ -188,6 +188,7 @@ var addComment = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                     user_id: currentUser.user_id,
                     profile_picture_url: currentUser.profile_picture_url
                 };
+                _comment.likes_count = 0;
                 jsonResponse.success(_comment);
                 if (post.author_id === currentUser.user_id)
                     return [2 /*return*/];
@@ -257,6 +258,7 @@ var addReply = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     user_id: currentUser.user_id,
                     profile_picture_url: currentUser.profile_picture_url
                 };
+                _reply.likes_count = 0;
                 jsonResponse.success(_reply);
                 if (comment.author_id === reply.author_id)
                     return [2 /*return*/];

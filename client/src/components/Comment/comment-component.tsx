@@ -14,7 +14,7 @@ interface CommentProps {
 }
 export default function CommentComponent(props: CommentProps){
     const data = props.comment;
-    const [showChild, setShowChild] = useState(false);
+    const [showChild, setShowChild] = useState(true);
     const [like_count, setLike_count] = useState(data.likes_count);
     const [has_liked, setHas_liked] = useState(data.has_liked);
     const viewReplies = showChild?"Hide Replies ▲":"View Replies ▼";

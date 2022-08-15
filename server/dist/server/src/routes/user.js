@@ -2,12 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRoutes = void 0;
 var express_1 = require("express");
+var student_performance_controller_1 = require("../controller/student-performance-controller");
 var user_controller_1 = require("../controller/user-controller");
 var router = express_1.Router();
 exports.UserRoutes = router;
 router.get("/current", user_controller_1.getCurrentUser);
 router.get("/student/:user_id", user_controller_1.getStudentById);
-router.get("/student/:user_id/performance/merits", user_controller_1.getStudentMeritsPerformance);
-router.get("/student/:user_id/performance/demerits", user_controller_1.getStudentDemeritsPerformance);
-router.get("/student/:user_id/performance/overall/md", user_controller_1.getStudentMDOverall);
+router.get("/student/:user_id/performance/merits", student_performance_controller_1.getStudentMeritsPerformance);
+router.get("/student/:user_id/performance/demerits", student_performance_controller_1.getStudentDemeritsPerformance);
+router.get("/student/:user_id/performance/overall/md", student_performance_controller_1.getStudentMDOverall);
+router.get("/student/:user_id/performance/overall/assignment", student_performance_controller_1.getStudentsAssignmentPerformance);
 router.get("/teacher/:user_id", user_controller_1.getTeacherById);
