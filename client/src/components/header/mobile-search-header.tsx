@@ -10,13 +10,16 @@ interface SearchHeaderProps {
     buttonLabel: string,
     onSearch?: (val: string) => any;
     onChange?: (val: string) => any;
+    defaultValue?: string
 }
 export default function MobileSearchHeader({
     goBackTo, 
     goBack,
     buttonLabel,
+    defaultValue,
     onChange,
-    onSearch
+    onSearch,
+    
 }: SearchHeaderProps){
     const navigate = useNavigate();
     const [text, setText] = useState("");
@@ -33,7 +36,7 @@ export default function MobileSearchHeader({
                 <div className = "stack-header-search-icon">
                     <SearchIcon />
                 </div>
-                <input className = "stack-header-search-input" onKeyUp={(e)=>e.key === "Enter" && onSearch?.(text)} placeholder="Search" onChange={(e)=>{onChange?.(e.target.value); setText(e.target.value)}} />
+                <input defaultValue={defaultValue} className = "stack-header-search-input" onKeyUp={(e)=>e.key === "Enter" && onSearch?.(text)} placeholder="Search" onChange={(e)=>{onChange?.(e.target.value); setText(e.target.value)}} />
             </div>
             <div className = "stack-header-search-button" onClick={()=>onSearch?.(text)}>{buttonLabel}</div>
         </HeaderContainer>

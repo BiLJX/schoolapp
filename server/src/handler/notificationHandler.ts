@@ -26,15 +26,15 @@ export enum NotificationTypes {
 
 export default class NotificationHandler {
     constructor(private io: Server){};
-    public async notify(data: SendNotificationData){
+    public async notify(data: SendNotificationData, save_notification: boolean = true){
         try {
             if(data.receiver_id === data.sender_id) return;
             const notificationDoc = new Notifications({
                 ...data,
                 notification_id: makeId(),
             });
-            const notification = (await notificationDoc.save()).toJSON() as Notification<NotificationComment>;
-            this.io.to(data.receiver_id).emit("newNotification", notification);
+            if(save_notification) (await notificationDoc.save()).toJSON() as Notification<NotificationComment>;
+            this.io.to(data.receiver_id).emit("newNotification", notificationDoc);
         } catch (error) {
             console.log(error);
         }

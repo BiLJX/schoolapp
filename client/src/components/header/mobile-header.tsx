@@ -4,14 +4,14 @@ import "./stack-header.scss"
 import { useNavigate } from "react-router-dom";
 interface StackHeaderProps {
     label: string,
-    goBackTo?: string,
+    goBackTo?: string|number,
     goBack?: boolean
 }
 export default function MobileStackHeader({label, goBackTo, goBack}: StackHeaderProps){
     const navigate = useNavigate()
     return(
         <HeaderContainer>
-            {goBack && (<button className = "stack-header-icon" onClick={()=>goBackTo?navigate(goBackTo):navigate(-1)}>
+            {goBack && (<button className = "stack-header-icon" onClick={()=>goBackTo?navigate(goBackTo as any):navigate(-1)}>
                 <ChevronLeftRoundedIcon />
             </button>)}
             <h3 className = "stack-header-label">{label}</h3>

@@ -3,6 +3,7 @@
     flex-direction: column;
     padding: 1rem;
     margin-top: 0;
+    margin-bottom: 55px;
 }
 
 .explore-items-title {
@@ -31,4 +32,10 @@
             font-size: .9rem;
         }
     }
+}
+
+.explore-item-skeleton {
+    margin-bottom: .25rem;
+    height: 1rem;
+    background-color: var(--skeleton);
 }

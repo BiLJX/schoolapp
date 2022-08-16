@@ -56,7 +56,7 @@ export default function CommentInput({data, comment, onComment, onReplyClose}: P
                         <CloseIcon />
                     </div>
                     <div className = "comment-input-reply">
-                        Replying to <b>Billjesh Man Baidya</b>
+                        Replying to <b>{comment.author_data.full_name}</b>
                     </div>
                 </div>
                 <div style = {{display: "flex", width: "100%"}}>
@@ -68,7 +68,6 @@ export default function CommentInput({data, comment, onComment, onReplyClose}: P
                         {isPosting?<button className="disabled" disabled>Replying</button>:<button onClick={createReply}>Reply</button>}
                     </div>
                 </div>
-                
             </div>
         )
     }

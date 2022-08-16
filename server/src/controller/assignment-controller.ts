@@ -186,8 +186,8 @@ export const getAssignedStudents: Controller = async(req, res) => {
                                         {$in: ["$class_id", "$$clases"]},
                                         {$not: { $in: ["$user_id", "$$completed_by"] }}
                                     ]
-                                   
-                                }
+                                },
+                                student_verified: true,
                             }
                         },
                         {
@@ -260,13 +260,13 @@ export const createAssignment: Controller = async(req, res) => {
                         type: notification.Types.NEW_ASSIGNMENT,
                         receiver_id: x,
                         sender_id: currentUser.user_id,
-                        content: null,
+                        content: assignment.id,
                         sender_data: {
                             full_name: currentUser.full_name,
                             profile_picture_url: currentUser.profile_picture_url,
                             type: "teacher"
                         },
-                    })
+                    }, false)
                 } catch (error) {
                     console.log(error);
                 }
@@ -355,7 +355,7 @@ export const getSubmittedStudents: Controller = async(req, res) => {
         const assignment = (await Assignments.findOne({assignment_id, school_id}))?.toJSON();
         if(!assignment) return jsonResponse.clientError("Assignment not found");
         const submitted_students_id = assignment.completed_by;
-        const submitted_students = await Students.find({user_id: { $in: submitted_students_id }}).select("user_id full_name profile_picture_url").exec();
+        const submitted_students = await Students.find({user_id: { $in: submitted_students_id }, student_verified: true}).select("user_id full_name profile_picture_url").exec();
         jsonResponse.success(submitted_students);
     } catch (error) {
         console.log(error);
@@ -391,8 +391,8 @@ export const getPendingStudents: Controller = async(req, res) => {
                                         {$in: ["$class_id", "$$clases"]},
                                         {$not: { $in: ["$user_id", "$$completed_by"] }}
                                     ]
-                                   
-                                }
+                                },
+                                student_verified: true
                             }
                         },
                         {
@@ -424,7 +424,7 @@ export const getRedoStudents: Controller = async (req, res) => {
         const assignment = (await Assignments.findOne({assignment_id, school_id}))?.toJSON();
         if(!assignment) return jsonResponse.clientError("Assignment not found");
         const redo_students_id = assignment.redo_by;
-        const redo_students = await Students.find({user_id: { $in: redo_students_id }}).select("user_id full_name profile_picture_url");
+        const redo_students = await Students.find({user_id: { $in: redo_students_id }, student_verified: true}).select("user_id full_name profile_picture_url");
         jsonResponse.success(redo_students);
     } catch (error) {
         console.log(error);

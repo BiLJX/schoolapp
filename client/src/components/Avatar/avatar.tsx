@@ -33,3 +33,18 @@ export default function Avatar(
         </div>
     )
 }
+interface SkeletonProps {
+    className?: string,
+    style?: React.CSSProperties,
+    size?: number
+}
+export function SkeletonAvatar({
+    className,
+    style,
+    size = 30,
+}: SkeletonProps){
+    return(
+        <div style={{width: size + "px", height: size + "px",...style}} className = {"avatar "+className||""}>  
+        </div>
+    )
+}

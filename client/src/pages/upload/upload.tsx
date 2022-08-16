@@ -12,7 +12,7 @@ import { Navigate, NavLink } from "react-router-dom";
 export default function UploadPage(){
     const currentUser = useSelector((state: RootState)=>state.currentUser);
     if(currentUser?.type === "student"){
-        return <Navigate to = "post" />;
+        return <UploadPost />
     }
     return(
         <>

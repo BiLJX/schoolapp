@@ -56,8 +56,11 @@ function MobileNavItem(props: NavProps){
     }
     return(
         <NavLink end to = {props.to} className={className}>
-            {props.badge}
-            {isActive?<props.ActiveIcon />:<props.Icon />}
+            <div style = {{position: "relative", display: "flex"}}>
+                {props.badge}
+                {isActive?<props.ActiveIcon />:<props.Icon />}
+            </div>
+           
         </NavLink>
     )
 }

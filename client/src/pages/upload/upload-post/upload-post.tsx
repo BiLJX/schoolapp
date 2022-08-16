@@ -55,10 +55,9 @@ export function UploadPost(){
         const url = URL.createObjectURL(image);
         setImageUrl(url);
     }, [image])
-
     return(
         <>
-            <MobileStackHeader goBack label="Upload a post" />
+            <MobileStackHeader goBack label="Upload a post"/>
             <StackContainer className="upload-post-page">
                 <UploadCategory onText={()=>setImage(undefined)} onImage = {(i)=>setImage(i)} />
                 <TextareaAutosize placeholder="Write a title..." className = "upload-title" onChange={(e)=>setData({...data, title: e.target.value})} />

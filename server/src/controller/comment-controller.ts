@@ -88,7 +88,7 @@ export const getComments: Controller = async (req, res) => {
             },
             {
                 $sort: {
-                    createdAt: -1
+                    createdAt: 1
                 }
             }
         ])

@@ -14,6 +14,7 @@ import AssignmentGivenPage from "pages/Inbox/assignment/given/assignment-given";
 import InboxPage from "pages/Inbox/inbox";
 import LoginPage from "pages/Login/login-page";
 import PostPage from "pages/Post/post-page";
+import PreLoadPage from "pages/preload/preload";
 import AccountReview from "pages/Review/account-review-page";
 import AssignPage from "pages/upload/assignment/assign-page";
 import UploadAssignment from "pages/upload/assignment/assignment-page";
@@ -53,10 +54,10 @@ export default function UserRoutes(){
     }, []);
 
     if(loading) {
-        return <span>Loading...</span>
+        return <PreLoadPage />
     }
 
-    if(!currentUser){
+    if(!currentUser?.user_id){
         return (
             <LoginPage />
         )

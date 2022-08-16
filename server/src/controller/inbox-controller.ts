@@ -1,5 +1,7 @@
+import { Assignment } from "@shared/Assignment";
 import { Inbox, Notification } from "@shared/Notification";
 import NotificationHandler, { NotificationTypes } from "../handler/notificationHandler";
+import { Assignments } from "../models/Assignment";
 import { Notifications } from "../models/Notification";
 import { Controller } from "../types/controller";
 import JsonResponse from "../utils/Response";
@@ -13,6 +15,7 @@ const assignment_filter = (x: Notification) => x.type === NotificationTypes.NEW_
 export const getInbox: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
     try {
+        let assignments: Assignment[] = [];
         const currentUser = res.locals.user;
         const notifications = await Notifications.aggregate<Notification>([
             {
@@ -80,9 +83,16 @@ export const getInbox: Controller = async(req, res) => {
                 }
             },
         ]);
+        if(currentUser.type === "student") assignments = await Assignments.aggregate([
+            {
+                $match: {
+                    assigned_class: { $in: [currentUser.class_id] },
+                    completed_by: { $not: { $in: [currentUser.user_id] } }
+                }
+            }
+        ])
         const activity = notifications.filter(activity_filter);
         const announcement = notifications.filter(announcement_filter);
-        const assignment = notifications.filter(assignment_filter);
         const inbox: Inbox = {
             activity: {
                 count: activity.filter(x=>!x.has_read).length,
@@ -93,8 +103,8 @@ export const getInbox: Controller = async(req, res) => {
                 has_read: announcement.every(x=>x.has_read),
             },
             assignment: {
-                count: assignment.filter(x=>!x.has_read).length,
-                has_read: assignment.every(x=>x.has_read),
+                count: assignments.length,
+                has_read: assignments.length === 0,
             }
         }
         return jsonResponse.success(inbox)

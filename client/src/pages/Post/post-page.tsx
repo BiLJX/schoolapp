@@ -61,7 +61,7 @@ export default function PostPage(){
                         mappedComments.map((x, i)=> <CommentComponent comment={x} key= {i} onReplyClicked={(comment)=>setComment(comment)} />)
                     }
                 </div>
-                <CommentInput onReplyClose={()=>setComment(null)} onComment={(c)=>setComments([c, ...comments])} data={post} comment = {comment} />
+                <CommentInput onReplyClose={()=>setComment(null)} onComment={(c)=>c.parent_id?setComments([...comments, c]):setComments([c, ...comments])} data={post} comment = {comment} />
             </StackContainer>
         </>
         

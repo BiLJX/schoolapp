@@ -6,30 +6,36 @@ import Avatar from "components/Avatar/avatar"
 import { useEffect, useState } from "react"
 import { toastError } from "components/Toast/toast"
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom"
+import { ClipLoader } from "react-spinners"
 export default function SearchPage(){
     const [searchParams] = useSearchParams();
+    const [loading, setLoading] = useState(true)
     const [topStudents, setTopStudents] = useState<SearchResult[]>([]);
     const text = searchParams.get("s");
     const navigtate = useNavigate();
     const fetchStudent = async() => {
         if(!text) return;
+        setLoading(true);
+        setTopStudents([])
         const res = await searchExplore(text);
         if(res.error){
+            setLoading(false)
             return toastError(res.message);
         }
+        setLoading(false)
         setTopStudents(res.data);
     }
     useEffect(()=>{
+        
         fetchStudent()
     }, [text])
     return(
         <>
-            <MobileSearchHeader goBack buttonLabel="Search" onSearch={(val)=>navigtate("/explore/results?s="+val)}/>
+            <MobileSearchHeader defaultValue={text||undefined} goBack buttonLabel="Search" onSearch={(val)=>navigtate("/explore/results?s="+val)}/>
             <StackContainer className = "explore-items-container">
                 <span className = "explore-items-title">Results</span>
-                {
-                    topStudents.map((x, i)=><SearchItem data = {x} key = {i}/>)
-                }
+                <div style={{display: "flex", width: "100%", "justifyContent": "center", alignItems: "center"}}><ClipLoader color="var(--text-secondary-alt)" loading = {loading} /></div>
+                {topStudents.map((x, i)=><SearchItem data = {x} key = {i}/>)}
             </StackContainer>
         </>
     )
