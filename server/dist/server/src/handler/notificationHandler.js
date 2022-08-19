@@ -65,26 +65,30 @@ var NotificationHandler = /** @class */ (function () {
         this.io = io;
     }
     ;
-    NotificationHandler.prototype.notify = function (data) {
+    NotificationHandler.prototype.notify = function (data, save_notification) {
+        if (save_notification === void 0) { save_notification = true; }
         return __awaiter(this, void 0, void 0, function () {
-            var notificationDoc, notification, error_1;
+            var notificationDoc, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 3, , 4]);
                         if (data.receiver_id === data.sender_id)
                             return [2 /*return*/];
                         notificationDoc = new Notification_1.Notifications(__assign(__assign({}, data), { notification_id: idgen_1.makeId() }));
+                        if (!save_notification) return [3 /*break*/, 2];
                         return [4 /*yield*/, notificationDoc.save()];
                     case 1:
-                        notification = (_a.sent()).toJSON();
-                        this.io.to(data.receiver_id).emit("newNotification", notification);
-                        return [3 /*break*/, 3];
+                        (_a.sent()).toJSON();
+                        _a.label = 2;
                     case 2:
+                        this.io.to(data.receiver_id).emit("newNotification", notificationDoc);
+                        return [3 /*break*/, 4];
+                    case 3:
                         error_1 = _a.sent();
                         console.log(error_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

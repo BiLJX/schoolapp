@@ -41,20 +41,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.readNotification = exports.getActivity = exports.getInbox = void 0;
 var notificationHandler_1 = require("../handler/notificationHandler");
+var Assignment_1 = require("../models/Assignment");
 var Notification_1 = require("../models/Notification");
 var Response_1 = __importDefault(require("../utils/Response"));
 var activity_filter = function (x) { return x.type === notificationHandler_1.NotificationTypes.LIKED_POST || x.type === notificationHandler_1.NotificationTypes.MERIT || x.type === notificationHandler_1.NotificationTypes.COMMENTED || x.type === notificationHandler_1.NotificationTypes.REPLIED || x.type === notificationHandler_1.NotificationTypes.DEMERIT; };
 var announcement_filter = function (x) { return x.type === notificationHandler_1.NotificationTypes.NEW_ANNOUNCEMENT; };
 var assignment_filter = function (x) { return x.type === notificationHandler_1.NotificationTypes.NEW_ASSIGNMENT; };
 var getInbox = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var jsonResponse, currentUser, notifications, activity, announcement, assignment, inbox, error_1;
+    var jsonResponse, assignments, currentUser, notifications, activity, announcement, inbox, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 jsonResponse = new Response_1.default(res);
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 3, , 4]);
+                _a.trys.push([1, 5, , 6]);
+                assignments = [];
                 currentUser = res.locals.user;
                 return [4 /*yield*/, Notification_1.Notifications.aggregate([
                         {
@@ -124,9 +126,21 @@ var getInbox = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     ])];
             case 2:
                 notifications = _a.sent();
+                if (!(currentUser.type === "student")) return [3 /*break*/, 4];
+                return [4 /*yield*/, Assignment_1.Assignments.aggregate([
+                        {
+                            $match: {
+                                assigned_class: { $in: [currentUser.class_id] },
+                                completed_by: { $not: { $in: [currentUser.user_id] } }
+                            }
+                        }
+                    ])];
+            case 3:
+                assignments = _a.sent();
+                _a.label = 4;
+            case 4:
                 activity = notifications.filter(activity_filter);
                 announcement = notifications.filter(announcement_filter);
-                assignment = notifications.filter(assignment_filter);
                 inbox = {
                     activity: {
                         count: activity.filter(function (x) { return !x.has_read; }).length,
@@ -137,17 +151,17 @@ var getInbox = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         has_read: announcement.every(function (x) { return x.has_read; }),
                     },
                     assignment: {
-                        count: assignment.filter(function (x) { return !x.has_read; }).length,
-                        has_read: assignment.every(function (x) { return x.has_read; }),
+                        count: assignments.length,
+                        has_read: assignments.length === 0,
                     }
                 };
                 return [2 /*return*/, jsonResponse.success(inbox)];
-            case 3:
+            case 5:
                 error_1 = _a.sent();
                 console.log(error_1);
                 jsonResponse.serverError();
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

@@ -15,6 +15,8 @@ import { RootState } from "types/states";
 import { UserAuthWrapper } from "./User-Auth-Wrapper";
 import UserRoutes from "./UserRoutes";
 import { useSocket } from "hooks/useSocket";
+import AdminAnnouncementPage from "pages/admin/Announcement/announcement-page";
+import CreateAnnouncementPage from "pages/admin/Announcement/create-announcement";
 export default function App(){
     useSocket();
     return(
@@ -24,6 +26,10 @@ export default function App(){
                 <Route index element = {<Navigate to = "requests" />} />
                 <Route path = "requests/*" element = {<AccountRequestPage />} />
                 <Route path = "classes" element = {<AdminClassPage />} />
+                <Route path = "announcement">
+                    <Route index element = {<AdminAnnouncementPage />} />
+                    <Route path="create" element = {<CreateAnnouncementPage />} />
+                </Route>
             </Route>
             <Route path = "/admin/login" element = {<AdminLoginPage/>} /> 
             <Route path = "/login" element = {<UserAuthWrapper />}>

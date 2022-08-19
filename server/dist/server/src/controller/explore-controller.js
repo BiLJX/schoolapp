@@ -55,15 +55,22 @@ var WEIGHTS = {
     merits_difference: 0.5
 };
 var getTopStudents = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var jsonResponse, students, error_1;
+    var jsonResponse, currentUser, students, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 jsonResponse = new Response_1.default(res);
+                currentUser = res.locals.user;
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, Student_1.Students.aggregate([
+                        {
+                            $match: {
+                                school_id: currentUser.school_id,
+                                student_verified: true,
+                            }
+                        },
                         {
                             $lookup: {
                                 from: "assignment_logs",
@@ -211,38 +218,33 @@ var getTopStudents = function (req, res) { return __awaiter(void 0, void 0, void
                             $addFields: {
                                 WEIGHTS: WEIGHTS,
                                 given_assignments_count: { $add: [{ $ifNull: ["$given_assignments.count", 0] }, 1] },
-                                completed_assignments_count: { $ifNull: ["$completed_assignments.count", 0] }
+                                completed_assignments_count: { $ifNull: ["$completed_assignments.count", 0] },
+                                assignment_points: { $ifNull: ["$assignment_logs.total_points", 0] },
+                                merits_count: { $ifNull: ["$merits.total_points", 0] },
+                                demerits_count: { $ifNull: ["$demerits.total_points", 0] },
                             }
                         },
                         {
                             $addFields: {
-                                merits_ratio: { $divide: ["$merits.total_points", "$demerits.total_points"] },
-                                merits_difference: { $subtract: ["$merits.total_points", "$demerits.total_points"] },
-                                assignment_ratio: { $divide: ["$completed_assignments_count", "$given_assignments_count"] }
+                                merits_ratio: { $divide: ["$merits_count", { $add: ["$demerits_count", 1] }] },
+                                merits_difference: { $subtract: ["$merits_count", "$demerits_count"] },
+                                assignment_ratio: { $divide: ["$completed_assignments_count", { $add: ["$demerits_count", 1] }] }
                             }
                         },
                         {
                             $addFields: {
-                                merits_ratio_score: { $multiply: ["$merits_ratio", "$WEIGHTS.merits_ratio"] },
-                                merits_difference_score: { $multiply: ["$merits_difference", "$WEIGHTS.merits_difference"] },
-                                assignment_score: { $multiply: ["$assignment_logs.total_points", "$assignment_ratio"] },
+                                merits_score: { $multiply: ["$merits_difference", "$merits_ratio", "$WEIGHTS.merits_difference"] },
+                                assignment_score: { $multiply: ["$assignment_points", "$assignment_ratio", "$WEIGHTS.assignment_ratio"] },
                             }
                         },
                         {
                             $addFields: {
-                                score: { $add: ["$assignment_score", "$merits_ratio_score", "$merits_difference_score"] },
+                                score: { $add: ["$assignment_score", "$merits_score"] },
                             }
                         },
                         {
                             $sort: {
                                 score: -1
-                            }
-                        },
-                        {
-                            $addFields: {
-                                assignment_points: "$assignment_logs.total_points",
-                                merits_count: "$merits.total_points",
-                                demerits_count: "$demerits.total_points",
                             }
                         },
                         {
@@ -287,7 +289,8 @@ var searchExplore = function (req, res) { return __awaiter(void 0, void 0, void 
                     {
                         $match: {
                             full_name: { $regex: searchQuery, $options: 'i' },
-                            school_id: school_id
+                            school_id: school_id,
+                            student_verified: true
                         }
                     },
                     {
@@ -376,7 +379,8 @@ var searchExplore = function (req, res) { return __awaiter(void 0, void 0, void 
                     {
                         $match: {
                             full_name: { $regex: searchQuery, $options: 'i' },
-                            school_id: school_id
+                            school_id: school_id,
+                            teacher_verified: true
                         }
                     },
                     {

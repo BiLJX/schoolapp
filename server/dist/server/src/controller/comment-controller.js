@@ -133,7 +133,7 @@ var getComments = function (req, res) { return __awaiter(void 0, void 0, void 0,
                         },
                         {
                             $sort: {
-                                createdAt: -1
+                                createdAt: 1
                             }
                         }
                     ])];

@@ -296,7 +296,8 @@ var getAssignedStudents = function (req, res) { return __awaiter(void 0, void 0,
                                                     { $in: ["$class_id", "$$clases"] },
                                                     { $not: { $in: ["$user_id", "$$completed_by"] } }
                                                 ]
-                                            }
+                                            },
+                                            student_verified: true,
                                         }
                                     },
                                     {
@@ -332,7 +333,7 @@ var getAssignedStudents = function (req, res) { return __awaiter(void 0, void 0,
 }); };
 exports.getAssignedStudents = getAssignedStudents;
 var createAssignment = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var jsonResponse, currentUser, notification, upload_data, assignment, users, receiver_ids, error_5, error_6;
+    var jsonResponse, currentUser, notification, upload_data, assignment_1, users, receiver_ids, error_5, error_6;
     var _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -361,16 +362,16 @@ var createAssignment = function (req, res) { return __awaiter(void 0, void 0, vo
                     return [2 /*return*/, jsonResponse.clientError("Points should be greator than 0 but less than 11")];
                 if (upload_data.assigned_to.length === 0)
                     return [2 /*return*/, jsonResponse.clientError("Please assign a class")];
-                assignment = new Assignment_1.Assignments(__assign(__assign({}, upload_data), { assigned_by: currentUser.user_id, assignment_id: idgen_1.makeId(), school_id: currentUser.school_id, assigned_class: upload_data.assigned_to.map(function (x) { return x.class_id; }), completed_by: [], redo_by: [], due: new Date(upload_data.due) }));
-                return [4 /*yield*/, assignment.save()];
+                assignment_1 = new Assignment_1.Assignments(__assign(__assign({}, upload_data), { assigned_by: currentUser.user_id, assignment_id: idgen_1.makeId(), school_id: currentUser.school_id, assigned_class: upload_data.assigned_to.map(function (x) { return x.class_id; }), completed_by: [], redo_by: [], due: new Date(upload_data.due) }));
+                return [4 /*yield*/, assignment_1.save()];
             case 2:
                 _c.sent();
-                jsonResponse.success(assignment.toJSON());
+                jsonResponse.success(assignment_1.toJSON());
                 _c.label = 3;
             case 3:
                 _c.trys.push([3, 5, , 6]);
                 return [4 /*yield*/, Student_1.Students.find({ class_id: {
-                            $in: assignment.assigned_class
+                            $in: assignment_1.assigned_class
                         } })];
             case 4:
                 users = _c.sent();
@@ -385,13 +386,13 @@ var createAssignment = function (req, res) { return __awaiter(void 0, void 0, vo
                                         type: notification.Types.NEW_ASSIGNMENT,
                                         receiver_id: x,
                                         sender_id: currentUser.user_id,
-                                        content: null,
+                                        content: assignment_1.id,
                                         sender_data: {
                                             full_name: currentUser.full_name,
                                             profile_picture_url: currentUser.profile_picture_url,
                                             type: "teacher"
                                         },
-                                    })];
+                                    }, false)];
                             case 1:
                                 _a.sent();
                                 return [3 /*break*/, 3];
@@ -551,7 +552,7 @@ var getSubmittedStudents = function (req, res) { return __awaiter(void 0, void 0
                 if (!assignment)
                     return [2 /*return*/, jsonResponse.clientError("Assignment not found")];
                 submitted_students_id = assignment.completed_by;
-                return [4 /*yield*/, Student_1.Students.find({ user_id: { $in: submitted_students_id } }).select("user_id full_name profile_picture_url").exec()];
+                return [4 /*yield*/, Student_1.Students.find({ user_id: { $in: submitted_students_id }, student_verified: true }).select("user_id full_name profile_picture_url").exec()];
             case 3:
                 submitted_students = _b.sent();
                 jsonResponse.success(submitted_students);
@@ -601,7 +602,8 @@ var getPendingStudents = function (req, res) { return __awaiter(void 0, void 0, 
                                                     { $in: ["$class_id", "$$clases"] },
                                                     { $not: { $in: ["$user_id", "$$completed_by"] } }
                                                 ]
-                                            }
+                                            },
+                                            student_verified: true
                                         }
                                     },
                                     {
@@ -651,7 +653,7 @@ var getRedoStudents = function (req, res) { return __awaiter(void 0, void 0, voi
                 if (!assignment)
                     return [2 /*return*/, jsonResponse.clientError("Assignment not found")];
                 redo_students_id = assignment.redo_by;
-                return [4 /*yield*/, Student_1.Students.find({ user_id: { $in: redo_students_id } }).select("user_id full_name profile_picture_url")];
+                return [4 /*yield*/, Student_1.Students.find({ user_id: { $in: redo_students_id }, student_verified: true }).select("user_id full_name profile_picture_url")];
             case 3:
                 redo_students = _b.sent();
                 jsonResponse.success(redo_students);

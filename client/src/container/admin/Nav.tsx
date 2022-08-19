@@ -20,7 +20,7 @@ export default function AdminNav(){
             <div className = "nav-items-container">
                 <NavItem Icon={AccountBoxOutlinedIcon} to = "/admin" label="Account Requests" />
                 <NavItem Icon={GroupOutlinedIcon} to = "/admin/classes" label="Classes" />
-                <NavItem Icon={CampaignOutlinedIcon} to = "/admin/notice" label="Notice" />
+                <NavItem Icon={CampaignOutlinedIcon} to = "/admin/announcement" label="Notice" />
                 <NavItem Icon={SettingsOutlinedIcon} to = "/admin/settings" label="Settings" />
             </div>
         </nav>

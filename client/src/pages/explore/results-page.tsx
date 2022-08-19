@@ -47,7 +47,7 @@ function SearchItem({data}: {data: SearchResult}){
         Info = (
             <>
                 <span className = "explore-item-name">{data.full_name}</span>
-                <span className = "explore-item-stats" style = {{paddingBottom: "0"}}>Teacher</span>
+                <span className = "explore-item-stats" style = {{paddingBottom: "0", fontWeight: "bold"}}>Teacher</span>
             </>
         )
     }else{
