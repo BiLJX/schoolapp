@@ -1,0 +1,35 @@
+.admin-login-page {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    // background-image: url("https://wallpaperaccess.com/full/545486.jpg");
+    background-color: var(--background);
+    .admin-login-form {
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--drop-shadow);
+        border: 1px solid var(--border-color);
+        background-color: var(--cards-background);
+        border-radius: 20px;
+        padding: 0 2rem;
+        width: 531px;
+        .header {
+            padding: 2rem 0;
+            h1 {
+                color: var(--text-title);
+                text-align: center;
+            }
+        }
+        .main {
+            display: flex;
+            flex-direction: column;
+        }
+        .footer {
+            padding: 2rem 0;
+            display: flex;
+            justify-content: center;
+        }
+    }
+}

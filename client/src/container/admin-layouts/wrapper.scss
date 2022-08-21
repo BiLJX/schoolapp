@@ -1,0 +1,11 @@
+.admin-nav-wrapper {
+    display: flex;
+}
+
+.admin-main-wrapper {
+    padding-top: calc(var(--admin-header-height) + 1rem);
+    padding-left: calc(var(--admin-nav-width) + 1rem);
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    width: 100vw;
+}

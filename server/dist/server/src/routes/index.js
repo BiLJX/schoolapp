@@ -55,6 +55,7 @@ var teacher_1 = require("../middleware/teacher");
 var inbox_1 = require("./inbox");
 var assignment_1 = require("./assignment");
 var explore_1 = require("./explore");
+var announcement_1 = require("./announcement");
 var router = express_1.Router();
 exports.ApiRoutes = router;
 router.use("/auth", auth_1.AuthRoutes);
@@ -67,6 +68,7 @@ router.use("/inbox", user_1.UserAuth, inbox_1.InboxRoutes);
 router.use("/interaction", user_1.UserAuth, teacher_1.TeacherAuth, interaction_1.InteractionRoutes);
 router.use("/assignment", user_1.UserAuth, assignment_1.AssignmentRoutes);
 router.use("/explore", user_1.UserAuth, explore_1.ExploreRoutes);
+router.use("/announcement", announcement_1.AnnouncementRoutes);
 router.get("/email", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var mail, error_1;
     return __generator(this, function (_a) {

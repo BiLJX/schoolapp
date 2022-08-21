@@ -73,8 +73,9 @@
 
     .post-card-button {
         display: flex;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         margin-right: 1rem;
+        font-weight: 500;
         span {
             color: var(--icon-color);
             align-self: center;
@@ -82,6 +83,8 @@
         button {
             display: flex;
             align-items: center;
+            padding: 0;
+            margin-right: 5px;
             svg {
                 color: var(--icon-color);
             }

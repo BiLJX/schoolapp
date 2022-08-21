@@ -26,6 +26,9 @@
         font-weight: 500;
         margin-bottom: 1rem;
         width: 100%;
+        span {
+            color: var(--text-title);
+        }
         .announcement-item-status {
             color: #fff;
             display: flex;
@@ -71,6 +74,7 @@
         font-weight: 500;
         margin-bottom: 1rem;
         font-size: .9rem;
+        white-space: pre-wrap;
     }
     button {
         width: 80px;
@@ -79,5 +83,10 @@
         color: #fff;
         border-radius: 10px;
     }
+}
+
+.announcement-modal:focus, .announcement-modal:active {
+    outline: none;
+    border: none;
 }
 

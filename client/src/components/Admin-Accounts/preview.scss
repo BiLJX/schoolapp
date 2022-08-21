@@ -1,0 +1,33 @@
+.admin-account-preview {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+    width: 35%;
+    .account-preview-header {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .account-preview-info-title {
+        color: var(--text-secondary-alt);
+        padding: 1rem 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+}
+
+.account-preview-key-value {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    .key {
+        font-weight: bold;
+        color: var(--text-title);
+        width: 30%;
+    }
+    input, select {
+       flex: 1;
+       font-size: .9rem;
+    }
+}

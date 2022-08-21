@@ -1,7 +1,3 @@
-import { AdminLayout } from "container/admin/Layout";
-import AccountRequestPage from "pages/admin/AccountRequest/account-request-page";
-import AdminClassPage from "pages/admin/Class/class-page";
-import AdminLoginPage from "pages/admin/Login/login-page";
 import LoginPage from "pages/Login/login-page";
 import StudentLoginPage from "pages/Login/login-student-page";
 import TeacherLoginPage from "pages/Login/login-teacher-page";
@@ -15,23 +11,22 @@ import { RootState } from "types/states";
 import { UserAuthWrapper } from "./User-Auth-Wrapper";
 import UserRoutes from "./UserRoutes";
 import { useSocket } from "hooks/useSocket";
-import AdminAnnouncementPage from "pages/admin/Announcement/announcement-page";
-import CreateAnnouncementPage from "pages/admin/Announcement/create-announcement";
+import AdminNavWrapper from "container/admin-layouts/admin-nav-wrapper";
+import StudentAccountRequestsPage from "pages/Admin/student-account-request/student-account-requests";
 export default function App(){
     useSocket();
     return(
         <Routes>
             <Route path = "/*" element = {<UserRoutes />} />
-            <Route path = "/admin" element = {<AdminLayout />}>
-                <Route index element = {<Navigate to = "requests" />} />
-                <Route path = "requests/*" element = {<AccountRequestPage />} />
-                <Route path = "classes" element = {<AdminClassPage />} />
+            <Route path = "/admin/*" element = {<AdminNavWrapper />}>
+                <Route path = "requests/student/*" element = {<StudentAccountRequestsPage />}/>
+                <Route path = "classes"/>
                 <Route path = "announcement">
-                    <Route index element = {<AdminAnnouncementPage />} />
-                    <Route path="create" element = {<CreateAnnouncementPage />} />
+                    <Route index  />
+                    <Route path="create" />
                 </Route>
             </Route>
-            <Route path = "/admin/login" element = {<AdminLoginPage/>} /> 
+            <Route path = "/admin/login" /> 
             <Route path = "/login" element = {<UserAuthWrapper />}>
                 <Route index element = {<LoginPage />} />
                 <Route path = "student" element = {<StudentLoginPage />} />

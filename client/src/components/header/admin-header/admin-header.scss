@@ -1,0 +1,37 @@
+.admin-header {
+    display: flex;
+    height: var(--admin-header-height);
+    width: 100%;
+    position: fixed;
+    margin-left: var(--admin-nav-width);
+    width: calc(100vw - var(--admin-nav-width));
+    background-color: var(--cards-background);
+    padding: 0 1rem;
+    align-items: center;
+}
+
+.admin-header-labels {
+    display: flex;
+    flex-direction: column;
+    h1 {
+        font-size: 1.5rem;
+        color: var(--text-title);
+    }
+    span {
+        margin-top: .2rem;
+        font-size: .9rem;
+        color: var(--text-secondary-alt);
+        font-weight: 500;
+    }
+}
+
+.admin-header-button-container {
+    margin-left: auto;
+    button {
+        cursor: pointer;
+        svg {
+            color: var(--text-title);
+        }
+    }
+    
+}

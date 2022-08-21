@@ -5,6 +5,7 @@
   --pink: #FF7C7C;
   --white: #FFFFFF;
   --white-2: #FAFAFA;
+  --white-3: #F1F0F9;
   --gray-0: #E9E9E9;
   --gray-1: #c2c2c2;
   --gray-2: #6A6A6A;
@@ -43,11 +44,9 @@
   --skeleton-alt: var(--white);
   --input-background: var(--gray-0);
   --radio-border-color: #3e3e3e;
-  /*Admin Styles*/
-  --admin-list-category-text-color: var(--gray-3);
-  --admin-input-label-color: var(--gray-3);
-  --admin-nav: #16263E;
-  --admin-search-bar-color: var(--gray-0);
+  /*ADMIN*/
+  --admin-nav-width: 220px;
+  --admin-header-height: 86px;
   /*Nav*/
   --nav-item-color: var(--gray-2);
   --nav-background: #fff;

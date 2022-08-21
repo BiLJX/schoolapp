@@ -1,0 +1,11 @@
+.admin-card-container {
+    display: flex;
+    background-color: var(--cards-background);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.admin-card-heading {
+    color: var(--text-secondary);
+    font-size: 1.7rem;
+}

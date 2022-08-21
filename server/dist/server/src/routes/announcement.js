@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AnnouncementRoutes = void 0;
+var express_1 = require("express");
+var announcement_controller_1 = require("../controller/announcement-controller");
+var admin_1 = require("../middleware/admin");
+var user_1 = require("../middleware/user");
+var router = express_1.Router();
+exports.AnnouncementRoutes = router;
+router.post("/create", admin_1.AdminAuth, announcement_controller_1.createAnnouncement);
+router.get("/", user_1.UserAuth, announcement_controller_1.getAnnouncements);
