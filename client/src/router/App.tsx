@@ -13,6 +13,7 @@ import UserRoutes from "./UserRoutes";
 import { useSocket } from "hooks/useSocket";
 import AdminNavWrapper from "container/admin-layouts/admin-nav-wrapper";
 import StudentAccountRequestsPage from "pages/Admin/student-account-request/student-account-requests";
+import TeachersAccountRequestsPage from "pages/Admin/student-account-request/teacher-account-request";
 export default function App(){
     useSocket();
     return(
@@ -20,6 +21,7 @@ export default function App(){
             <Route path = "/*" element = {<UserRoutes />} />
             <Route path = "/admin/*" element = {<AdminNavWrapper />}>
                 <Route path = "requests/student/*" element = {<StudentAccountRequestsPage />}/>
+                <Route path = "requests/teacher/*" element = {<TeachersAccountRequestsPage />}/>
                 <Route path = "classes"/>
                 <Route path = "announcement">
                     <Route index  />

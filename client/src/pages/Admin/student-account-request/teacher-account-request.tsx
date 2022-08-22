@@ -3,18 +3,18 @@ import { AdminMain } from "container/admin-layouts/admin-nav-wrapper";
 import "./account-request-page.scss"
 import { AccountItem, AccountsContainer } from "components/Admin-Accounts/admin-accounts";
 import { useEffect, useState } from "react";
-import { Student } from "@shared/User";
-import { getStudentsAccountRequest } from "api/admin/admin-requests";
+import { Teacher } from "@shared/User";
+import { getTeachersAccountRequest } from "api/admin/admin-requests";
 import { toastError } from "components/Toast/toast";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import AdminAccountPreview from "components/Admin-Accounts/admin-account-preview";
 import { User } from "types/user";
-export default function StudentAccountRequestsPage(){
-    const [users, setUsers] = useState<Student[]>([]);
+export default function TeachersAccountRequestsPage(){
+    const [users, setUsers] = useState<Teacher[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate()
     const fetchItem = async () => {
-        const res = await getStudentsAccountRequest();
+        const res = await getTeachersAccountRequest();
         setLoading(false);
         if(res.error){
             return toastError(res.message)

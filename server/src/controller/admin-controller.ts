@@ -9,7 +9,8 @@ import JsonResponse from "../utils/Response";
 import admin from "firebase-admin";
 import { Teachers } from "../models/Teacher";
 import { sendMail } from "../utils/mail";
-import { Student } from "@shared/User";
+import { Student, Teacher } from "@shared/User";
+import { validateEmail, validateFullName } from "../utils/validator";
 
 const st = admin.storage()
 
@@ -116,24 +117,26 @@ export namespace AdminUser {
     export const approveStudentAccount: Controller = async (req, res) => {
         const jsonResponse = new JsonResponse(res);
         const admin = res.locals.admin;
-        const user_id = req.params.user_id;
-        const updated_data = req.body;
-        let student: Student|null;
+        const user = req.body as Student;
         try {
-            if(updated_data){
-                student = await Students.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
-                    $set: {
-                        student_verified: true,
-                        class_id: updated_data.class_id
-                    }
-                });
-            }else{
-                student = await Students.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
-                    $set: {
-                        student_verified: true
-                    }
-                });
-            }
+            user.full_name = user.full_name.trim()
+            user.email = user.email.toLowerCase().trim()
+            //validations
+            const nameValidation = validateFullName(user.full_name)
+            const emailValidation = validateEmail(user.email);
+            if(!nameValidation.success) return jsonResponse.clientError(nameValidation.message);
+            if(!emailValidation.success) return jsonResponse.clientError(emailValidation.message);
+            const student = await Students.findOneAndUpdate({user_id: user.user_id, school_id: admin.school_id}, { 
+                $set: {
+                    student_verified: true,
+                    full_name: user.full_name,
+                    email: user.email,
+                    gender: user.gender,
+                    class_id: user.class_id,
+                    mothers_email: user.mothers_email,
+                    fathers_email: user.fathers_email
+                }
+            });
             jsonResponse.success("Student Approved")
             if(student) await sendMail({
                 to: student.email,
@@ -149,11 +152,18 @@ export namespace AdminUser {
     export const approveTeacherAccount: Controller = async (req, res) => {
         const jsonResponse = new JsonResponse(res);
         const admin = res.locals.admin;
-        const user_id = req.params.user_id;
+        const user = req.body as Teacher;
         try {
-            const teacher = await Teachers.findOneAndUpdate({user_id, school_id: admin.school_id}, { 
+            const nameValidation = validateFullName(user.full_name)
+            const emailValidation = validateEmail(user.email.trim());
+            if(!nameValidation.success) return jsonResponse.clientError(nameValidation.message);
+            if(!emailValidation.success) return jsonResponse.clientError(emailValidation.message);
+            const teacher = await Teachers.findOneAndUpdate({user_id: user.user_id, school_id: admin.school_id}, { 
                 $set: {
-                    teacher_verified: true
+                    teacher_verified: true,
+                    full_name: user.full_name.trim(),
+                    email: user.email.trim(),
+                    gender: user.gender,
                 }
             });
             jsonResponse.success("Teacher Approved");

@@ -5,11 +5,12 @@ import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import WcIcon from '@mui/icons-material/Wc';
 import "./signup.scss"
 import { useEffect, useState } from "react";
 import { getClasses, getSchools } from "api/schools";
 import { toastError } from "components/Toast/toast";
-import { StudentSignupData, TeacherSignupData } from "../../../../shared/User";
+import { Gender, StudentSignupData, TeacherSignupData } from "../../../../shared/User";
 import { signUpStudent, signUpTeacher } from "api/auth";
 import { useDispatch } from "react-redux";
 import { signInUser } from "redux/User/userActions";
@@ -26,6 +27,7 @@ export default function TeacherSignupPage(){
         email: "",
         password: "",
         school_id: "",
+        gender: "null"
     })
     const school = async() => {
         const res = await getSchools();
@@ -43,9 +45,9 @@ export default function TeacherSignupPage(){
         if(!pfp) return toastError("Add a profile picture")
         setLoading(true)
         const res = await signUpTeacher(signupData, pfp)
-        if(res.error) toastError(res.message)
-        dispatch(signInUser(res.data))
         setLoading(false)
+        if(res.error) return toastError(res.message)
+        dispatch(signInUser(res.data))
     }
     useEffect(()=>{
         school()
@@ -66,6 +68,7 @@ export default function TeacherSignupPage(){
                 <FormInput Icon={AlternateEmailOutlinedIcon} placeholder = "Email" onChange={(val)=>setSignupData({...signupData, email: val })} />
                 <FormInput Icon = {VpnKeyOutlinedIcon} placeholder = "Password" type="password" onChange={(val)=>setSignupData({...signupData, password: val })} />
                 <FormSelect Icon={SchoolOutlinedIcon} data = {schools} onChange={(val)=>setSignupData({...signupData, school_id: val })} />
+                <FormSelect Icon={WcIcon} data = {[{label: "Gender", value: "null"}, {label: "Male", value: "Male"}, {label: "Female", value: "Female"}]} onChange={(val)=>setSignupData({...signupData, gender: val as Gender })} />
                 <FormSubmit label="Signup" isLoading = {loading} />
             </form>
         </div>

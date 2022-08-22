@@ -1,12 +1,10 @@
 import { Request, Response } from "express";
-import { StudentPerformanceData, TimePeriods } from "@shared/Student-Performance"
-import { Interactions } from "../models/Interaction";
 import { Students } from "../models/Student";
 import { Teachers } from "../models/Teacher";
 import { Controller } from "../types/controller";
-import { performanceAggregation, studentAggregation } from "../utils/aggregations";
+import { studentAggregation } from "../utils/aggregations";
 import JsonResponse from "../utils/Response"
-import moment from "moment";
+
 
 export const getCurrentUser = (req: Request, res: Response) => {
     const jsonResponse = new JsonResponse(res);

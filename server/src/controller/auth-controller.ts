@@ -59,7 +59,7 @@ export const studentSignUp = async (req: Request, res: Response) => {
             data.email = data.email.trim().toLowerCase();
             data.full_name = data.full_name.trim();
             //validations
-            const nameValidation = validateFullName(data.full_name.trim().toLowerCase());
+            const nameValidation = validateFullName(data.full_name);
             const emailValidation = validateEmail(data.email);
             const passwordValidation = validatePassowrd(data.password);
             if (!pfp.mimetype.includes("image")) return jsonResponse.clientError("Invalid file format")
@@ -72,6 +72,7 @@ export const studentSignUp = async (req: Request, res: Response) => {
             if(school === null) return jsonResponse.clientError("The School does not exist");
             const _class = await Class.findOne({class_id: data.class_id}); 
             if(_class === null) return jsonResponse.clientError("The class does not exist");
+            if(!(data.gender === "Male" || data.gender === "Female")) return jsonResponse.clientError("Please select your gender")
             //initializing user id
             const user_id = makeId();
             //uploading file
@@ -79,7 +80,16 @@ export const studentSignUp = async (req: Request, res: Response) => {
             //saving data
             const salt = await bcrypt.genSalt(10);
             data.password = await bcrypt.hash(data.password, salt);
-            const student = new Students({...data, profile_picture_url: url, user_id});
+            const student = new Students({
+                full_name: data.full_name,
+                email: data.email,
+                class_id: data.class_id,
+                school_id: data.school_id,
+                password: data.password,
+                profile_picture_url: url,
+                gender: data.gender, 
+                user_id
+            });
             await student.save()
             const token = jwt.sign({ user_id: student.user_id, type: "student" }, USER_PASSWORD_SECRET, { expiresIn: "10d" })
             res.cookie("user_session", token, options);
@@ -187,6 +197,7 @@ export const teacherSignup: Controller = (req, res) => {
             if(user !== null) return jsonResponse.clientError("email address already in use");
             const school = await Schools.findOne({school_id: data.school_id});
             if(school === null) return jsonResponse.clientError("The School does not exist");
+            if(!(data.gender === "Male" || data.gender === "Female")) return jsonResponse.clientError("Please select your gender")
             //initializing user id
             const user_id = makeId();
             //uploading file
@@ -195,7 +206,15 @@ export const teacherSignup: Controller = (req, res) => {
             const salt = await bcrypt.genSalt(10);
             data.password = await bcrypt.hash(data.password, salt);
             data.full_name = data.full_name.trim()
-            const teacher = new Teachers({...data, profile_picture_url: url, user_id});
+            const teacher = new Teachers({
+                full_name: data.full_name,
+                email: data.email,
+                school_id: data.school_id,
+                password: data.password,
+                profile_picture_url: url, 
+                gender: data.gender,
+                user_id
+            });
             await teacher.save()
             const token = jwt.sign({ user_id: teacher.user_id, type: "teacher" }, USER_PASSWORD_SECRET, { expiresIn: "10d" })
             res.cookie("user_session", token, options);

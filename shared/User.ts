@@ -1,9 +1,10 @@
 import { School, ClassSchema } from "./School"
-
+export type Gender = "Male"|"Female"
 interface User {
     user_id: string,
     full_name: string,
     first_name: string,
+    gender: Gender,
     middle_name: string,
     last_name: string,
     email: string,
@@ -20,6 +21,8 @@ export interface Student extends User {
     student_verified: boolean,
     class: ClassSchema,
     type: "student",
+    mothers_email: string,
+    fathers_email: string,
     merits_count: number,
     demerits_count: number
 }
@@ -35,6 +38,7 @@ export interface StudentSignupData {
     class_id: string,
     school_id: string,
     password: string,
+    gender: Gender|"null"
 }
 
 export interface TeacherSignupData {
@@ -42,4 +46,5 @@ export interface TeacherSignupData {
     email: string,
     school_id: string,
     password: string,
+    gender: Gender|"null"
 }

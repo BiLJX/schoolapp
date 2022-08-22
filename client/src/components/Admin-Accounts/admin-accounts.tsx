@@ -12,12 +12,12 @@ export function AccountsContainer({children}: {children: React.ReactNode}){
         <AdminCardContainer className="accounts-container">
             <header className = "accounts-container-header">
                 <h1 className = "admin-card-heading">Accounts</h1>
-                <div className = "account-search">
+                {/* <div className = "account-search">
                     <div className = "search-icon">
                         <SearchOutlinedIcon />
                     </div>
                     <input type = "text" placeholder="Search..." />
-                </div>
+                </div> */}
             </header>
             <main className="accounts-container-items-container">
                 {children}

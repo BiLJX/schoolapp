@@ -14,8 +14,8 @@ router.delete("/class/:class_id", Classes.removeClass)
 router.get("/requests/students", AdminUser.getStudentAccountRequests)
 router.get("/requests/teachers", AdminUser.getTeacherAccountRequests)
 
-router.put("/requests/students/:user_id/approve", AdminUser.approveStudentAccount)
-router.put("/requests/teachers/:user_id/approve", AdminUser.approveTeacherAccount)
+router.put("/requests/students/approve", AdminUser.approveStudentAccount)
+router.put("/requests/teachers/approve", AdminUser.approveTeacherAccount)
 
 router.delete("/requests/students/:user_id/reject", AdminUser.rejectStudentAccount)
 router.delete("/requests/teachers/:user_id/reject", AdminUser.rejectTeacherAccount);

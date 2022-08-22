@@ -16,6 +16,11 @@ const schema = new Schema<Teacher>({
         required: true,
         type: String,
     },
+    gender: {
+        required: true,
+        type: String,
+        enum: ["Male", "Female"]
+    },
     password: {
         required: true,
         type: String,

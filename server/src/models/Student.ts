@@ -32,6 +32,19 @@ const schema = new Schema<Student>({
         required: true,
         type: String
     },
+    gender: {
+        required: true,
+        type: String,
+        enum: ["Male", "Female"]
+    },
+    mothers_email: {
+        type: String,
+        default: ""
+    },
+    fathers_email: {
+        type: String,
+        default: ""
+    },
     email_verified: {
         default: false,
         type: Boolean

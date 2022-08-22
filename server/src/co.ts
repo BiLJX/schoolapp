@@ -2,11 +2,12 @@ import { Schools } from "./models/School";
 import bcrypt from "bcrypt"
 import { makeId } from "./utils/idgen";
 import mongoose from "mongoose";
+import { Students } from "./models/Student";
+import { Teachers } from "./models/Teacher";
 
 const CONNECTION_URL = "mongodb+srv://billjesh:Billu456@cluster0.vyegx.mongodb.net/Schoolapp?retryWrites=true&w=majority"
 
 const SCHOOL_PASSWORD = "euro1221@admin"
-
 const createSchool = async () => {
     const salt = await bcrypt.genSalt(10)
     const school = new Schools({
@@ -18,6 +19,18 @@ const createSchool = async () => {
     await school.save();
     console.log("created")
 }
-mongoose.connect(CONNECTION_URL).then(()=>{
-    createSchool()
+mongoose.connect(CONNECTION_URL).then(async()=>{
+    await Students.updateMany({}, {
+        $set: {
+            gender: "Male",
+            mothers_email: "",
+            fathers_email: ""
+        }
+    })
+    await Teachers.updateMany({}, {
+        $set: {
+            gender: "Male",
+        }
+    })
+    console.log("done")
 })
