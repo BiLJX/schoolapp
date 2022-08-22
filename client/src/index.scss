@@ -120,6 +120,10 @@ a {
   text-overflow: ellipsis;
 }
 
-
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 
