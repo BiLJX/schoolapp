@@ -14,6 +14,8 @@ import { useSocket } from "hooks/useSocket";
 import AdminNavWrapper from "container/admin-layouts/admin-nav-wrapper";
 import StudentAccountRequestsPage from "pages/Admin/student-account-request/student-account-requests";
 import TeachersAccountRequestsPage from "pages/Admin/student-account-request/teacher-account-request";
+import ManageTeacherPage from "pages/Admin/Manage/teacher";
+import ManageStudentPage from "pages/Admin/Manage/student";
 export default function App(){
     useSocket();
     return(
@@ -23,6 +25,10 @@ export default function App(){
                 <Route path = "requests/student/*" element = {<StudentAccountRequestsPage />}/>
                 <Route path = "requests/teacher/*" element = {<TeachersAccountRequestsPage />}/>
                 <Route path = "classes"/>
+                <Route path = "manage">
+                    <Route path = "teacher/*" element = {<ManageTeacherPage />} />
+                    <Route path = "student/*" element = {<ManageStudentPage />} />
+                </Route>
                 <Route path = "announcement">
                     <Route index  />
                     <Route path="create" />

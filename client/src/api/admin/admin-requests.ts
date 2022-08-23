@@ -1,12 +1,14 @@
 import axios from "../instance";
 import { Student, Teacher } from "@shared/User";
 
-export const getStudentsAccountRequest = async() => {
-    const res = await axios.get("/api/admin/requests/students");
+export const getStudentsAccountRequest = async(s: string) => {
+    const res = await axios.get("/api/admin/requests/students", {
+        params: {s}
+    });
     return res.data as ApiResponse<Student[]> 
 }
-export const getTeachersAccountRequest = async() => {
-    const res = await axios.get("/api/admin/requests/teachers");
+export const getTeachersAccountRequest = async(s: string) => {
+    const res = await axios.get("/api/admin/requests/teachers", {params: {s}});
     return res.data as ApiResponse<Teacher[]> 
 }
 export const approveStudent = async(user: Student) => {

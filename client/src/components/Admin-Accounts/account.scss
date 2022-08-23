@@ -2,6 +2,7 @@
     flex-direction: column;
     width: 65%;
     height: 82vh;
+    overflow: scroll;
 }
 
 .accounts-container-header {
@@ -66,7 +67,8 @@
             color: var(--text-secondary);
         }
     }
-    &:hover {
+    &:hover, &.active {
         background-color: var(--background);
     }
+    
 }

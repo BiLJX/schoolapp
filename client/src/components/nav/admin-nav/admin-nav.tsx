@@ -14,8 +14,8 @@ export default function AdminNav(){
             </div>
             <NavItemsContainer name = "MENU">
                 <NavItem end to = "" label = "Dashboard" Icon={<DashboardOutlinedIcon />}  />
-                <NavItem to = "user/student" label = "Students" Icon={<PersonOutlineOutlinedIcon />}  />
-                <NavItem to = "user/teacher" label = "Teachers" Icon={<CastForEducationOutlinedIcon />}  />
+                <NavItem to = "manage/student" label = "Students" Icon={<PersonOutlineOutlinedIcon />}  />
+                <NavItem to = "manage/teacher" label = "Teachers" Icon={<CastForEducationOutlinedIcon />}  />
                 <NavItem to = "classes" label = "Classes" Icon={<GroupsOutlinedIcon />}  />
             </NavItemsContainer>
             <NavItemsContainer name = "REQUESTS">

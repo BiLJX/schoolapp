@@ -53,3 +53,19 @@
         }
     }
 }
+
+.admin-update-user-button {
+    height: 50px;
+    width: 100%;
+    background-color: var(--blue);
+    cursor: pointer;
+    color: #fff;
+    border-radius: 20px;
+    margin-top: auto;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    &:disabled {
+        background-color: var(--light-blue);
+    }
+}

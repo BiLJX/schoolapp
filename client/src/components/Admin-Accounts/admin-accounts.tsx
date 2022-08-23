@@ -7,17 +7,17 @@ import React from "react";
 import { User } from "types/user";
 import { NavLink } from "react-router-dom";
 
-export function AccountsContainer({children}: {children: React.ReactNode}){
+export function AccountsContainer({children, onSearch}: {children: React.ReactNode, onSearch: (s: string)=>void}){
     return(
         <AdminCardContainer className="accounts-container">
             <header className = "accounts-container-header">
                 <h1 className = "admin-card-heading">Accounts</h1>
-                {/* <div className = "account-search">
+                <div className = "account-search">
                     <div className = "search-icon">
                         <SearchOutlinedIcon />
                     </div>
-                    <input type = "text" placeholder="Search..." />
-                </div> */}
+                    <input type = "text" placeholder="Search..." onChange={(e)=>onSearch(e.target.value)}/>
+                </div>
             </header>
             <main className="accounts-container-items-container">
                 {children}

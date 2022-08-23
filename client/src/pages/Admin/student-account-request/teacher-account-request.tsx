@@ -13,9 +13,10 @@ import { ClipLoader } from "react-spinners";
 export default function TeachersAccountRequestsPage(){
     const [users, setUsers] = useState<Teacher[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchText, setSearchText] = useState("")
     const navigate = useNavigate()
     const fetchItem = async () => {
-        const res = await getTeachersAccountRequest();
+        const res = await getTeachersAccountRequest(searchText);
         setLoading(false);
         if(res.error){
             return toastError(res.message)
@@ -31,12 +32,12 @@ export default function TeachersAccountRequestsPage(){
     }
     useEffect(()=>{
         fetchItem()
-    }, [])
+    }, [searchText])
     return(
         <>
-            <AdminHeader title="Student's Account Requests" sub_title="Accept or decline student's accoount creation."/>
+            <AdminHeader title="Teacher's Account Requests" sub_title="Accept or decline teacher's accoount creation."/>
             <AdminMain className="account-request-page">
-                <AccountsContainer>
+                <AccountsContainer onSearch =  {s=>setSearchText(s)}>
                     {loading && <div className="center"> <ClipLoader color="var(--text-secondary-alt)" /> </div>}
                     {
                         users.map((x, i)=><AccountItem user={x} key = {i} />)

@@ -1,9 +1,10 @@
 import { ClassSchema } from "@shared/School";
-import { Gender, Student } from "@shared/User";
+import { Gender, Student, Teacher } from "@shared/User";
 import { getAdminClasses } from "api/admin/admin-classes";
+import { updateStudent, updateTeacher } from "api/admin/admin-manage-users";
 import { approveStudent, rejectStudent } from "api/admin/admin-requests";
 import Avatar from "components/Avatar/avatar"
-import { toastError } from "components/Toast/toast";
+import { toastError, toastSuccess } from "components/Toast/toast";
 import AdminCardContainer from "container/Admin-Cards/admin-card";
 import React, { useEffect, useState } from "react";
 import { Classes } from "react-modal";
@@ -11,9 +12,20 @@ import { useLocation } from "react-router-dom"
 import { User } from "types/user"
 import "./preview.scss"
 
-export default function AdminAccountPreview({onTaskComplete}: {onTaskComplete?: (user: User)=>void}){
+export default function AdminAccountPreview({onTaskComplete, manageUser}: {onTaskComplete?: (user: User)=>void, manageUser?: boolean}){
     const _user = useLocation().state as Student;
     const [user, setUser] = useState(_user);
+    const [loading, setLoading] = useState(false);
+    const saveChanges = async() => {
+        if(loading) return;
+        setLoading(true);
+        const res = _user.class_id?await updateStudent(user):await updateTeacher(user as any);
+        setLoading(false);
+        if(res.error) return toastError(res.message);
+        toastSuccess("Successfully Saved User")
+        window.history.replaceState(user, document.title)
+        onTaskComplete?.(user);
+    }
     const accept = async() => {
         if(window.confirm("Are you sure you want to accept?")){
             const res = await approveStudent(user);
@@ -55,7 +67,7 @@ export default function AdminAccountPreview({onTaskComplete}: {onTaskComplete?: 
                     </>
                 )
             }
-            <ApprovalButtons onAccept={accept} onReject={reject} />
+            {manageUser?<SaveButton onSave={saveChanges} isLoading = {loading} />:<ApprovalButtons onAccept={accept} onReject={reject} />}
         </AdminCardContainer>
     )
     
@@ -143,5 +155,14 @@ function ApprovalButtons({
             <button className = "reject" onClick={onReject}>REJECT</button>
             <button className = "accept" onClick = {onAccept}>ACCEPT</button>
         </div>
+    )
+}
+
+function SaveButton({
+    onSave,
+    isLoading
+}: {onSave: ()=>void, isLoading: boolean}){
+    return(
+        <button className = "admin-update-user-button" onClick={onSave} disabled = {isLoading}>{isLoading?"loading...":"SAVE"}</button>
     )
 }
