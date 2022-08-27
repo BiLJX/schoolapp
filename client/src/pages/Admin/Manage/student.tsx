@@ -9,11 +9,13 @@ import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { User } from "types/user";
+import { CreateUserButton, CreateUserModal } from "./global";
 import "./manage.scss"
 export default function ManageStudentPage(){
     const [users, setUsers] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchText, setSearchText] = useState("")
+    const [searchText, setSearchText] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate()
     const fetchItem = async () => {
         const res = await getAdminStudents(searchText);
@@ -35,10 +37,12 @@ export default function ManageStudentPage(){
 
     return(
         <>
+            {modalOpen && <CreateUserModal onComplete={(user)=>setUsers([user as Student, ...users])} type = "student" onClose={()=>setModalOpen(false)} />}
             <AdminHeader title="Manage Students" sub_title="Change students information and details."/>
             <AdminMain className="manage-users-page">
                 <AccountsContainer onSearch={s=>setSearchText(s)}>
                     {loading && <div className="center"> <ClipLoader color="var(--text-secondary-alt)" /> </div>}
+                    <CreateUserButton onClick={()=>setModalOpen(true)} />
                     {
                         users.map((x, i)=><AccountItem user={x} key = {i} />)
                     }

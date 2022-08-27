@@ -35,6 +35,18 @@ export function validateEmail(email: string): ValidationResult {
     }
 }
 
+export function validateGender(gender: string): ValidationResult {
+    const genders = ["Male", "Female"];
+    if(!genders.includes(gender)) return {
+        success: false,
+        message: "Invalid Gender"
+    }
+    return {
+        success: true,
+        message: ""
+    }
+}
+
 export function validatePassowrd(password: string): ValidationResult {
     if(password.length < 8) return {
         success: false,

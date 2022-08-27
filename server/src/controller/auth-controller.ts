@@ -67,7 +67,7 @@ export const studentSignUp = async (req: Request, res: Response) => {
             if(!emailValidation.success) return jsonResponse.clientError(emailValidation.message);
             if(!passwordValidation.success) return jsonResponse.clientError(passwordValidation.message);
             const user = await Students.findOne({email: data.email});
-            if(user !== null) return jsonResponse.clientError("email address already in use");
+            if(user !== null) return jsonResponse.clientError("Email address already in use");
             const school = await Schools.findOne({school_id: data.school_id});
             if(school === null) return jsonResponse.clientError("The School does not exist");
             const _class = await Class.findOne({class_id: data.class_id}); 

@@ -14,8 +14,7 @@ router.delete("/class/:class_id", Classes.removeClass)
 //req controls
 
 //manage
-router.get("/manage/students", ManageUsers.getAdminStudents);
-router.get("/manage/teachers", ManageUsers.getAdminTeachers);
+
 
 router.get("/requests/students", AdminRequets.getStudentAccountRequests)
 router.get("/requests/teachers", AdminRequets.getTeacherAccountRequests)
@@ -23,8 +22,13 @@ router.get("/requests/teachers", AdminRequets.getTeacherAccountRequests)
 router.put("/requests/students/approve", AdminRequets.approveStudentAccount)
 router.put("/requests/teachers/approve", AdminRequets.approveTeacherAccount)
 
-router.patch("/manage/teachers/update", ManageUsers.updateTeacher)
-router.patch("/manage/students/update", ManageUsers.updateStudent)
+
+router.get("/manage/students", ManageUsers.getAdminStudents);
+router.get("/manage/teachers", ManageUsers.getAdminTeachers);
+router.patch("/manage/teachers/update", ManageUsers.updateTeacher);
+router.patch("/manage/students/update", ManageUsers.updateStudent);
+router.post("/manage/students/create", ManageUsers.createStudent);
+
 router.delete("/requests/students/:user_id/reject", AdminRequets.rejectStudentAccount)
 router.delete("/requests/teachers/:user_id/reject", AdminRequets.rejectTeacherAccount);
 export { router as AdminRoutes }

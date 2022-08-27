@@ -21,6 +21,11 @@ export const getStudentAccountRequests: Controller = async(req, res) => {
                 }
             },
             {
+                $sort: {
+                    createdAt: -1
+                }
+            },
+            {
                 $project: {
                     password: 0
                 }
@@ -44,6 +49,11 @@ export const getTeacherAccountRequests: Controller = async(req, res) => {
                     full_name: {$regex : searchQuery, $options: 'i'},
                     school_id: admin.school_id, 
                     teacher_verified: false
+                }
+            },
+            {
+                $sort: {
+                    createdAt: -1
                 }
             },
             {

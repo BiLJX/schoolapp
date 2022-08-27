@@ -48,3 +48,14 @@ export interface TeacherSignupData {
     password: string,
     gender: Gender|"null"
 }
+
+export interface UserSignupData {
+    full_name: string,
+    email: string,
+    class_id: string,
+    school_id: string,
+    password: string,
+    gender: Gender|"null",
+    mothers_email: string,
+    fathers_email: string
+}
