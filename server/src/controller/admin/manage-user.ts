@@ -190,3 +190,59 @@ export const createStudent: Controller = async(req, res) => {
         jsonResponse.serverError();
     }
 }
+
+export const createTeacher: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const admin = res.locals.admin;
+    try {
+        upload(req, res, async(err)=>{
+            try {
+                if(err) return jsonResponse.serverError();
+                const data: UserSignupData = req.body;
+                const files  = req.files as Express.Multer.File[];
+                const pfp = files[0];
+                if(!data) return jsonResponse.clientError("No informations provided");
+                //reasign
+                data.email = data.email.trim().toLocaleLowerCase();
+                data.full_name = data.full_name.trim();
+                //validations
+                const nameValidation = validateFullName(data.full_name);
+                const emailValidation = validateEmail(data.email);
+                const passwordValidation = validatePassowrd(data.password);
+                const genderValidation = validateGender(data.gender);
+                if (!pfp.mimetype.includes("image")) return jsonResponse.clientError("Invalid file format")
+                if(!nameValidation.success) return jsonResponse.clientError(nameValidation.message);
+                if(!emailValidation.success) return jsonResponse.clientError(emailValidation.message);
+                if(!passwordValidation.success) return jsonResponse.clientError(passwordValidation.message);
+                if(!genderValidation.success) return jsonResponse.clientError(genderValidation.message)
+                const user = await Teachers.findOne({email: data.email});
+                if(user !== null) return jsonResponse.clientError("Email address already in use");
+                //save user
+                const user_id = makeId();
+                const buffer = await sharp(pfp.buffer).jpeg({ quality: 80 }).toBuffer()
+                const url = await uploadFile({buffer, dir: `user/${user_id}/pfp/`});
+                const salt = await bcrypt.genSalt(10);
+                data.password = await bcrypt.hash(data.password, salt);
+                const teacher = new Teachers({
+                    full_name: data.full_name,
+                    email: data.email,
+                    school_id: admin.school_id,
+                    password: data.password,
+                    profile_picture_url: url,
+                    gender: data.gender,
+                    user_id,
+                    email_verified: true,
+                    teacher_verified: true
+                });
+                await teacher.save();
+                return jsonResponse.success(teacher);
+            } catch (error) {
+                console.log(error);
+                jsonResponse.serverError()
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}

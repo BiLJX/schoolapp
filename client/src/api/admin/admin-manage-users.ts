@@ -31,3 +31,14 @@ export const createStudent = async(data: UserSignupData, pfp: File) => {
     const res = await axios.post("/api/admin/manage/students/create", formData);
     return res.data as ApiResponse<Student>
 }
+
+export const createTeacher = async(data: UserSignupData, pfp: File) => {
+    const _data: any = data
+    const formData = new FormData();
+    for(let key in _data){
+        formData.append(key, _data[key]);
+    }
+    formData.append("pfp", pfp);
+    const res = await axios.post("/api/admin/manage/teachers/create", formData);
+    return res.data as ApiResponse<Teacher>
+}

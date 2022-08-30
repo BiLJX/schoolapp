@@ -13,7 +13,7 @@ import { ClassSchema } from "@shared/School";
 import { getAdminClasses } from "api/admin/admin-classes";
 import { toastError } from "components/Toast/toast";
 import Avatar from "components/Avatar/avatar";
-import { createStudent } from "api/admin/admin-manage-users";
+import { createStudent, createTeacher } from "api/admin/admin-manage-users";
 import { User } from "types/user";
 export function CreateUserButton({onClick}:{onClick: ()=>void}){
     return(
@@ -58,7 +58,7 @@ export function CreateUserModal({
         if(!image) return toastError("Please upload a pfp.");
         if(signupData.gender === "null") return toastError("Please select gender");
         setIsCreating(true);
-        const res = await createStudent(signupData, image);
+        const res = type === "student"?await createStudent(signupData, image):await createTeacher(signupData, image);
         setIsCreating(false);
         if(res.error){
             return toastError(res.message);
@@ -93,10 +93,10 @@ export function CreateUserModal({
                 <FormInput Icon={PersonOutlineOutlinedIcon} placeholder = "Full Name" onChange={(val)=>setSignupData({...signupData, full_name: val })} />
                 <FormInput Icon={AlternateEmailOutlinedIcon} placeholder = "Email" onChange={(val)=>setSignupData({...signupData, email: val })} />
                 <FormInput Icon = {VpnKeyOutlinedIcon} placeholder = "Password" type="password" onChange={(val)=>setSignupData({...signupData, password: val })} />
-                <FormSelect Icon={GroupsOutlinedIcon} data = {classes} onChange={(val)=>setSignupData({...signupData, class_id: val })} />
+                {type === "student" && <FormSelect Icon={GroupsOutlinedIcon} data = {classes} onChange={(val)=>setSignupData({...signupData, class_id: val })} />}
                 <FormSelect Icon={WcIcon} data = {[{label: "Gender", value: "null"}, {label: "Male", value: "Male"}, {label: "Female", value: "Female"}]} onChange={(val)=>setSignupData({...signupData, gender: val as Gender })} />
-                <FormInput Icon = {AlternateEmailOutlinedIcon} placeholder = "Mother's Email" onChange={(val)=>setSignupData({...signupData, mothers_email: val })} />
-                <FormInput Icon = {AlternateEmailOutlinedIcon} placeholder = "Father's Email" onChange={(val)=>setSignupData({...signupData, fathers_email: val })} />
+                {type === "student" && <FormInput Icon = {AlternateEmailOutlinedIcon} placeholder = "Mother's Email" onChange={(val)=>setSignupData({...signupData, mothers_email: val })} />}
+                {type === "student" && <FormInput Icon = {AlternateEmailOutlinedIcon} placeholder = "Father's Email" onChange={(val)=>setSignupData({...signupData, fathers_email: val })} />}
                 <div className = "create-user-modal-buttons">
                     <button className="cancel" onClick={closeModal}>Cancel</button>
                     <button type="submit" className="accept" disabled = {isCreating}>{isCreating?"Creating...":"Create"}</button>

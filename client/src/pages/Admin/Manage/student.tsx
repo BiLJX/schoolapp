@@ -41,8 +41,8 @@ export default function ManageStudentPage(){
             <AdminHeader title="Manage Students" sub_title="Change students information and details."/>
             <AdminMain className="manage-users-page">
                 <AccountsContainer onSearch={s=>setSearchText(s)}>
-                    {loading && <div className="center"> <ClipLoader color="var(--text-secondary-alt)" /> </div>}
                     <CreateUserButton onClick={()=>setModalOpen(true)} />
+                    {loading && <div className="center"> <ClipLoader color="var(--text-secondary-alt)" /> </div>}
                     {
                         users.map((x, i)=><AccountItem user={x} key = {i} />)
                     }
