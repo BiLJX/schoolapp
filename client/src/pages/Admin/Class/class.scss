@@ -1,0 +1,54 @@
+.admin-class-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.admin-class-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.admin-class-container-header {
+    display: flex;
+    width: 400px;
+    align-items: center;
+    padding-bottom: 1rem;
+    h1 {
+        color: var(--text-title);
+        font-size: 1.6rem;
+    }
+    .add {
+        margin-left: auto;
+        cursor: pointer;
+        svg {
+            color: var(--text-secondary);
+            font-size: 1.6rem;
+        }
+    }
+}
+
+.admin-class-item {
+    display: flex;
+    padding: 1rem 0;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border-color);
+    align-items: center;
+    cursor: pointer;
+    .class-item-name {
+        color: var(--text-primary);
+        width: 60%;
+    }
+    .class-item-students {
+        width: 30%;
+        color: var(--text-secondary-alt);
+    }
+    .class-item-next {
+        width: 10%;
+        svg {
+            color: var(--text-secondary-alt);
+        }
+    }
+}

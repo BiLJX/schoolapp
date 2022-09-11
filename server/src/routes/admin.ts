@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Classes, getCurrentAdmin } from "../controller/admin-controller";
+import { addClasses, getClasses, removeClass } from "../controller/admin/admin-classes";
 import * as AdminRequets from "../controller/admin/admin-requets";
 import * as ManageUsers from "../controller/admin/manage-user"
 const router = Router();
@@ -7,9 +8,9 @@ const router = Router();
 router.get("/current", getCurrentAdmin);
 
 //classes
-router.get("/classes", Classes.getClasses)
-router.put("/class", Classes.addClasses);
-router.delete("/class/:class_id", Classes.removeClass)
+router.get("/classes", getClasses);
+router.put("/class", addClasses);
+router.delete("/class/:class_id", removeClass);
 
 
 
