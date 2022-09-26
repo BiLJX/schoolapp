@@ -4,6 +4,8 @@ import { Class } from "../../models/Class";
 import { makeId } from "../../utils/idgen";
 import JsonResponse from "../../utils/Response";
 import admin from "firebase-admin";
+import { Controller } from "../../types/controller";
+import { Students } from "../../models/Student";
 
 export const getCurrentAdmin = async (req: Request, res: Response) => {
     const jsonResponse = new JsonResponse(res)
@@ -54,6 +56,19 @@ export const getClasses = async (req: Request, res: Response) => {
             }
         ]);
         return jsonResponse.success(classes);
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError()
+    }
+}
+
+export const getClassStudents: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const class_id = req.params.class_id as string|undefined;
+    try {
+        if(!class_id) return jsonResponse.clientError("No class id provided");
+        const students = await Students.find({class_id, student_verified: true}).select("user_id profile_picture_url full_name")
+        return jsonResponse.success(students)
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()

@@ -1,0 +1,56 @@
+.manage-class-container {
+    display: flex;
+}
+
+.manage-class-students-container {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    height: 82vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .container-header {
+        display: flex;
+        width: 100%;
+        margin-bottom: 1rem;
+        .header-add-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto;
+            cursor: pointer;
+            svg {
+                color: var(--text-title);
+            }
+        }
+    }
+    .student-items-container {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        .student-item {
+            display: flex;
+            cursor: pointer;
+            padding: 1rem 0;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            span {
+                margin-left: 1rem;
+                font-weight: 500;
+                color: var(--text-title);
+                font-size: 0.9rem;
+            }
+        }
+    }
+}
+
+.admin-class-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+    flex: 1;
+    .info-header {
+        display: flex;
+        width: 100%;
+    }
+}

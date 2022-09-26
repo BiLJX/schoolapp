@@ -3,11 +3,7 @@ import StudentLoginPage from "pages/Login/login-student-page";
 import TeacherLoginPage from "pages/Login/login-teacher-page";
 import SignupUpPage from "pages/Signup/signup-page";
 import TeacherSignupPage from "pages/Signup/teacher-signup-page";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Navigate, Route, Routes } from "react-router-dom";
-import io from "socket.io-client";
-import { RootState } from "types/states";
+import { Route, Routes } from "react-router-dom";
 import { UserAuthWrapper } from "./User-Auth-Wrapper";
 import UserRoutes from "./UserRoutes";
 import { useSocket } from "hooks/useSocket";
@@ -18,6 +14,7 @@ import ManageTeacherPage from "pages/Admin/Manage/teacher";
 import ManageStudentPage from "pages/Admin/Manage/student";
 import AdminLoginPage from "pages/Admin/Login/admin-login";
 import AdminClassPage from "pages/Admin/Class/class-page";
+import ManageClassPage from "pages/Admin/Class/manage-class/manage-class";
 export default function App(){
     useSocket();
     return(
@@ -27,7 +24,10 @@ export default function App(){
             <Route path = "/admin/*" element = {<AdminNavWrapper />}>
                 <Route path = "requests/student/*" element = {<StudentAccountRequestsPage />}/>
                 <Route path = "requests/teacher/*" element = {<TeachersAccountRequestsPage />}/>
-                <Route path = "classes" element = {<AdminClassPage />}/>
+                <Route path = "classes/*">
+                    <Route index element = {<AdminClassPage />} />
+                    <Route path = ":class_id" element = {<ManageClassPage />} />
+                </Route>
                 <Route path = "manage">
                     <Route path = "teacher/*" element = {<ManageTeacherPage />} />
                     <Route path = "student/*" element = {<ManageStudentPage />} />

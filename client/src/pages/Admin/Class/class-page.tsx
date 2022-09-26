@@ -8,6 +8,7 @@ import { getAdminClasses } from "api/admin/admin-classes";
 import { toastError } from "components/Toast/toast";
 import { ClassSchema } from "@shared/School";
 import "./class.scss";
+import { NavLink } from "react-router-dom";
 
 export default function AdminClassPage(){
     const [classes, setClasses] = useState<ClassSchema[]>([]);
@@ -39,10 +40,10 @@ export default function AdminClassPage(){
 
 function ClassItem({data}: {data: ClassSchema}){
     return(
-        <div className = "admin-class-item">
+        <NavLink className = "admin-class-item" to = {data.class_id}>
             <div className = "class-item-name">{`Class ${data.grade} (${data.section})`}</div>
             <div className = "class-item-students">{data.total_students} students</div>
             <div className = "class-item-next center"><NavigateNextRoundedIcon /></div>
-        </div>
+        </NavLink>
     )
 }
