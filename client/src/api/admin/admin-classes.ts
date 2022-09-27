@@ -17,6 +17,11 @@ export const getAdminClassStudents = async (class_id: string) => {
     return res.data as ApiResponse<Student[]>;
 }
 
+export const editClass = async(data: {grade: number, section: string, class_id: string}) => {
+    const res = await axios.patch(`/api/admin/classes/${data.class_id}/update`, data);
+    return res.data as ApiResponse;
+}
+
 export const addClass = async(data: {grade: number, section: string}) => {
     const res = await axios.put("/api/admin/class", data);
     return res.data as ApiResponse<ClassSchema>;

@@ -5,7 +5,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import "./manage.scss";
 import React, { useEffect, useState } from "react";
 import { Student } from "@shared/User";
-import { getAdminClassById, getAdminClassStudents } from "api/admin/admin-classes";
+import { editClass, getAdminClassById, getAdminClassStudents } from "api/admin/admin-classes";
 import { useParams } from "react-router-dom";
 import { toastError } from "components/Toast/toast";
 import Avatar from "components/Avatar/avatar";
@@ -69,7 +69,21 @@ function ClassInfoCompomenent(){
     const class_id = useParams().class_id
     const [data, setData] = useState<ClassInfo>();
     const [temp, setTemp] = useState<ClassInfo>()
-    const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const save = async() => {
+        if(!data) return;
+        setIsSaving(true);
+        setIsButtonDisabled(true);
+        const res = await editClass({grade: data.grade, class_id: data.class_id, section: data.section});
+        setIsSaving(false);
+        setIsButtonDisabled(false);
+        if(res.error){
+            return toastError(res.message)
+        }
+        setTemp(data);
+    }
+
     useEffect(()=>{
         const fetchClass = async() => {
             if(!class_id) return;
@@ -83,7 +97,7 @@ function ClassInfoCompomenent(){
     useEffect(()=>{
         if(!temp) return;
         setIsButtonDisabled(temp.section === data?.section && temp.grade === data.grade)
-    }, [data])
+    }, [data, temp])
     return(
         <AdminCardContainer className="admin-class-info">
             <header className="info-header">
@@ -94,12 +108,13 @@ function ClassInfoCompomenent(){
             <KeyValue keyName="Section" value={data?.section||""} onChange = {text=>data && setData({...data, section: text})} />
             <KeyValue keyName="Grade" value={data?.grade||""} onChange = {(text)=>data && setData({...data, grade: parseInt(text)})} />
 
-            <InfoTitle>Stats</InfoTitle>
+            <InfoTitle>STATS</InfoTitle>
 
             <KeyValue keyName="Students" value={data?.total_students||""} />
             <KeyValue keyName="Male" value={data?.total_males||""} />
             <KeyValue keyName="Female" value={data?.total_females||""} />
-            <button className = "admin-class-info-save-button" disabled = {isButtonDisabled}>SAVE</button>
+
+            <button className = "admin-class-info-save-button" onClick={save} disabled = {isButtonDisabled}>{isSaving?"SAVING":"SAVE"}</button>
         </AdminCardContainer>
     )
 }

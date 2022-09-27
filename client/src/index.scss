@@ -78,7 +78,6 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  cursor: default;
 }
 body {
   background: var(--background);
@@ -94,6 +93,7 @@ body {
 a {
   text-decoration: none;
   color: var(--text-secondary-alt);
+  cursor: pointer !important;
 }
 
 .modal-overlay {

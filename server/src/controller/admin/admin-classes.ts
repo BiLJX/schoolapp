@@ -134,6 +134,26 @@ export const getClassStudents: Controller = async (req, res) => {
     }
 }
 
+export const editClass: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const { grade, section }: { grade: number, section: string } = req.body;
+    const class_id = req.body.class_id;
+    try {
+        if( typeof grade !== "number" ) return jsonResponse.clientError("Classes must be a number");
+        const admin: School = res.locals.admin;
+        await Class.findOneAndUpdate({
+            class_id,
+            school_id: admin.school_id,
+            grade,
+            section
+        })
+        jsonResponse.success();
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError()
+    }
+}
+
 export const addClasses = async (req: Request, res: Response) => {
     const jsonResponse = new JsonResponse(res);
     const { grade, section }: { grade: number, section: string } = req.body;
