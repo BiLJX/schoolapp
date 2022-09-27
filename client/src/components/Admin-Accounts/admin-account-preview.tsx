@@ -90,7 +90,6 @@ function KeyValue({
     value,
     onChange
 }: KeyValueProps){
-   
     return(
         <div className="account-preview-key-value">
             <span className="key">{keyName}:</span>

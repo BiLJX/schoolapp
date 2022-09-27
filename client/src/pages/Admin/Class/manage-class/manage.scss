@@ -52,5 +52,45 @@
     .info-header {
         display: flex;
         width: 100%;
+        margin-bottom: 1rem;
+    }
+    .info-title {
+        color: var(--text-secondary-alt);
+        padding: 1rem 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+}
+
+.class-info-key-value {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    .key {
+        font-weight: bold;
+        color: var(--text-title);
+        width: 30%;
+    }
+    input, select {
+       flex: 1;
+       font-size: 1rem;
+       color: var(--text-secondary);
+       font-weight: 500;
+    }
+}
+
+.admin-class-info-save-button {
+    background-color: var(--blue);
+    color: #fff;
+    width: 100%;
+    height: 45px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: auto;
+    cursor: pointer;
+    &:disabled {
+        background-color: var(--light-blue);
+        cursor: default;
     }
 }

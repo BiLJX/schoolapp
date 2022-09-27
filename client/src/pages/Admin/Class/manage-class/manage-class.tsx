@@ -3,13 +3,14 @@ import AdminCardContainer from "container/Admin-Cards/admin-card";
 import { AdminMain } from "container/admin-layouts/admin-nav-wrapper";
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import "./manage.scss";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Student } from "@shared/User";
-import { getAdminClassStudents } from "api/admin/admin-classes";
+import { getAdminClassById, getAdminClassStudents } from "api/admin/admin-classes";
 import { useParams } from "react-router-dom";
 import { toastError } from "components/Toast/toast";
 import Avatar from "components/Avatar/avatar";
 import { InformationError } from "components/Error/error-component";
+import { ClassInfo } from "@shared/School";
 
 export default function ManageClassPage(){
     return(
@@ -17,7 +18,7 @@ export default function ManageClassPage(){
             <AdminHeader title="Class" sub_title="Manage Individual Classes" />
             <AdminMain className="manage-class-container">
                 <StudentsContainer />
-                <ClassInfo />
+                <ClassInfoCompomenent />
             </AdminMain>
         </>
     )
@@ -64,12 +65,65 @@ function StudentsContainer(){
     )
 }
 
-function ClassInfo(){
+function ClassInfoCompomenent(){
+    const class_id = useParams().class_id
+    const [data, setData] = useState<ClassInfo>();
+    const [temp, setTemp] = useState<ClassInfo>()
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+    useEffect(()=>{
+        const fetchClass = async() => {
+            if(!class_id) return;
+            const res = await getAdminClassById(class_id);
+            if(res.error) return toastError(res.message);
+            setData(res.data);
+            setTemp(res.data)
+        }
+        fetchClass()
+    }, [])
+    useEffect(()=>{
+        if(!temp) return;
+        setIsButtonDisabled(temp.section === data?.section && temp.grade === data.grade)
+    }, [data])
     return(
         <AdminCardContainer className="admin-class-info">
             <header className="info-header">
                 <h1 className = "admin-card-heading">Class Info</h1>
             </header>
+            <InfoTitle>INFO</InfoTitle>
+
+            <KeyValue keyName="Section" value={data?.section||""} onChange = {text=>data && setData({...data, section: text})} />
+            <KeyValue keyName="Grade" value={data?.grade||""} onChange = {(text)=>data && setData({...data, grade: parseInt(text)})} />
+
+            <InfoTitle>Stats</InfoTitle>
+
+            <KeyValue keyName="Students" value={data?.total_students||""} />
+            <KeyValue keyName="Male" value={data?.total_males||""} />
+            <KeyValue keyName="Female" value={data?.total_females||""} />
+            <button className = "admin-class-info-save-button" disabled = {isButtonDisabled}>SAVE</button>
         </AdminCardContainer>
+    )
+}
+
+function InfoTitle({children}: {children: React.ReactNode}){
+    return(
+        <div className="info-title">{children}</div>
+    )
+}
+interface KeyValueProps {
+    keyName: string,
+    value: string|number,
+    onChange?: (text: string) => void;
+}
+
+function KeyValue({
+    keyName,
+    value,
+    onChange
+}: KeyValueProps){
+    return(
+        <div className="class-info-key-value">
+            <span className="key">{keyName}:</span>
+            <input type={typeof value === "number"?"number":"text"} placeholder={keyName} value={value} onChange = {(e)=>onChange?.(e.target.value)} disabled = {onChange?false:true} />
+        </div>
     )
 }

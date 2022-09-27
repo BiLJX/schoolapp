@@ -13,3 +13,8 @@ export interface ClassSchema {
     section: string,
     total_students: number
 }
+
+export interface ClassInfo extends ClassSchema {
+    total_males: number,
+    total_females: number
+}

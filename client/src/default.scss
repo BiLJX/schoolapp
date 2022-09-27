@@ -16,6 +16,10 @@ input:focus,
   border: none;
 }
 
+input {
+  cursor: auto;
+}
+
 input::-webkit-input-placeholder {
 color: var(--text-secondary-alt);
   font-weight: 400;

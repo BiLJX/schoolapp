@@ -18,6 +18,65 @@ export const getCurrentAdmin = async (req: Request, res: Response) => {
     }
 }
 
+export const getClassById: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const class_id = req.params.class_id;
+    try {
+        if(!class_id) return jsonResponse.clientError("Id not provided");
+        const class_data = await Class.aggregate([
+            {
+                $match: {
+                    class_id
+                }
+            },
+            {
+                $lookup: {
+                    from: "students",
+                    as: "males",
+                    foreignField: "class_id",
+                    localField: "class_id",
+                    pipeline: [
+                        {
+                            $match: {
+                                gender: "Male"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: "students",
+                    as: "females",
+                    foreignField: "class_id",
+                    localField: "class_id",
+                    pipeline: [
+                        {
+                            $match: {
+                                gender: "Female"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $addFields: {
+                    total_students: {
+                        $add: [{$size: "$males"}, {$size: "$females"}]
+                    },
+                    total_males: { $size: "$males" },
+                    total_females: { $size: "$females" },
+                }
+            },
+        ])
+        if(!class_data[0]) return jsonResponse.notFound("Class not found.");
+        jsonResponse.success(class_data[0]);
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
+
 export const getClasses = async (req: Request, res: Response) => {
     const jsonResponse = new JsonResponse(res);
     try {
