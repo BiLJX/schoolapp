@@ -1,0 +1,41 @@
+.add-class-modal {
+    background-color: var(--cards-background);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border-radius: 20px;
+    header {
+        display: flex;
+        padding-bottom: 1rem;
+        h1 {
+            color: var(--text-title);
+            font-size: 1.6rem;
+        }
+    }
+    .label-input {
+        width: 300px;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+    }
+    .add-class-button-container {
+        display: flex;
+        margin-top: 1rem;
+        button {
+            flex: 1;
+            height: 40px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--text-secondary-alt);
+            cursor: pointer;
+        }
+        .create {
+            background-color: var(--blue);
+            color: #fff;
+            border-radius: 10px;
+            &:disabled {
+                background-color: var(--light-blue);
+                cursor: default;
+            }
+        }
+    }
+}

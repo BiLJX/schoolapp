@@ -167,7 +167,9 @@ export const addClasses = async (req: Request, res: Response) => {
             section
         })
         await _class.save();
-        jsonResponse.success(_class.toJSON(), "successfully created new class");
+        const class_data = _class.toJSON();
+        class_data.total_students = 0;
+        jsonResponse.success(class_data, "successfully created new class");
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()
