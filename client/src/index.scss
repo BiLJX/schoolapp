@@ -108,7 +108,14 @@ a {
   align-items: center;
   z-index: 888;
   overflow-y: auto;
+  div:active {
+    outline: none;
+  }
+  div:focus {
+    outline: none;
+  }
 }
+
 
 .liked {
   svg {

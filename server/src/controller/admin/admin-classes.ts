@@ -134,6 +134,32 @@ export const getClassStudents: Controller = async (req, res) => {
     }
 }
 
+export const getStudents: Controller = async (req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const admin: School = res.locals.admin;
+    try {
+        const students = await Students.aggregate([
+            {
+                $match: {
+                    school_id: admin.school_id
+                }
+            },
+            {
+                $project: {
+                    profile_picture_url: 1,
+                    full_name: 1,
+                    user_id: 1,
+                    class_id: 1
+                }
+            }
+        ])
+        jsonResponse.success(students);
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError()
+    }
+}
+
 export const editClass: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
     const { grade, section }: { grade: number, section: string } = req.body;

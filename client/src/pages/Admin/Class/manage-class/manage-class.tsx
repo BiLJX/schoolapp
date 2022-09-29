@@ -11,6 +11,7 @@ import { toastError } from "components/Toast/toast";
 import Avatar from "components/Avatar/avatar";
 import { InformationError } from "components/Error/error-component";
 import { ClassInfo } from "@shared/School";
+import AddStudents from "../modals/add-students";
 
 export default function ManageClassPage(){
     return(
@@ -27,7 +28,8 @@ export default function ManageClassPage(){
 function StudentsContainer(){
     const class_id = useParams().class_id;
     const [students, setStudents] = useState<Student[]>([]);
-    const [isFetchingStudents, setIsFetchingStudents] = useState(true)
+    const [isFetchingStudents, setIsFetchingStudents] = useState(true);
+    const [modalOpen, setModalOpen] = useState(false);
     useEffect(()=>{
         const getStudents = async() => {
             if(!class_id) return;
@@ -40,9 +42,10 @@ function StudentsContainer(){
     }, [])
     return(
         <AdminCardContainer className="manage-class-students-container">
+           {modalOpen && <AddStudents onClose={()=>setModalOpen(false)} />}
             <header className="container-header">
                 <h1 className = "admin-card-heading">Students</h1>
-                <div className = "header-add-icon">
+                <div className = "header-add-icon" onClick={()=>setModalOpen(true)}>
                     <AddRoundedIcon />
                 </div>
             </header>

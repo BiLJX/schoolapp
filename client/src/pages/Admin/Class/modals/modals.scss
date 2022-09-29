@@ -1,41 +1,117 @@
 .add-class-modal {
-    background-color: var(--cards-background);
+  background-color: var(--cards-background);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: 20px;
+  header {
+    display: flex;
+    padding-bottom: 1rem;
+    h1 {
+      color: var(--text-title);
+      font-size: 1.6rem;
+    }
+  }
+  .label-input {
+    width: 300px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+  }
+  .add-class-button-container {
+    display: flex;
+    margin-top: 1rem;
+    button {
+      flex: 1;
+      height: 40px;
+      font-weight: bold;
+      font-size: 1rem;
+      color: var(--text-secondary-alt);
+      cursor: pointer;
+    }
+    .create {
+      background-color: var(--blue);
+      color: #fff;
+      border-radius: 10px;
+      &:disabled {
+        background-color: var(--light-blue);
+        cursor: default;
+      }
+    }
+  }
+}
+
+.add-students-modal {
+  background-color: var(--cards-background);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: 20px;
+  width: 400px;
+  min-height: 400px;
+  max-height: 600px;
+  height: 90vh;
+  header {
+    display: flex;
+    padding-bottom: 1rem;
+    .cross {
+      cursor: pointer;
+      flex: 1;
+      margin-left: 1rem;
+      svg {
+        color: var(--text-title);
+      }
+    }
+    .search-input-container {
+      display: flex;
+      background-color: var(--input-background);
+      border-radius: 10px;
+      height: 35px;
+      align-items: center;
+      padding: 0 .5rem;
+      width: 95%;
+      input {
+        margin-left: .3rem;
+        font-size: .9rem;
+        flex: 1;
+      }
+      .search-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+          font-size: 1.3rem;
+          color: var(--text-secondary);
+        }
+      }
+    }
+  }
+  .item-container {
     display: flex;
     flex-direction: column;
-    padding: 1.5rem;
-    border-radius: 20px;
-    header {
-        display: flex;
-        padding-bottom: 1rem;
-        h1 {
-            color: var(--text-title);
-            font-size: 1.6rem;
-        }
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+.add-student-item {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  span {
+    font-size: .9rem;
+    flex: 1;
+    margin-left: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: default;
+  }
+  button {
+    color: var(--blue);
+    font-weight: bold;
+    cursor: pointer;
+    &:disabled {
+      color: var(--light-blue);
+      cursor: default;
     }
-    .label-input {
-        width: 300px;
-        border-bottom: 1px solid var(--border-color);
-        margin-bottom: 1rem;
-    }
-    .add-class-button-container {
-        display: flex;
-        margin-top: 1rem;
-        button {
-            flex: 1;
-            height: 40px;
-            font-weight: bold;
-            font-size: 1rem;
-            color: var(--text-secondary-alt);
-            cursor: pointer;
-        }
-        .create {
-            background-color: var(--blue);
-            color: #fff;
-            border-radius: 10px;
-            &:disabled {
-                background-color: var(--light-blue);
-                cursor: default;
-            }
-        }
-    }
+  }
 }
