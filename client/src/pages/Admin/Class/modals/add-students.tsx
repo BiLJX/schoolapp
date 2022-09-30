@@ -8,6 +8,7 @@ import { Student } from "@shared/User";
 import { toastError } from "components/Toast/toast";
 import { getAdminStudents } from "api/admin/admin-manage-users";
 import { useParams } from "react-router-dom";
+import { addStudent } from "api/admin/admin-classes";
 
 interface ModalProps {
     onClose: ()=>void
@@ -55,11 +56,21 @@ function SearchInput({onChange}: {onChange: (val: string)=>void}){
 function StudentItem({data}: {data: Student}){
     const class_id = useParams().class_id;
     const [hasChanged, setHasChanged] = useState(data.class_id === class_id);
+    const [isLoading, setIsLoading] = useState(false);
+    const add = async() => {
+        if(!class_id) return;
+        if(isLoading) return;
+        setIsLoading(true);
+        const res = await addStudent(class_id, data.user_id);
+        setIsLoading(false);
+        if(res.error) return toastError(res.message);
+        setHasChanged(true);
+    }
     return(
         <div className = "add-student-item">
             <Avatar src = {data.profile_picture_url} size={30} />
             <span>{data.full_name}</span>
-            <button disabled = {hasChanged}>CHANGE</button>
+            <button onClick={add} disabled = {hasChanged||isLoading}>{isLoading?"ADDING":"CHANGE"}</button>
         </div>
     )
 }

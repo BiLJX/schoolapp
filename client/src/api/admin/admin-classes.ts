@@ -17,13 +17,14 @@ export const getAdminClassStudents = async (class_id: string) => {
     return res.data as ApiResponse<Student[]>;
 }
 
-export const getAdminStudents = async() => {
-    const res = await axios.get("/api/admin/classes/students");
-    return res.data as ApiResponse<Student[]>;
-}
 
 export const editClass = async(data: {grade: number, section: string, class_id: string}) => {
     const res = await axios.patch(`/api/admin/classes/${data.class_id}/update`, data);
+    return res.data as ApiResponse;
+}
+
+export const addStudent = async(class_id: string, user_id: string) => {
+    const res = await axios.put("/api/admin/classes/student/add", {class_id, user_id});
     return res.data as ApiResponse;
 }
 

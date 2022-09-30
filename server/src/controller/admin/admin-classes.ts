@@ -134,30 +134,26 @@ export const getClassStudents: Controller = async (req, res) => {
     }
 }
 
-export const getStudents: Controller = async (req, res) => {
+export const addStudent: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
-    const admin: School = res.locals.admin;
     try {
-        const students = await Students.aggregate([
-            {
-                $match: {
-                    school_id: admin.school_id
-                }
-            },
-            {
-                $project: {
-                    profile_picture_url: 1,
-                    full_name: 1,
-                    user_id: 1,
-                    class_id: 1
-                }
+        const { class_id, user_id } = req.body;
+        const student = await Students.findOne({user_id});
+        if(!student) return jsonResponse.clientError("Student not found");
+        if(student.class_id === class_id) return jsonResponse.clientError("The student is already in the class.")
+        const class_data = await Class.findOne({class_id});
+        if(!class_data) return jsonResponse.clientError("Class not found");
+        await Students.findOneAndUpdate({user_id}, {
+            $set: {
+                class_id
             }
-        ])
-        jsonResponse.success(students);
+        });
+        jsonResponse.success();
     } catch (error) {
         console.log(error);
         jsonResponse.serverError()
     }
+   
 }
 
 export const editClass: Controller = async (req, res) => {
