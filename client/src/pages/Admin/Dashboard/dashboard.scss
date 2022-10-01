@@ -2,8 +2,10 @@
     display: flex;
     height: 100vh;
     .left-section {
+        display: flex;
         flex: 1;
         padding: 1rem 2rem;
+        flex-direction: column;
         .total-items-container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
