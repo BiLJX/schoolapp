@@ -1,0 +1,17 @@
+.admin-dashboard {
+    display: flex;
+    height: 100vh;
+    .left-section {
+        flex: 1;
+        padding: 1rem 2rem;
+        .total-items-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+    }
+    .right-section {
+        width: 400px;
+        padding: 1rem 2rem;
+    }
+}

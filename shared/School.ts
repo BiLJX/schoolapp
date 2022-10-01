@@ -18,3 +18,13 @@ export interface ClassInfo extends ClassSchema {
     total_males: number,
     total_females: number
 }
+
+export interface DashboardData {
+    total_students: number,
+    total_teachers: number,
+    total_classes: number
+    gender_stats: {
+        male_students: number,
+        female_students: number
+    }
+}

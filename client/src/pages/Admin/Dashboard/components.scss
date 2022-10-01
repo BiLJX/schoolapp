@@ -1,0 +1,50 @@
+.admin-total-card {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+    .label {
+        margin-bottom: 1rem;
+        color: var(--text-secondary-alt);
+    }
+    .value {
+        color: var(--text-title);
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+}
+
+.admin-gender-comparision-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    header {
+        h1 {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+    }
+    .pi-chart-container {
+        margin-top: 2rem;
+    }
+    .stats-heading {
+        padding: 2rem;
+        margin-top: 1rem;
+        span {
+            color: var(--text-secondary-alt);
+            font-weight: 500;
+        }
+
+    }
+    .stats-item {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        color: var(--text-title);
+        margin-bottom: 1rem;
+        .color-box {
+            width: 18px;
+            height: 18px;
+            margin-right: .5rem;
+        }
+    }
+}

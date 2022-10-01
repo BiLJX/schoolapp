@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getCurrentAdmin } from "../controller/admin-controller";
 import { addClasses, addStudent, editClass, getClassById, getClasses, getClassStudents, removeClass } from "../controller/admin/admin-classes";
+import { getDashboard } from "../controller/admin/admin-dashboard";
 import * as AdminRequets from "../controller/admin/admin-requets";
 import * as ManageUsers from "../controller/admin/manage-user"
 const router = Router();
@@ -39,4 +40,8 @@ router.put("/requests/teachers/approve", AdminRequets.approveTeacherAccount);
 
 router.delete("/requests/students/:user_id/reject", AdminRequets.rejectStudentAccount);
 router.delete("/requests/teachers/:user_id/reject", AdminRequets.rejectTeacherAccount);
+
+//dashboard
+
+router.get("/dashboard", getDashboard)
 export { router as AdminRoutes }
