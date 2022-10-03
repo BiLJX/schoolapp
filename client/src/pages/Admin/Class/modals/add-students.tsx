@@ -24,7 +24,7 @@ export default function AddStudents({onClose}: ModalProps){
         fetchStudent()
     }, [])
     return(
-        <ReactModal isOpen overlayClassName="modal-overlay" className="add-students-modal">
+        <ReactModal closeTimeoutMS={200} isOpen overlayClassName="modal-overlay" className="add-students-modal">
             <header>
                 <SearchInput onChange={val=>fetchStudent(val)} />
                 <div className="cross center" onClick={onClose}>

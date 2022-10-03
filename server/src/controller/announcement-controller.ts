@@ -4,7 +4,7 @@ import { Announcements } from "../models/Announcement";
 import { Controller } from "../types/controller";
 import { makeId } from "../utils/idgen";
 import JsonResponse from "../utils/Response";
-
+import { validatePostTitle, validatePostBody } from "../utils/validator"
 export const createAnnouncement: Controller = async (req, res) => {
     const jsonResponse = new JsonResponse(res);
     const admin = res.locals.admin;
@@ -12,6 +12,11 @@ export const createAnnouncement: Controller = async (req, res) => {
         const data: AnnouncementClientData = req.body;
         data.body = data.body.trim();
         data.title = data.title.trim();
+        const titleValidationResult = validatePostTitle(data.title);
+        const bodyValidationResult = validatePostBody(data.body);
+        if(!titleValidationResult.success) return jsonResponse.clientError(titleValidationResult.message);
+        if(!bodyValidationResult.success) return jsonResponse.clientError(bodyValidationResult.message);
+        if(!(data.is_announced_to_students || data.is_announced_to_teachers)) return jsonResponse.clientError("Please select whom you want to announce.");
         const announcement = new Announcements({
             announcement_id: makeId(),
             school_id: admin.school_id,

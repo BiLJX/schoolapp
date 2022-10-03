@@ -25,7 +25,7 @@ export default function AddClassModal({onClose, onCreate}: ModalProps){
         onClose();
     }
     return(
-        <ReactModal isOpen overlayClassName="modal-overlay" className="add-class-modal">
+        <ReactModal closeTimeoutMS={200} isOpen overlayClassName="modal-overlay" className="add-class-modal">
             <header>
                 <h1>Create Class</h1>
             </header>

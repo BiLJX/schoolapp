@@ -1,0 +1,49 @@
+.add-notice-modal {
+    display: flex;
+    background-color: var(--cards-background);
+    border-radius: 10px;
+    padding: 1rem;
+    flex-direction: column;
+    width: 400px;
+    header {
+        h1 {
+            font-size: 1.5rem;
+            color: var(--text-title);
+            cursor: default;
+        }
+    }
+    .notice-title-input {
+        font-size: 1rem;
+        padding: 2rem 0;
+        font-weight: bold;
+        color: var(--text-secondary-alt);
+    }
+    .notice-body-input {
+        font-size: 0.95rem;
+        color: var(--text-secondary-alt);
+    }
+    #select-label {
+        color: var(--text-title);
+    }
+    .create-button-container {
+        display: flex;
+        margin-top: 2rem;
+        button {
+            flex: 1;
+            height: 40px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--text-secondary-alt);
+            cursor: pointer;
+        }
+        .create {
+            background-color: var(--blue);
+            color: #fff;
+            border-radius: 10px;
+            &:disabled {
+                background-color: var(--light-blue);
+                cursor: default;
+            }
+        }
+      }
+}

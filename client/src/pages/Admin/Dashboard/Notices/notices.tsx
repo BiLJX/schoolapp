@@ -3,15 +3,17 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 import { Announcement } from "@shared/Announcement";
 import { useState, useEffect } from "react";
-import "./notices.scss";
 import { getAdminNotices } from "api/admin/admin-dashboard";
 import { toastError } from "components/Toast/toast";
 import { ClipLoader } from "react-spinners";
 import moment from "moment";
+import "./notices.scss";
+import { AddNoticeModal } from "./add-notice";
 
 export default function Notices(){
     const [notices, setNotices] = useState<Announcement[]>([]);
     const [loading, setLoading] = useState(true);
+    const [addNoticeOpen, setAddNoticeOpen] = useState(false);
     const fetchNotices = async() => {
         const res = await getAdminNotices();
         setLoading(false);
@@ -32,9 +34,10 @@ export default function Notices(){
     )
     return (
         <AdminCardContainer className="admin-notice-container">
+            {addNoticeOpen && <AddNoticeModal onClose={()=>setAddNoticeOpen(false)} onNoticeAdded = {data=>setNotices([data, ...notices])} />}
             <header>
                 <h1>Notices</h1>
-                <div className = "icon center">
+                <div className = "icon center" onClick={()=>setAddNoticeOpen(true)}>
                     <AddRoundedIcon />
                 </div>
             </header>

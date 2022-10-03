@@ -1,9 +1,9 @@
 import axios from "./instance";
-import { AnnouncementClientData, AnnouncementFeed } from "@shared/Announcement";
+import { Announcement, AnnouncementClientData, AnnouncementFeed } from "@shared/Announcement";
 
 export const createAnnouncement = async(data: AnnouncementClientData) => {
     const res = await axios.post("/api/announcement/create", data);
-    return res.data as ApiResponse<AnnouncementClientData>;
+    return res.data as ApiResponse<Announcement>;
 }
 
 export const getAnnouncements = async() => {
