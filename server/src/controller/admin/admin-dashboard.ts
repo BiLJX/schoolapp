@@ -1,4 +1,3 @@
-
 import { ClassSchema, DashboardData } from "@shared/School";
 import { Student, Teacher } from "@shared/User";
 import { Announcements } from "../../models/Announcement";
@@ -69,6 +68,19 @@ export const getAdminNotices: Controller = async(req, res) => {
     try {
         const announcements = await Announcements.find({school_id: school.school_id});
         jsonResponse.success(announcements)
+    } catch (error) {
+        console.log(error);
+        jsonResponse.serverError();
+    }
+}
+
+export const deleteNotice: Controller = async(req, res) => {
+    const jsonResponse = new JsonResponse(res);
+    const school = res.locals.admin;
+    try {
+        const notice_id = req.params.id;
+        await Announcements.findOneAndDelete({school_id: school.school_id, announcement_id: notice_id});
+        jsonResponse.success();
     } catch (error) {
         console.log(error);
         jsonResponse.serverError();

@@ -11,3 +11,8 @@ export const getAdminNotices = async() => {
     const res = await axios.get("/api/admin/dashboard/notices");
     return res.data as ApiResponse<Announcement[]>;
 }
+
+export const deleteAdminNotice = async(notice_id: string) => {
+    const res = await axios.delete(`/api/admin/dashboard/notices/${notice_id}/delete`);
+    return res.data as ApiResponse;
+}

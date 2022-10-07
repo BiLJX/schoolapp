@@ -20,12 +20,12 @@
 }
 
 .create-user-modal {
-    position: relative;
     background-color: var(--cards-background);
     border-radius: 10px;
     padding: 1rem;
-    top: 2rem;
     width: 400px;
+    max-height: 600px;
+    overflow: auto;
     .create-user-pfp-edit-icon {
         position: absolute;
         bottom: 16px;

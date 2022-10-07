@@ -68,6 +68,8 @@ export const getAnnouncements: Controller = async (req, res) => {
     }
 }
 
+
+
 const groupAnnouncement = async (announcements: {given_on: string}[] & Announcement[]) => {
     let map: Record<string,  {given_on: string}[] & Announcement[]> = {};
     for(let announcement of announcements){
