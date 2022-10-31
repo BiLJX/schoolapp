@@ -1,0 +1,33 @@
+.settings-heading {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+}
+
+.settings-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    label {
+        font-weight: 500;
+        color: var(--text-secondary-alt);
+        font-size: 0.9rem;
+        margin-bottom: .5rem;
+    }
+    input {
+        background-color: var(--input-background-2);
+        padding: .8rem 1rem;
+        width: 60%;
+        font-size: .85rem;
+        border-radius: 10px;
+    }
+}
+
+.settings-save {
+    background-color: var(--blue);
+    border-radius: 10px;
+    width: 80px;
+    height: 35px;
+    margin-top: auto;
+    color: #fff;
+    cursor: pointer;
+}

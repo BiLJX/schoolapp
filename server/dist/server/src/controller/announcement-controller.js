@@ -44,8 +44,9 @@ var moment_1 = __importDefault(require("moment"));
 var Announcement_1 = require("../models/Announcement");
 var idgen_1 = require("../utils/idgen");
 var Response_1 = __importDefault(require("../utils/Response"));
+var validator_1 = require("../utils/validator");
 var createAnnouncement = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var jsonResponse, admin, data, announcement, error_1;
+    var jsonResponse, admin, data, titleValidationResult, bodyValidationResult, announcement, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -57,6 +58,14 @@ var createAnnouncement = function (req, res) { return __awaiter(void 0, void 0, 
                 data = req.body;
                 data.body = data.body.trim();
                 data.title = data.title.trim();
+                titleValidationResult = validator_1.validatePostTitle(data.title);
+                bodyValidationResult = validator_1.validatePostBody(data.body);
+                if (!titleValidationResult.success)
+                    return [2 /*return*/, jsonResponse.clientError(titleValidationResult.message)];
+                if (!bodyValidationResult.success)
+                    return [2 /*return*/, jsonResponse.clientError(bodyValidationResult.message)];
+                if (!(data.is_announced_to_students || data.is_announced_to_teachers))
+                    return [2 /*return*/, jsonResponse.clientError("Please select whom you want to announce.")];
                 announcement = new Announcement_1.Announcements({
                     announcement_id: idgen_1.makeId(),
                     school_id: admin.school_id,

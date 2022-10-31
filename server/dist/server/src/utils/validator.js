@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validatePostBody = exports.validatePostTitle = exports.validatePassowrd = exports.validateEmail = exports.validateFullName = void 0;
+exports.validatePostBody = exports.validatePostTitle = exports.validatePassowrd = exports.validateGender = exports.validateEmail = exports.validateFullName = void 0;
 function validateFullName(name) {
     var regex = /^[a-zA-Z ]{2,30}$/;
     if (!regex.test(name))
@@ -37,6 +37,19 @@ function validateEmail(email) {
     };
 }
 exports.validateEmail = validateEmail;
+function validateGender(gender) {
+    var genders = ["Male", "Female"];
+    if (!genders.includes(gender))
+        return {
+            success: false,
+            message: "Invalid Gender"
+        };
+    return {
+        success: true,
+        message: ""
+    };
+}
+exports.validateGender = validateGender;
 function validatePassowrd(password) {
     if (password.length < 8)
         return {

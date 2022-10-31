@@ -43,6 +43,8 @@ var School_1 = require("./models/School");
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var idgen_1 = require("./utils/idgen");
 var mongoose_1 = __importDefault(require("mongoose"));
+var Student_1 = require("./models/Student");
+var Teacher_1 = require("./models/Teacher");
 var CONNECTION_URL = "mongodb+srv://billjesh:Billu456@cluster0.vyegx.mongodb.net/Schoolapp?retryWrites=true&w=majority";
 var SCHOOL_PASSWORD = "euro1221@admin";
 var createSchool = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -71,6 +73,27 @@ var createSchool = function () { return __awaiter(void 0, void 0, void 0, functi
         }
     });
 }); };
-mongoose_1.default.connect(CONNECTION_URL).then(function () {
-    createSchool();
-});
+mongoose_1.default.connect(CONNECTION_URL).then(function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, Student_1.Students.updateMany({}, {
+                    $set: {
+                        gender: "Male",
+                        mothers_email: "",
+                        fathers_email: ""
+                    }
+                })];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, Teacher_1.Teachers.updateMany({}, {
+                        $set: {
+                            gender: "Male",
+                        }
+                    })];
+            case 2:
+                _a.sent();
+                console.log("done");
+                return [2 /*return*/];
+        }
+    });
+}); });

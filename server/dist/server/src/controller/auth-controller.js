@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -121,7 +110,7 @@ var studentSignUp = function (req, res) { return __awaiter(void 0, void 0, void 
                         //reasign
                         data.email = data.email.trim().toLowerCase();
                         data.full_name = data.full_name.trim();
-                        nameValidation = validator_1.validateFullName(data.full_name.trim().toLowerCase());
+                        nameValidation = validator_1.validateFullName(data.full_name);
                         emailValidation = validator_1.validateEmail(data.email);
                         passwordValidation = validator_1.validatePassowrd(data.password);
                         if (!pfp.mimetype.includes("image"))
@@ -136,7 +125,7 @@ var studentSignUp = function (req, res) { return __awaiter(void 0, void 0, void 
                     case 2:
                         user = _b.sent();
                         if (user !== null)
-                            return [2 /*return*/, jsonResponse.clientError("email address already in use")];
+                            return [2 /*return*/, jsonResponse.clientError("Email address already in use")];
                         return [4 /*yield*/, School_1.Schools.findOne({ school_id: data.school_id })];
                     case 3:
                         school = _b.sent();
@@ -147,6 +136,10 @@ var studentSignUp = function (req, res) { return __awaiter(void 0, void 0, void 
                         _class = _b.sent();
                         if (_class === null)
                             return [2 /*return*/, jsonResponse.clientError("The class does not exist")];
+                        if (!(data.gender === "Male" || data.gender === "Female"))
+                            return [2 /*return*/, jsonResponse.clientError("Please select your gender")
+                                //initializing user id
+                            ];
                         user_id = idgen_1.makeId();
                         return [4 /*yield*/, upload_1.uploadFile({ buffer: pfp.buffer, dir: "user/" + user_id + "/pfp/" })];
                     case 5:
@@ -158,7 +151,16 @@ var studentSignUp = function (req, res) { return __awaiter(void 0, void 0, void 
                         return [4 /*yield*/, bcrypt_1.default.hash(data.password, salt)];
                     case 7:
                         _a.password = _b.sent();
-                        student = new Student_1.Students(__assign(__assign({}, data), { profile_picture_url: url, user_id: user_id }));
+                        student = new Student_1.Students({
+                            full_name: data.full_name,
+                            email: data.email,
+                            class_id: data.class_id,
+                            school_id: data.school_id,
+                            password: data.password,
+                            profile_picture_url: url,
+                            gender: data.gender,
+                            user_id: user_id
+                        });
                         return [4 /*yield*/, student.save()];
                     case 8:
                         _b.sent();
@@ -326,6 +328,10 @@ var teacherSignup = function (req, res) {
                     school = _b.sent();
                     if (school === null)
                         return [2 /*return*/, jsonResponse.clientError("The School does not exist")];
+                    if (!(data.gender === "Male" || data.gender === "Female"))
+                        return [2 /*return*/, jsonResponse.clientError("Please select your gender")
+                            //initializing user id
+                        ];
                     user_id = idgen_1.makeId();
                     return [4 /*yield*/, upload_1.uploadFile({ buffer: pfp.buffer, dir: "user/" + user_id + "/pfp/" })];
                 case 4:
@@ -338,7 +344,15 @@ var teacherSignup = function (req, res) {
                 case 6:
                     _a.password = _b.sent();
                     data.full_name = data.full_name.trim();
-                    teacher = new Teacher_1.Teachers(__assign(__assign({}, data), { profile_picture_url: url, user_id: user_id }));
+                    teacher = new Teacher_1.Teachers({
+                        full_name: data.full_name,
+                        email: data.email,
+                        school_id: data.school_id,
+                        password: data.password,
+                        profile_picture_url: url,
+                        gender: data.gender,
+                        user_id: user_id
+                    });
                     return [4 /*yield*/, teacher.save()];
                 case 7:
                     _b.sent();

@@ -1,0 +1,39 @@
+.admin-settings-container {
+    display: flex;
+    width: 700px;
+    height: 80vh;
+    padding: 0;
+}
+
+.admin-settings-nav {
+    display: flex;
+    width: 250px;
+    border-right: 1px solid var(--border-color);
+    flex-direction: column;
+    padding: 1rem;
+    .settings-nav-item {
+        height: 60px;
+        display: flex;
+        div {
+            display: flex;
+            align-items: center;
+        }
+        .item-label {
+            margin-left: 1rem;
+            font-weight: 500;
+        }
+        .item-next-icon {
+            margin-left: auto;
+            svg {
+                font-size: 2rem;
+            }
+        }
+        &.active {
+            color: var(--text-secondary);
+            svg {
+                color: var(--text-secondary);
+            }
+        }
+    }
+    
+}

@@ -43,7 +43,7 @@ export const getDashboard: Controller = async (req, res) => {
                     localField: "school_id",
                     foreignField: "school_id"
                 }
-            }
+            },
         ]);
         const x = raw_data[0];
         const data: DashboardData = {
@@ -66,7 +66,7 @@ export const getAdminNotices: Controller = async(req, res) => {
     const jsonResponse = new JsonResponse(res);
     const school = res.locals.admin;
     try {
-        const announcements = await Announcements.find({school_id: school.school_id});
+        const announcements = await Announcements.find({school_id: school.school_id}).sort({"createdAt": -1});
         jsonResponse.success(announcements)
     } catch (error) {
         console.log(error);
