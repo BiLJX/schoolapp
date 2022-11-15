@@ -20,6 +20,14 @@ const schoolSchema = new Schema<School>({
     password: {
         type: String,
         required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    school_email: {
+        type: String,
+        required: true
     }
 }, { timestamps: true })
 

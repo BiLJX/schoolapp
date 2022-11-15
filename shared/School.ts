@@ -1,9 +1,11 @@
 export interface School {
-    school_id: string
-    name: string
-    logo_url: string
-    password: string
-    total_students: number
+    school_id: string;
+    name: string;
+    address: string;
+    school_email: string;
+    logo_url: string;
+    password: string;
+    total_students: number;
 }
 
 export interface ClassSchema {

@@ -7,19 +7,21 @@ export const SettingsHeading = ({children}: {children: React.ReactNode}) => {
 
 interface InputProps {
     label: string,
-    placeholder: string
+    placeholder: string,
+    value: string,
+    onChange: (val: string) => void;
 }
-export const SettingsInput = ({label, placeholder}: InputProps) => {
+export const SettingsInput = ({label, placeholder, value, onChange}: InputProps) => {
     return (
         <div className="settings-input">
             <label>{label}</label>
-            <input placeholder={placeholder} />
+            <input placeholder={placeholder} value = {value} onChange = {(e)=>onChange(e.target.value)} />
         </div>
     )
 }
 
-export const SettingsSaveButton = ({onSave}: {onSave: ()=>void}) => {
+export const SettingsSaveButton = ({onSave, isDisabled}: {onSave: ()=>void, isDisabled?: boolean}) => {
     return(
-        <button className="settings-save" onClick={onSave}>SAVE</button>
+        <button className="settings-save" onClick={onSave} disabled = {isDisabled}>SAVE</button>
     )
 }

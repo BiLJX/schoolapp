@@ -30,4 +30,8 @@
     margin-top: auto;
     color: #fff;
     cursor: pointer;
+    &:disabled {
+        cursor: default;
+        background-color: var(--light-blue);
+    }
 }

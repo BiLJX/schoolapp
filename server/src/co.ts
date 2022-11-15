@@ -20,17 +20,11 @@ const createSchool = async () => {
     console.log("created")
 }
 mongoose.connect(CONNECTION_URL).then(async()=>{
-    await Students.updateMany({}, {
+    const res = await Schools.updateMany({}, {
         $set: {
-            gender: "Male",
-            mothers_email: "",
-            fathers_email: ""
+            address: "Hattigauda, Kathmandu",
+            school_email: "euroschool@gmail.com"
         }
     })
-    await Teachers.updateMany({}, {
-        $set: {
-            gender: "Male",
-        }
-    })
-    console.log("done")
+    console.log(res)
 })

@@ -10,7 +10,8 @@ import { toastError } from 'components/Toast/toast';
 
 interface CommentProps {
     onReplyClicked: (comment: Comment) => any;
-    comment: Comment
+    comment: Comment;
+    isRootComment?: boolean;
 }
 export default function CommentComponent(props: CommentProps){
     const data = props.comment;
@@ -39,7 +40,7 @@ export default function CommentComponent(props: CommentProps){
         }
     }
     return(
-        <div className = "comment-component">
+        <div className = {`comment-component ${props.isRootComment?"comment-root":""}`}>
             <div className = "comment-left">
                 <div className = "comment-pfp">
                     <img className='full-img' src = {data.author_data.profile_picture_url} />

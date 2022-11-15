@@ -58,7 +58,7 @@ export default function PostPage(){
                 {post && <Content data = {post} />}
                 <div className = "comments-container">
                     {
-                        mappedComments.map((x, i)=> <CommentComponent comment={x} key= {i} onReplyClicked={(comment)=>setComment(comment)} />)
+                        mappedComments.map((x, i)=> <CommentComponent isRootComment comment={x} key= {i} onReplyClicked={(comment)=>setComment(comment)} />)
                     }
                 </div>
                 <CommentInput onReplyClose={()=>setComment(null)} onComment={(c)=>c.parent_id?setComments([...comments, c]):setComments([c, ...comments])} data={post} comment = {comment} />

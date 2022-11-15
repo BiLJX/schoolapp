@@ -4,11 +4,11 @@
     .post-card {
         border-radius: 0 0 10px 10px;
         cursor: default;
+        margin-bottom: 0;
     }
     .comments-container {
         display: flex;
         flex-direction: column;
-        padding: 1rem;
         overflow-x: scroll;
     }
 }
