@@ -12,3 +12,8 @@ export const editSchool = async (data: School, logo: File|undefined) => {
     const res = await axios.patch("/api/admin/settings/edit/school", formData);
     return res.data as ApiResponse<School>;
 }
+
+export const changeAdminPassword = async (data: any) => {
+    const res = await axios.patch("/api/admin/settings/change/password", data);
+    return res.data as ApiResponse;
+}

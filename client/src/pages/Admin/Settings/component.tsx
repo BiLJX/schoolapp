@@ -10,18 +10,19 @@ interface InputProps {
     placeholder: string,
     value: string,
     onChange: (val: string) => void;
+    type?: string;
 }
-export const SettingsInput = ({label, placeholder, value, onChange}: InputProps) => {
+export const SettingsInput = ({label, placeholder, value, onChange, type}: InputProps) => {
     return (
         <div className="settings-input">
             <label>{label}</label>
-            <input placeholder={placeholder} value = {value} onChange = {(e)=>onChange(e.target.value)} />
+            <input type = {type || "text"} placeholder={placeholder} value = {value} onChange = {(e)=>onChange(e.target.value)} />
         </div>
     )
 }
 
-export const SettingsSaveButton = ({onSave, isDisabled}: {onSave: ()=>void, isDisabled?: boolean}) => {
+export const SettingsSaveButton = ({onSave, isDisabled, label}: {onSave: ()=>void, isDisabled?: boolean, label?: string}) => {
     return(
-        <button className="settings-save" onClick={onSave} disabled = {isDisabled}>SAVE</button>
+        <button className="settings-save" onClick={onSave} disabled = {isDisabled}>{label || "SAVE"}</button>
     )
 }

@@ -7,7 +7,7 @@ export default function AdminSettingsNav(){
     return(
         <nav className="admin-settings-nav">
             <NavItem to = "edit" label="Edit School" Icon={<EditRoundedIcon />} />
-            <NavItem to = "password" label="Change Password" Icon={<LockRoundedIcon />} />
+            <NavItem to = "password/change" label="Change Password" Icon={<LockRoundedIcon />} />
             <NavItem to = "notification" label="Notifications" Icon={<NotificationsRoundedIcon />} />
         </nav>
     )
