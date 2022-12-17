@@ -1,7 +1,5 @@
 import { Student, Teacher } from "@shared/User";
 import { getAdminStudents, getAdminTeachers } from "api/admin/admin-manage-users";
-import AdminAccountPreview from "components/Admin-Accounts/admin-account-preview";
-import { AccountItem, AccountsContainer } from "components/Admin-Accounts/admin-accounts";
 import AdminHeader from "components/header/admin-header/admin-header";
 import { toastError } from "components/Toast/toast";
 import { AdminMain } from "container/admin-layouts/admin-nav-wrapper";
@@ -9,8 +7,12 @@ import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { User } from "types/user";
+import AdminManageContainer from "./components/container";
 import { CreateUserButton, CreateUserModal } from "./global";
 import "./manage.scss"
+import "./components/component.scss"
+import ManageHeader from "./components/header";
+import { ItemLabelsStudent, StudentItem } from "./components/items";
 export default function ManageStudentPage(){
     const [users, setUsers] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
@@ -25,31 +27,21 @@ export default function ManageStudentPage(){
         }
         setUsers(res.data);
     }
-    const updateUsers = (user: User)=>{
-        const index = users.findIndex(x=>x.user_id===user.user_id);
-        const _users = [...users];
-        _users[index] = user as Student;
-        setUsers(_users)
-    }
     useEffect(()=>{
         fetchItem()
     }, [searchText])
 
     return(
         <>
-            {modalOpen && <CreateUserModal onComplete={(user)=>setUsers([user as Student, ...users])} type = "student" onClose={()=>setModalOpen(false)} />}
             <AdminHeader title="Manage Students" sub_title="Change students information and details."/>
-            <AdminMain className="manage-users-page">
-                <AccountsContainer onSearch={s=>setSearchText(s)}>
-                    <CreateUserButton onClick={()=>setModalOpen(true)} />
-                    {loading && <div className="center"> <ClipLoader color="var(--text-secondary-alt)" /> </div>}
+            <AdminMain className="manage-users-page center">
+                <AdminManageContainer>
+                    <ManageHeader />
+                    <ItemLabelsStudent />
                     {
-                        users.map((x, i)=><AccountItem user={x} key = {i} />)
+                        users && users.map((x, i)=><StudentItem student={x} key={i} />)
                     }
-                </AccountsContainer>
-                <Routes>
-                    <Route path = ":id/preview" element = {<AdminAccountPreview manageUser onTaskComplete={updateUsers} />} />
-                </Routes>
+                </AdminManageContainer>
             </AdminMain>
         </>
     )

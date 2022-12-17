@@ -30,6 +30,19 @@ export const getAdminStudents: Controller = async(req, res) => {
                 }
             },
             {
+                $lookup: {
+                    from: "classes",
+                    localField: "class_id",
+                    foreignField: "class_id",
+                    as: "class"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$class"
+                }
+            },
+            {
                 $project: {
                     password: 0
                 }

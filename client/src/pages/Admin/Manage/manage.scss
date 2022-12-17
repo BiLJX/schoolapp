@@ -3,21 +3,7 @@
     flex-direction: row;
 }
 
-.create-user-button-container {
-    display: flex;
-    width: 100%;
-    margin-bottom: 1rem;
-    button {
-        background-color: var(--blue);
-        width: 80px;
-        height: 35px;
-        color: #fff;
-        border-radius: 10px;
-        margin-left: auto;
-        font-weight: 500;
-        cursor: pointer;
-    }
-}
+
 
 .create-user-modal {
     background-color: var(--cards-background);

@@ -1,4 +1,5 @@
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import { NavLink } from 'react-router-dom';
 import "./admin-header.scss"
 interface HeaderProps {
     title: string,
@@ -15,9 +16,9 @@ export default function AdminHeader({
                 <span>{sub_title}</span>
             </div>
             <div className = "admin-header-button-container">
-                <button className = "admin-header-button">
+                <NavLink to = "/admin/settings/edit" className = "admin-header-button">
                     <SettingsOutlinedIcon />
-                </button>
+                </NavLink>
             </div>
         </header>
     )

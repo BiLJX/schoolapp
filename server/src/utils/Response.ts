@@ -15,7 +15,7 @@ export default class JsonResponse {
         this.res.status(200).json({
             error: true,
             status: 500,
-            data: {},
+            data: null,
             message: "Internal Server Error"
         })
     }

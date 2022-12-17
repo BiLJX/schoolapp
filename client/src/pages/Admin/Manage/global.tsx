@@ -17,9 +17,7 @@ import { createStudent, createTeacher } from "api/admin/admin-manage-users";
 import { User } from "types/user";
 export function CreateUserButton({onClick}:{onClick: ()=>void}){
     return(
-        <div className="create-user-button-container">
-            <button onClick={onClick}>Create</button>
-        </div>
+        <button className="create-user-button" onClick={onClick}>Create</button>
     )
 }
 

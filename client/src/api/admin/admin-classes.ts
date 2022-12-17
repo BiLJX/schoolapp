@@ -29,11 +29,11 @@ export const addStudent = async(class_id: string, user_id: string) => {
 }
 
 export const addClass = async(data: {grade: number, section: string}) => {
-    const res = await axios.put("/api/admin/class", data);
+    const res = await axios.put("/api/admin/classes", data);
     return res.data as ApiResponse<ClassSchema>;
 }
 
 export const removeClass = async(class_id: string) => {
-    const res = await axios.delete("/api/admin/class/"+class_id);
+    const res = await axios.delete("/api/admin/classes/"+class_id);
     return res.data as ApiResponse;
 }

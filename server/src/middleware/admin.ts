@@ -15,7 +15,7 @@ export const AdminAuth = async (req: Request, res: Response, next: NextFunction)
         res.locals.admin = school.toJSON();
         next();
     }catch(err){
-        console.log(err);
+        console.log(err, " admin");
         jsonResponse.serverError()
     }
 }

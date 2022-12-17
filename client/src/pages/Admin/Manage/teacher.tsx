@@ -37,7 +37,6 @@ export default function ManageTeacherPage(){
     return(
         <>
             <AdminHeader title="Manage Teachers" sub_title="Change teachers information and details."/>
-            {modal && <CreateUserModal onComplete={(user)=>setUsers([user as Teacher, ...users])} type = "teacher" onClose={()=>setModal(false)} />}
             <AdminMain className="manage-users-page">
                 <AccountsContainer onSearch={s=>setSearchText(s)}>
                     <CreateUserButton onClick={()=>setModal(true)} />

@@ -32,7 +32,7 @@ export const adminLogin = async (req: Request, res: Response) => {
         if(school === null) return jsonResponse.notFound("Couldnt Find Any School");
 
         //check password
-        const result = await bcrypt.compare(body.password, school.password);
+        const result = await bcrypt.compare(body.password, school.password); 
         if(!result) return jsonResponse.clientError("Invalid Password");
         
         //signing in
