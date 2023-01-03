@@ -36,7 +36,7 @@ export default function ManageStudentPage(){
             <AdminHeader title="Manage Students" sub_title="Change students information and details."/>
             <AdminMain className="manage-users-page center">
                 <AdminManageContainer>
-                    <ManageHeader />
+                    <ManageHeader onSearch={setSearchText} />
                     <ItemLabelsStudent />
                     {
                         users && users.map((x, i)=><StudentItem student={x} key={i} />)

@@ -17,6 +17,7 @@ import AdminClassPage from "pages/Admin/Class/class-page";
 import ManageClassPage from "pages/Admin/Class/manage-class/manage-class";
 import DashboardPage from "pages/Admin/Dashboard/dashboard";
 import AdminSettingsPage from "pages/Admin/Settings/page";
+import CreateStudentPage from "pages/Admin/CreateUser/create-student-page";
 export default function App(){
     useSocket();
     return(
@@ -34,6 +35,9 @@ export default function App(){
                 <Route path = "manage">
                     <Route path = "teacher/*" element = {<ManageTeacherPage />} />
                     <Route path = "student/*" element = {<ManageStudentPage />} />
+                </Route>
+                <Route path = "create">
+                    <Route path = "student/*" element = {<CreateStudentPage />} /> 
                 </Route>
                 <Route path = "settings/*" element = {<AdminSettingsPage />} />
             </Route>
