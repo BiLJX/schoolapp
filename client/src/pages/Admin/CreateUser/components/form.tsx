@@ -2,9 +2,9 @@ import React from "react";
 import "./form.scss";
 
 
-export function FormContainer({title, children}: {title: string, children: any}){
+export function FormContainer({title, children, onSubmit}: {title: string, children: any, onSubmit?: () => void}){
     return(
-        <form className="create-user-form">
+        <form className="create-user-form" onSubmit={e=>{e.preventDefault(); onSubmit?.()}}>
             <header>
                 <h2>{title}</h2>
             </header>
@@ -44,5 +44,14 @@ export function CreateUserButtons(){
             <button className="back">Back</button>
             <button className="next">Next</button>
         </div>
+    )
+}
+
+export function SubHeading({children}: {children: string}){
+    return(
+        <div>
+            <h4 style={{marginBottom: "1rem", color: "var(--text-secondary)", textAlign: "center" }}>{children}</h4>
+        </div>
+        
     )
 }
