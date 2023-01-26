@@ -1,4 +1,4 @@
-import { UserPersonalInformation } from "@shared/User";
+import { StudentParentsInformation, UserPersonalInformation } from "@shared/User";
 import AdminHeader from "components/header/admin-header/admin-header";
 import AdminCardContainer from "container/Admin-Cards/admin-card";
 import { AdminMain } from "container/admin-layouts/admin-nav-wrapper";
@@ -35,6 +35,14 @@ export default function CreateStudentPage(){
         nationality: "",
         phone_no: 98
     });
+    const [parentsInformation, setParentsInformation] = useState<StudentParentsInformation>({
+        mothers_name: "",
+        fathers_name: "",
+        fathers_contact_no: "",
+        fathers_email: "",
+        mothers_contact_no: "",
+        mothers_email: ""
+    })
 
     const activateStep = (step: number) => {
         const i = navItems.findIndex(x=>x.step === step);
@@ -54,9 +62,11 @@ export default function CreateStudentPage(){
                             <PersonalInformation 
                             data = {personalInformation} 
                             setData = {setPersonalInformation}
-                            next = {()=>{activateStep(2)}} />
+                            next = {()=>{activateStep(2)}} 
+                            
+                            />
                         } />
-                        {navItems[1].is_active && <Route path = "2" element = {<ParentsInformationPage />} />}
+                        {navItems[1].is_active && <Route path = "2" element = {<ParentsInformationPage next={()=>{activateStep(3)}} data={parentsInformation} setData = {setParentsInformation} />} />}
                         {navItems[2].is_active && <Route path = "3" element = {<LocationAndAddressPage />} />}
                     </Routes>
                 </AdminCardContainer>

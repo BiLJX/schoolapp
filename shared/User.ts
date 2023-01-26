@@ -10,6 +10,15 @@ export interface UserPersonalInformation {
     nationality: string;
 }
 
+export interface StudentParentsInformation {
+    mothers_name: string;
+    fathers_name: string;
+    mothers_contact_no: string;
+    fathers_contact_no: string;
+    mothers_email: string;
+    fathers_email: string;
+}
+
 export interface UserLocation {
     city_name: string,
     permanent_address: string,

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./form.scss";
 
 
@@ -39,9 +40,10 @@ export function CreateUserFormInput({
 }
 
 export function CreateUserButtons(){
+    const navigate = useNavigate();
     return(
         <div className = "create-user-buttons">
-            <button className="back">Back</button>
+            <button className="back" onClick={(e)=>{e.preventDefault(); navigate(-1)}}>Back</button>
             <button className="next">Next</button>
         </div>
     )

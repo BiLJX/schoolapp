@@ -1,8 +1,10 @@
+import { StudentParentsInformation } from "@shared/User";
 import { CreateUserButtons, CreateUserFormInput, FormContainer, SubHeading } from "../components/form";
+import { ChildrenProps } from "../create-student-page";
 
-export default function ParentsInformationPage(){
+export default function ParentsInformationPage({data, next, setData}:ChildrenProps<StudentParentsInformation>){
     return(
-        <FormContainer title="Parent's Information">
+        <FormContainer title="Parent's Information" onSubmit={next}>
             
             <SubHeading>Mother's Information</SubHeading>
 
