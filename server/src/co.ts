@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { Students } from "./models/Student";
 import { Teachers } from "./models/Teacher";
 
-const CONNECTION_URL = "mongodb+srv://billjesh:Billu456@cluster0.vyegx.mongodb.net/Schoolapp?retryWrites=true&w=majority"
+const CONNECTION_URL = ""
 
 const SCHOOL_PASSWORD = "euro1221@admin"
 const createSchool = async () => {
