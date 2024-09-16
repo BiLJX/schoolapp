@@ -14,7 +14,7 @@ import { ApiRoutes } from "./routes"
 import { USER_PASSWORD_SECRET } from "./secret"
 
 //constants
-const CONNECTION_URL = "mongodb+srv://Classital:ofhlUSsqYXioMRXM@cluster0.vyegx.mongodb.net/Schoolapp?retryWrites=true&w=majority"
+const CONNECTION_URL = ""
 //const CONNECTION_URL = "mongodb+srv://cluster0.vyegx.mongodb.net/myFirstDatabase"
 const PORT = process.env.PORT || 5000
 
